@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Lernfeld 3</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.hdr-mode{background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;margin-left:6px}
+.lang-btns{display:flex;gap:6px}
+.lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+.lb.on{background:#fff;color:var(--green-dark);border-color:#fff}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tab-btn{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;padding:9px 6px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;text-align:center}
+.tab-btn.on{background:var(--red);border-color:var(--red)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.lf-hdr{background:var(--green-dark);color:#fff;padding:14px 18px;border-radius:8px;margin:20px 0 12px;display:flex;align-items:baseline;gap:10px}
+.lf-num{font-size:13px;font-weight:800;background:var(--red);padding:3px 10px;border-radius:4px}
+.lf-title{font-size:17px;font-weight:800}
+.part-hdr{margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--green);color:var(--green-dark);font-weight:800;font-size:15px}
+.sec{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:16px 18px;margin-bottom:12px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--red);margin-right:6px}
+.sec h3{font-size:15px;font-weight:700;color:var(--green-dark);display:inline}
+.sec-body{margin-top:10px}
+.sec p{margin-bottom:10px}
+.sec ul,.sec ol{margin-left:20px;margin-bottom:8px}
+.sec li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{background:#eef3ec;color:var(--green-dark);text-align:left;padding:6px 8px;border:1px solid var(--border);font-size:12px}
+td{padding:6px 8px;border:1px solid var(--border)}
+.rule{background:#fdf2f0;border-left:3px solid var(--red);padding:10px 14px;margin-top:10px;font-size:13px;border-radius:4px}
+.formula{background:#0a1020;border:2px solid var(--green);border-radius:8px;padding:12px 14px;margin:10px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#93e0a8;white-space:pre-wrap}
+[data-lang]{display:none}
+[data-lang].active{display:block}
+span[data-lang]{display:none}
+span[data-lang].active{display:inline}
+.progress{font-size:12px;color:var(--muted);text-align:center;margin:16px 0;padding:10px;background:#eef3ec;border-radius:6px}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.kw-box{background:#eef3ec;border:2px solid var(--green);border-radius:8px;padding:16px 18px;margin-bottom:14px}
+.kw-box h4{color:var(--green-dark);font-size:14px;margin-bottom:8px}
+.aufg-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:8px}
+.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;margin-right:8px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">Lernfeld 3 / 11</div>
+      <div class="hdr-mode">📖 <span data-lang="ua">Обширна версія</span><span data-lang="de">Ausführliche Version</span></div>
+    </div>
+    <div class="lang-btns">
+      <button class="lb" onclick="setLang('de',this)">DE</button>
+      <button class="lb on" onclick="setLang('ua',this)">UA</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn on" onclick="setTab('theorie',this)"><span data-lang="ua">📘 Теорія</span><span data-lang="de">📘 Theorie</span></button>
+    <button class="tab-btn" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
+    <button class="tab-btn" onclick="setTab('aufgaben',this)"><span data-lang="ua">✏️ Завдання</span><span data-lang="de">✏️ Aufgaben</span></button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lf-hdr">
+  <span class="lf-num">LF 3</span>
+  <span class="lf-title">Güter bearbeiten</span>
+</div>
+
+<!-- ============ TAB: THEORIE ============ -->
+<div class="tab-content on" id="tab-theorie">
+
+<div class="sec">
+<span class="sec-num">1</span><h3>Arbeitsmittel im Lager</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Робота складу неможлива без набору допоміжних засобів, які полегшують контроль товару. Ключова група — <strong>Wiegeeinrichtungen</strong> (ваги): стаціонарні (Standwaage, Plattformwaage, Tischwaage, Kranwaage — товар підвозять до ваги) і мобільні (вбудовані прямо у вилковий навантажувач чи візок — Gabelwaage, дозволяють зважити вантаж одночасно з підйомом, без окремого етапу). Окрема категорія — <strong>Zähleinrichtungen</strong> (лічильні ваги/Referenzwaagen), що одночасно зважують і рахують кількість дрібних деталей (наприклад, гвинтів), суттєво прискорюючи фасування.</p>
+<p>Для вимірювання відстані та розмірів використовують не лише класичну рулетку (Maßband) чи складаний метр (Zollstock), а й <strong>ультразвуковий далекомір</strong>, який дає одразу дві переваги: можна виміряти навіть у важкодоступних місцях, і довгі відстані вимірюються без фізичного навантаження на працівника.</p>
+<p>Окрема необхідна категорія — <strong>прибиральне обладнання</strong>, від найпростіших щітки й совка до моторизованих підмітальних і прибиральних машин — без нього неможливо підтримувати чистоту, яка є базовою передумовою правильного зберігання.</p>
+</div>
+<div data-lang="de">
+<p>Der Lagerbetrieb ist ohne eine Reihe von Hilfsmitteln, die die Warenkontrolle erleichtern, nicht denkbar. Eine Schlüsselgruppe sind <strong>Wiegeeinrichtungen</strong>: stationäre (Standwaage, Plattformwaage, Tischwaage, Kranwaage — die Ware wird zur Waage gebracht) und mobile (direkt in Gabelstapler oder Hubwagen integriert — Gabelwaage, ermöglicht das Wiegen gleichzeitig mit dem Anheben, ohne separaten Schritt). Eine eigene Kategorie sind <strong>Zähleinrichtungen</strong> (Referenzwaagen), die gleichzeitig wiegen und die Anzahl von Kleinteilen (z. B. Schrauben) zählen, was das Abpacken erheblich beschleunigt.</p>
+<p>Zur Entfernungs- und Größenmessung dient neben dem klassischen Maßband oder Zollstock auch der <strong>Ultraschall-Entfernungsmesser</strong>, der gleich zwei Vorteile bietet: Messung auch an schwer zugänglichen Stellen, und lange Strecken werden ohne körperliche Belastung gemessen.</p>
+<p>Eine weitere notwendige Kategorie sind <strong>Reinigungsgeräte</strong>, vom einfachen Besen und Kehrblech bis zur motorgetriebenen Kehr- und Saugmaschine — ohne sie ist die Sauberkeit, die Grundvoraussetzung ordnungsgemäßer Lagerung, nicht aufrechtzuerhalten.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.1</span><h3>Qualitative Schäden bei der Lagerung</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Неправильне зберігання чи шкідливі впливи можуть знизити якість товару або взагалі знищити її. Тому контроль якості потрібен не лише при прийманні, а й протягом усього періоду зберігання. Джерела шкоди й наслідки для кожного товару різні:</p>
+<table>
+<tr><th>Джерело шкоди</th><th>Наслідок</th></tr>
+<tr><td>Druck, Stoß, Erschütterung</td><td>розбиття/тріщини скла й кераміки, подряпини на меблях, вм'ятини на фруктах, деформація упаковки</td></tr>
+<tr><td>Hitze</td><td>плавлення жирів, псування свіжих продуктів, випаровування рідин</td></tr>
+<tr><td>Feuchtigkeit</td><td>корозія металу, пліснява, розбухання паперу/картону</td></tr>
+<tr><td>Licht</td><td>вицвітання кольорів, розкладання світлочутливих речовин</td></tr>
+<tr><td>Lebewesen (шкідники)</td><td>погризений товар, забруднення</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<p>Unsachgemäße Lagerung oder schädigende Einflüsse können die Qualität der Güter mindern oder komplett zunichtemachen. Deshalb sind Qualitätskontrollen nicht nur bei der Warenannahme, sondern auch während der gesamten Lagerzeit nötig. Schadensquellen und Folgen unterscheiden sich je nach Gut:</p>
+<table>
+<tr><th>Gefahrenquelle</th><th>Folgeschaden</th></tr>
+<tr><td>Druck, Stoß, Erschütterung</td><td>Bruch/Sprünge bei Glas und Keramik, Kratzer an Möbeln, Druckstellen an Obst, Verformung der Verpackung</td></tr>
+<tr><td>Hitze</td><td>Schmelzen von Fetten, Verderben von Frischprodukten, Verdampfen von Flüssigkeiten</td></tr>
+<tr><td>Feuchtigkeit</td><td>Korrosion von Metall, Schimmel, Aufquellen von Papier/Pappe</td></tr>
+<tr><td>Licht</td><td>Ausbleichen von Farben, Zersetzung lichtempfindlicher Stoffe</td></tr>
+<tr><td>Lebewesen (Schädlinge)</td><td>Fraßschäden, Verschmutzung</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.2</span><h3>Pflegemaßnahmen</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Найпростіший, але найважливіший захід — регулярний контроль строку придатності (Mindesthaltbarkeits-/Verfallsdatum) із відповідними діями, коли термін наближається. Крім цього, залежно від виду товару застосовують:</p>
+<ul>
+<li>регулярний візуальний контроль (Sichtkontrolle) товару</li>
+<li>контроль температури й вологості повітря</li>
+<li>очищення товару від пилу (entstauben)</li>
+<li>перевертання й провітрювання товару, щоб уникнути одностороннього псування</li>
+<li>захист від впливу світла</li>
+<li>чистота на місцях зберігання</li>
+<li>боротьба зі шкідниками хімічними засобами</li>
+<li>попередня фасовка (Vorverpackung), що обмежує контакт із зовнішнім середовищем</li>
+<li>дотримання холодового ланцюга (Kühlkette) для чутливих до температури товарів</li>
+<li>підтримання сухості приміщень зберігання</li>
+</ul>
+</div>
+<div data-lang="de">
+<p>Die wichtigste und einfachste Pflegemaßnahme ist die regelmäßige Überwachung des Mindesthaltbarkeits-/Verfallsdatums mit entsprechendem Handeln, wenn der Termin naht. Je nach Güterart kommen zudem folgende Maßnahmen zum Einsatz:</p>
+<ul>
+<li>regelmäßige Sichtkontrolle der Ware</li>
+<li>Kontrolle von Temperatur und Luftfeuchtigkeit</li>
+<li>Güter entstauben</li>
+<li>Güter umdrehen und belüften, um einseitigen Verderb zu vermeiden</li>
+<li>Schutz vor Lichteinwirkung</li>
+<li>Sauberkeit auf den Lagerplätzen</li>
+<li>Schädlingsbekämpfung mit chemischen Mitteln</li>
+<li>Vorverpackung, die den Kontakt mit der Umgebung einschränkt</li>
+<li>Einhalten der Kühlkette bei temperaturempfindlichen Gütern</li>
+<li>Lagerräume trocken halten</li>
+</ul>
+<div class="rule">EU-Verordnung 178/2002 schreibt zum Zweck der Lebensmittelsicherheit die Rückverfolgbarkeit von Erzeugnissen auf allen Produktionsstufen vor — auch die Qualitätssicherung beim Lagern und Befördern gehört dazu.</div>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">3 · Abfälle entsorgen</div>
+
+<div class="sec">
+<span class="sec-num">3.1</span><h3>Gesetze und Verordnungen zum Abfallrecht</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Поводження з відходами на складі регулюється насамперед <strong>Kreislaufwirtschaftsgesetz (KrWG)</strong>, яке визначає ієрархію поводження з відходами: спочатку уникнення утворення відходів (Vermeidung), потім підготовка до повторного використання (Wiederverwendung), далі переробка (Recycling), потім інше відновлення (напр. енергетичне), і лише в останню чергу — видалення (Beseitigung, полігон). Для упаковки додатково діє <strong>Verpackungsgesetz (VerpackG)</strong>, що зобов'язує виробників і продавців реєструватися в централізованому реєстрі й брати участь у системі утилізації (duale Systeme).</p>
+</div>
+<div data-lang="de">
+<p>Der Umgang mit Abfällen im Lager wird vor allem durch das <strong>Kreislaufwirtschaftsgesetz (KrWG)</strong> geregelt, das eine Rangfolge der Abfallbewirtschaftung festlegt: zuerst Vermeidung, dann Vorbereitung zur Wiederverwendung, danach Recycling, anschließend sonstige Verwertung (z. B. energetisch), und erst zuletzt Beseitigung (Deponie). Für Verpackungen gilt zusätzlich das <strong>Verpackungsgesetz (VerpackG)</strong>, das Hersteller und Vertreiber zur Registrierung im zentralen Register und zur Teilnahme an einem dualen System verpflichtet.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.2</span><h3>Abfallarten und ihre Verwertung</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Вид</th><th>Приклад/переробка</th></tr>
+<tr><td>Papier/Pappe</td><td>картонні коробки → пресуються, повторно переробляються</td></tr>
+<tr><td>Kunststoff</td><td>плівка, стретч-плівка → сортуються за типом пластику</td></tr>
+<tr><td>Holz</td><td>пошкоджені палети, дерев'яна тара</td></tr>
+<tr><td>Metall</td><td>обв'язувальна стрічка, каркаси</td></tr>
+<tr><td>Restmüll</td><td>суміш, що не піддається сортуванню — йде на видалення</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Art</th><th>Beispiel/Verwertung</th></tr>
+<tr><td>Papier/Pappe</td><td>Kartonagen → gepresst, wiederverwertet</td></tr>
+<tr><td>Kunststoff</td><td>Folie, Stretchfolie → nach Kunststoffart sortiert</td></tr>
+<tr><td>Holz</td><td>beschädigte Paletten, Holzverpackung</td></tr>
+<tr><td>Metall</td><td>Umreifungsband, Gestelle</td></tr>
+<tr><td>Restmüll</td><td>nicht sortierbarer Mischmüll — geht zur Beseitigung</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.3</span><h3>Besondere Abfallvorschriften</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Небезпечні відходи (залишки хімікатів, забруднена упаковка від Gefahrstoffe) підпадають під окремі, суворіші приписи: обов'язкова документація шляху відходу (Entsorgungsnachweis), спеціалізовані підприємства-утилізатори, заборона змішування з побутовим сміттям.</p>
+</div>
+<div data-lang="de">
+<p>Gefährliche Abfälle (Chemikalienreste, verunreinigte Verpackung von Gefahrstoffen) unterliegen gesonderten, strengeren Vorschriften: verpflichtender Entsorgungsnachweis, spezialisierte Entsorgungsbetriebe, Vermischungsverbot mit Hausmüll.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">4 · Inventur</div>
+
+<div class="sec">
+<span class="sec-num">4.1-4.2</span><h3><span data-lang="ua">Контроль і терміни</span><span data-lang="de">Kontrollen und Begriffserklärung</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Інвентаризація поєднує два типи контролю: <strong>quantitativ</strong> (фактична кількість товару, підрахунок) і <strong>qualitativ</strong> (стан товару — чи не пошкоджений, чи не прострочений). <strong>Inventur</strong> — сам процес фізичного підрахунку запасів; <strong>Inventar</strong> — результат цього підрахунку, детальний перелік майна; на основі Inventar складається <strong>Bilanz</strong>.</p>
+</div>
+<div data-lang="de">
+<p>Die Inventur verbindet zwei Kontrollarten: <strong>quantitativ</strong> (tatsächliche Menge, Zählung) und <strong>qualitativ</strong> (Zustand der Ware — beschädigt, abgelaufen). <strong>Inventur</strong> ist der Vorgang der körperlichen Bestandsaufnahme selbst; <strong>Inventar</strong> ist das Ergebnis, ein detailliertes Vermögensverzeichnis; auf Basis des Inventars wird die <strong>Bilanz</strong> erstellt.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">4.3-4.6</span><h3><span data-lang="ua">Види інвентаризації</span><span data-lang="de">Inventurarten</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Вид</th><th>Опис</th></tr>
+<tr><td><strong>Stichtagsinventur</strong></td><td>підрахунок на конкретну (зазвичай кінець фінансового року) дату — рахують АБСОЛЮТНО ВСЕ; за фіксованим планом, дуже трудо- й часомістка, зазвичай поза звичайним робочим процесом складу</td></tr>
+<tr><td><strong>Permanente Inventur</strong></td><td>усі зміни фіксуються одразу на підтверджуваних документах; фізичний підрахунок усе одно проводиться раз на рік, але не в один конкретний день і не все одразу — можна планувати зручний для підприємства час</td></tr>
+<tr><td><strong>Verlegte Inventur</strong></td><td>застосовується, коли ні Stichtags-, ні Permanente Inventur неможливі (напр. занадто великі запаси для одноразового підрахунку) — підрахунок переноситься на інший, зручніший момент, а результат перераховується на дату балансу</td></tr>
+<tr><td><strong>Stichprobeninventur</strong></td><td>підраховується лише вибіркова частина запасу, а результат статистично екстраполюється на весь запас — економить час при великих обсягах</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Art</th><th>Beschreibung</th></tr>
+<tr><td><strong>Stichtagsinventur</strong></td><td>Zählung an einem festen Datum (meist Geschäftsjahresende) — ALLES wird gezählt; nach festem Plan, sehr arbeits- und zeitintensiv, meist außerhalb des normalen Lagerbetriebs</td></tr>
+<tr><td><strong>Permanente Inventur</strong></td><td>alle Änderungen werden sofort auf nachprüfbaren Belegen erfasst; die körperliche Zählung erfolgt trotzdem einmal jährlich, aber nicht an einem festen Tag und nicht alles auf einmal — zeitlich flexibel planbar</td></tr>
+<tr><td><strong>Verlegte Inventur</strong></td><td>wird angewendet, wenn weder Stichtags- noch Permanente Inventur möglich ist (z. B. zu umfangreiche Bestände für eine Einmalzählung) — die Zählung wird auf einen günstigeren Zeitpunkt verlegt, das Ergebnis wird auf den Bilanzstichtag zurückgerechnet</td></tr>
+<tr><td><strong>Stichprobeninventur</strong></td><td>nur ein Teil des Bestands wird gezählt, das Ergebnis wird statistisch auf den Gesamtbestand hochgerechnet — spart Zeit bei großen Mengen</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">5 · Wirtschaftlichkeit im Lager</div>
+
+<div class="sec">
+<span class="sec-num">5.1</span><h3>Lagerkosten</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Витрати складу складаються з фіксованих (оренда/амортизація будівлі, регалів, техніки) і змінних (персонал, електроенергія, страхування товару, втрати від псування). Витрати на утримання запасу часто виражають через Lagerkosten je m² (загальні витрати ÷ загальна площа), що дозволяє порівнювати склади різного розміру.</p>
+</div>
+<div data-lang="de">
+<p>Die Lagerkosten setzen sich aus fixen (Miete/Abschreibung des Gebäudes, der Regale, der Technik) und variablen Bestandteilen (Personal, Energie, Warenversicherung, Schwundverluste) zusammen. Die Kosten der Bestandshaltung werden oft als Lagerkosten je m² ausgedrückt (Gesamtkosten ÷ Gesamtfläche), was Lager unterschiedlicher Größe vergleichbar macht.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">5.2.1</span><h3>Bestandsarten</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Вид</th><th>Пояснення</th></tr>
+<tr><td><strong>Mindestbestand (Sicherheitsbestand)</strong></td><td>абсолютний мінімум — "залізний запас" на випадок збою постачання; НЕ призначений для звичайного продажу</td></tr>
+<tr><td><strong>Meldebestand</strong></td><td>рівень, при досягненні якого автоматично формується нове замовлення</td></tr>
+<tr><td><strong>Höchstbestand</strong></td><td>максимум, який не можна перевищувати через обмеження площі й витрат</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Art</th><th>Erklärung</th></tr>
+<tr><td><strong>Mindestbestand (Sicherheitsbestand)</strong></td><td>absolute Untergrenze — "eiserne Reserve" für Lieferstörungen; NICHT für den regulären Verkauf vorgesehen</td></tr>
+<tr><td><strong>Meldebestand</strong></td><td>Niveau, bei dessen Erreichen automatisch eine neue Bestellung ausgelöst wird</td></tr>
+<tr><td><strong>Höchstbestand</strong></td><td>Maximum, das aus Platz- und Kostengründen nicht überschritten werden darf</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">5.2.2-5.2.5</span><h3><span data-lang="ua">Lagerumschlag, Lagerdauer, Lagerzinsen, Lagerreichweite</span><span data-lang="de">Lagerumschlag, Lagerdauer, Lagerzinsen, Lagerreichweite</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Umschlagshäufigkeit</strong> показує, скільки разів за період повністю оновлюється складський запас — чим вище значення, тим ефективніше використовується капітал. <strong>Durchschnittliche Lagerdauer</strong> — скільки днів у середньому товар лежить на складі до продажу; коротша тривалість зазвичай означає нижчі витрати на зберігання. <strong>Lagerzinsen</strong> показують, у скільки обходиться підприємству капітал, "заморожений" у запасах, за середній період зберігання. <strong>Lagerreichweite</strong> — на скільки днів вистачить поточного запасу при середньому рівні споживання; допомагає планувати наступне замовлення й узгоджувати строки з постачальником.</p>
+<div class="formula"><span style="color:#f5c842">Wareneinsatz</span> = Anfangsbestand + Zugang − Endbestand
+<span style="color:#f5c842">Ø Lagerbestand</span> = (Anfangsbestand + Endbestand) ÷ 2
+<span style="color:#f5c842">Umschlagshäufigkeit</span> = Wareneinsatz ÷ Ø Lagerbestand
+<span style="color:#f5c842">Lagerdauer (Tage)</span> = 360 ÷ Umschlagshäufigkeit
+<span style="color:#f5c842">Lagerzinssatz</span> = (Marktzinssatz × Lagerdauer) ÷ 360
+<span style="color:#f5c842">Lagerzinsen</span> = Ø Lagerbestand × Lagerzinssatz ÷ 100
+<span style="color:#f5c842">Lagerreichweite (Tage)</span> = Ø Lagerbestand ÷ Ø Verbrauch pro Tag
+<span style="color:#f5c842">Meldebestand</span> = (Tagesverbrauch × Lieferzeit) + Mindestbestand</div>
+</div>
+<div data-lang="de">
+<p><strong>Umschlagshäufigkeit</strong> zeigt, wie oft sich der Lagerbestand in einem Zeitraum vollständig erneuert — je höher der Wert, desto effizienter wird das Kapital genutzt. <strong>Durchschnittliche Lagerdauer</strong> — wie viele Tage die Ware im Schnitt bis zum Verkauf lagert; eine kürzere Dauer bedeutet meist niedrigere Lagerkosten. <strong>Lagerzinsen</strong> zeigen, wie viel das im Bestand gebundene Kapital das Unternehmen während der durchschnittlichen Lagerdauer kostet. <strong>Lagerreichweite</strong> — für wie viele Tage der aktuelle Bestand bei durchschnittlichem Verbrauch ausreicht; hilft bei der Planung der nächsten Bestellung und der Abstimmung mit dem Lieferanten.</p>
+<div class="formula"><span style="color:#f5c842">Wareneinsatz</span> = Anfangsbestand + Zugang − Endbestand
+<span style="color:#f5c842">Ø Lagerbestand</span> = (Anfangsbestand + Endbestand) ÷ 2
+<span style="color:#f5c842">Umschlagshäufigkeit</span> = Wareneinsatz ÷ Ø Lagerbestand
+<span style="color:#f5c842">Lagerdauer (Tage)</span> = 360 ÷ Umschlagshäufigkeit
+<span style="color:#f5c842">Lagerzinssatz</span> = (Marktzinssatz × Lagerdauer) ÷ 360
+<span style="color:#f5c842">Lagerzinsen</span> = Ø Lagerbestand × Lagerzinssatz ÷ 100
+<span style="color:#f5c842">Lagerreichweite (Tage)</span> = Ø Lagerbestand ÷ Ø Verbrauch pro Tag
+<span style="color:#f5c842">Meldebestand</span> = (Tagesverbrauch × Lieferzeit) + Mindestbestand</div>
+</div>
+</div>
+</div>
+
+<div class="progress">
+<span data-lang="ua">✅ Lernfeld 3 (чернетка) — потребує звірки з Kernwissen твого підручника</span>
+<span data-lang="de">✅ Lernfeld 3 (Entwurf) — muss mit dem Kernwissen deines Lehrbuchs abgeglichen werden</span>
+</div>
+
+</div>
+<!-- ============ END TAB: THEORIE ============ -->
+
+<!-- ============ TAB: KERNWISSEN ============ -->
+<div class="tab-content" id="tab-kernwissen">
+<div class="kw-box">
+<div data-lang="ua"><p><em>Заповнимо разом після звірки з твоєю книгою.</em></p></div>
+<div data-lang="de"><p><em>Wird nach Abgleich mit deinem Buch ausgefüllt.</em></p></div>
+</div>
+</div>
+<!-- ============ END TAB: KERNWISSEN ============ -->
+
+<!-- ============ TAB: AUFGABEN ============ -->
+<div class="tab-content" id="tab-aufgaben">
+<div data-lang="ua">
+<div class="aufg-item"><span class="aufg-num">1</span>Наведи по прикладу для кожного з 5 джерел шкоди при зберіганні (Druck/Hitze/Feuchtigkeit/Licht/Lebewesen).</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Назви три заходи догляду за товаром (Pflegemaßnahmen).</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Опиши ієрархію поводження з відходами за KrWG.</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Порівняй Stichtagsinventur і Permanente Inventur — головна різниця?</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Коли застосовується Verlegte Inventur замість звичайних видів?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Розрахуй Ø Lagerbestand, Umschlagshäufigkeit і Lagerdauer за заданими цифрами.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Чим Meldebestand відрізняється від Mindestbestand?</div>
+</div>
+<div data-lang="de">
+<div class="aufg-item"><span class="aufg-num">1</span>Nennen Sie je ein Beispiel für die 5 Gefahrenquellen bei der Lagerung (Druck/Hitze/Feuchtigkeit/Licht/Lebewesen).</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Nennen Sie drei Pflegemaßnahmen.</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Beschreiben Sie die Rangfolge der Abfallbewirtschaftung nach KrWG.</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Vergleichen Sie Stichtagsinventur und Permanente Inventur — der Hauptunterschied?</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Wann wird eine Verlegte Inventur statt der üblichen Arten angewendet?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Berechnen Sie Ø Lagerbestand, Umschlagshäufigkeit und Lagerdauer bei gegebenen Zahlen.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Worin unterscheidet sich der Meldebestand vom Mindestbestand?</div>
+</div>
+</div>
+<!-- ============ END TAB: AUFGABEN ============ -->
+
+</div>
+
+<script>
+let lang = 'ua';
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===l);
+  });
+}
+function setTab(t, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('on'));
+  document.getElementById('tab-'+t).classList.add('on');
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===lang);
+  });
+});
+</script>
+</body>
+</html>
