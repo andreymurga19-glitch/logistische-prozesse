@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Lernfeld 1 (коротка)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --green-light:#4a9d5c;
+  --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd; --accent:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.65}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.hdr-mode{background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;margin-left:6px}
+.lang-btns{display:flex;gap:6px}
+.lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+.lb.on{background:#fff;color:var(--green-dark);border-color:#fff}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tab-btn{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;padding:9px 6px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;text-align:center}
+.tab-btn.on{background:var(--red);border-color:var(--red)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.lf-hdr{background:var(--green-dark);color:#fff;padding:14px 18px;border-radius:8px;margin:20px 0 12px;display:flex;align-items:baseline;gap:10px}
+.lf-num{font-size:13px;font-weight:800;background:var(--red);padding:3px 10px;border-radius:4px}
+.lf-title{font-size:17px;font-weight:800}
+.sec{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 18px;margin-bottom:10px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--red);margin-right:6px}
+.sec h3{font-size:15px;font-weight:700;color:var(--green-dark);display:inline}
+.sec-body{margin-top:8px}
+.sec ul{margin-left:18px}
+.sec li{margin-bottom:4px}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}
+th{background:#eef3ec;color:var(--green-dark);text-align:left;padding:6px 8px;border:1px solid var(--border);font-size:12px}
+td{padding:6px 8px;border:1px solid var(--border)}
+.rule{background:#fdf2f0;border-left:3px solid var(--red);padding:8px 12px;margin-top:8px;font-size:13px;border-radius:4px}
+[data-lang]{display:none}
+[data-lang].active{display:block}
+span[data-lang]{display:none}
+span[data-lang].active{display:inline}
+.progress{font-size:12px;color:var(--muted);text-align:center;margin:16px 0;padding:10px;background:#eef3ec;border-radius:6px}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.kw-box{background:#eef3ec;border:2px solid var(--green);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.kw-box h4{color:var(--green-dark);font-size:14px;margin-bottom:6px}
+.aufg-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:6px;font-size:14px}
+.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:50%;width:20px;height:20px;text-align:center;line-height:20px;margin-right:8px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">Lernfeld 1 / 11</div>
+      <div class="hdr-mode">📌 <span data-lang="ua">Коротка версія</span><span data-lang="de">Kurzversion</span></div>
+    </div>
+    <div class="lang-btns">
+      <button class="lb" onclick="setLang('de',this)">DE</button>
+      <button class="lb on" onclick="setLang('ua',this)">UA</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn on" onclick="setTab('theorie',this)"><span data-lang="ua">📘 Теорія</span><span data-lang="de">📘 Theorie</span></button>
+    <button class="tab-btn" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
+    <button class="tab-btn" onclick="setTab('aufgaben',this)"><span data-lang="ua">✏️ Завдання</span><span data-lang="de">✏️ Aufgaben</span></button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lf-hdr">
+  <span class="lf-num">LF 1</span>
+  <span class="lf-title">Güter annehmen und kontrollieren</span>
+</div>
+
+<!-- ============ TAB: THEORIE ============ -->
+<div class="tab-content on" id="tab-theorie">
+
+<div class="sec">
+<span class="sec-num">1</span><h3>Warenannahme</h3>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.1</span><h3>Wege der Warenanlieferung</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Транспортом постачальника, власним транспортом одержувача, або через перевізника/експедитора (Frachtführer/Spediteur)</li>
+<li>Пряма доставка (Direktbelieferung) або через проміжний склад/термінал</li>
+<li>Вид транспорту: Lkw, Bahn, Schiff, Flugzeug, Paketdienst</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Durch den Lieferanten selbst, eigenen Fuhrpark des Empfängers, oder Frachtführer/Spediteur</li>
+<li>Direktbelieferung oder über Zwischenlager/Terminal</li>
+<li>Verkehrsträger: Lkw, Bahn, Schiff, Flugzeug, Paketdienst</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2</span><h3>Abladen der angelieferten Ware</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Розвантаження — фізична дія: зняття вантажу з транспортного засобу</li>
+<li>Хто відповідає: зазвичай водій/перевізник, якщо не домовлено інакше</li>
+<li>Одразу під час розвантаження — перша зовнішня перевірка тари/палет з усіх боків на пошкодження</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Abladen — die physische Handlung: Entnahme der Ladung aus dem Transportmittel</li>
+<li>Zuständigkeit: i. d. R. Fahrer/Frachtführer, sofern nichts anderes vereinbart</li>
+<li>Bereits beim Abladen — erste äußere Prüfung von Verpackung/Paletten von allen Seiten auf Schäden</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3</span><h3>Kontrollen in Anwesenheit des Überbringers</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Перевірки, які роблять, доки перевізник/водій ще присутній:</p>
+</div>
+<div data-lang="de">
+<p>Prüfungen, die erfolgen, solange der Überbringer/Fahrer noch anwesend ist:</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.1</span><h3>Ist die Ware für uns bestimmt?</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul><li>Звірка одержувача (ім'я, адреса) і номера замовлення на накладній із власними даними. Якщо не сходиться — товар не приймається</li></ul>
+</div>
+<div data-lang="de">
+<ul><li>Abgleich von Empfänger (Name, Adresse) und Bestellnummer mit eigenen Daten. Stimmt es nicht — keine Annahme</li></ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.2</span><h3>Stimmt die Anzahl der Packstücke?</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Підрахунок кількості Colli (палет, коробок, мішків) і звірка з документами</li>
+<li>Mehrlieferung (надлишок): підтвердження водієм, можлива відмова від зайвого</li>
+<li>Minderlieferung (нестача): підтвердження водієм, довезення постачальником</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Zählen der Colli (Paletten, Kartons, Säcke) und Abgleich mit den Papieren</li>
+<li>Mehrlieferung: Bestätigung durch Fahrer, ggf. Ablehnung des Überschusses</li>
+<li>Minderlieferung: Bestätigung durch Fahrer, Nachlieferung durch Lieferanten</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.3</span><h3>Stimmt die äußere Beschaffenheit?</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Візуальна перевірка на видимі пошкодження упаковки/тари з усіх боків</li>
+<li>При пошкодженні: Annahmeverweigerung АБО підтвердження водієм на документах</li>
+<li>При підозрі на транспортне пошкодження — Tatbestandsaufnahme + повідомити Frachtführer протягом <strong>7 днів</strong></li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Sichtprüfung von allen Seiten auf erkennbare Schäden</li>
+<li>Bei Schäden: Annahmeverweigerung ODER Bestätigung durch Fahrer auf Papieren</li>
+<li>Bei Verdacht auf Transportschaden — Tatbestandsaufnahme + Frachtführer innerhalb von <strong>7 Tagen</strong> benachrichtigen</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.4</span><h3>Liegen Mehrwegtransportverpackungen vor?</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul><li>Перевірка на MTV (Europaletten, Gitterboxen) — фіксувати окремо для обміну. Пошкоджену MTV приймати назад не зобов'язані</li></ul>
+</div>
+<div data-lang="de">
+<ul><li>Prüfung auf MTV (Europaletten, Gitterboxen) — gesondert für Tausch erfassen. Beschädigte MTV müssen nicht angenommen werden</li></ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.5</span><h3>Die Warenannahme quittieren</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Empfangsbestätigung на документах + за потреби Palettentausch</li>
+<li>При видимих дефектах — <strong>Vorbehalt</strong> ПЕРЕД підписом</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Empfangsbestätigung auf den Papieren + ggf. Palettentausch</li>
+<li>Bei erkennbaren Mängeln — <strong>Vorbehalt</strong> VOR der Unterschrift</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.6</span><h3>Wareneingangsschein</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul><li>Внутрішній документ складу: дата, товар, кількість, стан — запускає процеси в різних відділах (бухгалтерія, закупівля)</li></ul>
+</div>
+<div data-lang="de">
+<ul><li>Internes Lagerdokument: Datum, Ware, Menge, Zustand — löst Vorgänge in mehreren Abteilungen aus (Buchhaltung, Einkauf)</li></ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.4</span><h3>Beleglose Wareneingangskontrolle</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Контроль без паперу — дані напряму в систему через сканер/MDE-термінал</li>
+<li>Переваги: швидше, менше помилок, дані одразу в LVS</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Kontrolle ohne Papier — Daten direkt per Scanner/MDE-Terminal ins System</li>
+<li>Vorteile: schneller, weniger Fehler, Daten sofort im LVS</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.5</span><h3>Codierung der Ware</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Система</th><th>Принцип</th></tr>
+<tr><td>Barcode</td><td>штрихи різної ширини, лазер/камера, потрібен зоровий контакт</td></tr>
+<tr><td>RFID (Transponder = мікрочип+антена)</td><td>радіохвилі; без контакту, Pulkfähigkeit (групово), більше даних</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>System</th><th>Prinzip</th></tr>
+<tr><td>Barcode</td><td>Striche versch. Breite, Laser/Kamera, Sichtkontakt nötig</td></tr>
+<tr><td>RFID (Transponder = Mikrochip+Antenne)</td><td>Funk; ohne Kontakt, Pulkfähigkeit, mehr Daten</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.6</span><h3>Untersuchungs- und Anzeigepflichten</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Кому</th><th>Строк</th></tr>
+<tr><td>Frachtführer — транспортні пошкодження</td><td>7 днів</td></tr>
+<tr><td>Frachtführer — прострочення</td><td>21 день</td></tr>
+<tr><td>Lieferant — явні дефекти</td><td>негайно</td></tr>
+<tr><td>Lieferant — приховані дефекти</td><td>негайно після виявлення, макс. 2 роки</td></tr>
+</table>
+<div class="rule">§ 377 HGB: якщо не заявлено вчасно — товар вважається прийнятим, рекламація неможлива</div>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>An wen</th><th>Frist</th></tr>
+<tr><td>Frachtführer — Transportschäden</td><td>7 Tage</td></tr>
+<tr><td>Frachtführer — Verzug</td><td>21 Tage</td></tr>
+<tr><td>Lieferant — offene Mängel</td><td>unverzüglich</td></tr>
+<tr><td>Lieferant — versteckte Mängel</td><td>unverzüglich nach Entdeckung, max. 2 Jahre</td></tr>
+</table>
+<div class="rule">§ 377 HGB: keine rechtzeitige Anzeige → Ware gilt als angenommen, Reklamation ausgeschlossen</div>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.7</span><h3>Mehrwegtransportverpackungen</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Einweg: повторне використання АБО утилізація як вторсировина</li>
+<li>MTV bilateral: закрита система відправник↔отримувач/галузь</li>
+<li>MTV multilateral: Poolsystem або Pfandsystem, можлива купівля/оренда</li>
+<li>Повернення: обмін порожньої на повну АБО зберігання до забору оператором</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Einweg: Weiterverwendung ODER Entsorgung als Wertstoff</li>
+<li>MTV bilateral: geschlossen zwischen Versender↔Empfänger/Branche</li>
+<li>MTV multilateral: Poolsystem oder Pfandsystem, Kauf/Miete möglich</li>
+<li>Rückgabe: Austausch leer-gegen-voll ODER Lagerung bis Abholung</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2</span><h3>Warenprüfung</h3>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.1</span><h3>Gegenstand der Prüfung</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Identität — чи той товар? · Quantität — чи та кількість? · Beschaffenheit — чи є пошкодження? · Qualität — чи та якість (Güte)?</li>
+<li>Великі партії — вибіркова перевірка (stichprobenartige Kontrolle)</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Identität — richtige Ware? · Quantität — richtige Menge? · Beschaffenheit — Beschädigungen? · Qualität — richtige Güte?</li>
+<li>Große Mengen — stichprobenartige Kontrolle</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.2</span><h3>Leistungsstörungen seitens des Lieferanten</h3>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.2.1</span><h3>Schlechtlieferung</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>За розпізнаваністю:</strong> offener Mangel (явний) / versteckter Mangel (прихований) / arglistig verschwiegener Mangel (навмисно прихований)</p>
+<table>
+<tr><th>За видом</th><th>Пояснення</th></tr>
+<tr><td>Mangel in der Art (Falschlieferung)</td><td>не той товар</td></tr>
+<tr><td>Mangel in der Menge (Minderlieferung)</td><td>не та кількість (забагато/замало)</td></tr>
+<tr><td>Mangel in der Beschaffenheit</td><td>поганий стан / нема обіцяних властивостей</td></tr>
+<tr><td>Mangel in der Güte</td><td>не та якість/сорт</td></tr>
+</table>
+<div class="rule">Sachmangel → дотримано Rügefristen → Nacherfüllung (Nachbesserung/Neulieferung) → безрезультатний строк → Rücktritt/Minderung/Schadenersatz</div>
+</div>
+<div data-lang="de">
+<p><strong>Nach Erkennbarkeit:</strong> offener Mangel / versteckter Mangel / arglistig verschwiegener Mangel</p>
+<table>
+<tr><th>Nach Art</th><th>Erklärung</th></tr>
+<tr><td>Mangel in der Art (Falschlieferung)</td><td>falsches Produkt</td></tr>
+<tr><td>Mangel in der Menge (Minderlieferung)</td><td>falsche Menge (zu viel/zu wenig)</td></tr>
+<tr><td>Mangel in der Beschaffenheit</td><td>schlechter Zustand / fehlende Eigenschaften</td></tr>
+<tr><td>Mangel in der Güte</td><td>falsche Qualität</td></tr>
+</table>
+<div class="rule">Sachmangel → Rügefristen eingehalten → Nacherfüllung (Nachbesserung/Neulieferung) → erfolgloser Fristablauf → Rücktritt/Minderung/Schadenersatz</div>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.2.2</span><h3>Nicht-rechtzeitig-Lieferung (Lieferungsverzug)</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>3 умови Verzug:</strong> 1. Lieferung fällig 2. Verkäufer gemahnt (крім Fixgeschäft) 3. Verkäufer trifft Verschulden</p>
+<ul>
+<li><strong>Права покупця:</strong> наполягати на поставці / відмова від договору / Schadenersatz за порушення обов'язку / Schadenersatz замість виконання / компенсація марних витрат</li>
+<li>Schadenersatz: konkreter (легко довести, напр. Deckungskauf) vs abstrakter (важко, напр. втрачені клієнти) → на практиці Vertragsstrafe наперед</li>
+</ul>
+</div>
+<div data-lang="de">
+<p><strong>3 Voraussetzungen für Verzug:</strong> 1. Lieferung fällig 2. Verkäufer gemahnt (außer Fixgeschäft) 3. Verkäufer trifft Verschulden</p>
+<ul>
+<li><strong>Käuferrechte:</strong> auf Lieferung bestehen / Rücktritt / Schadenersatz wegen Pflichtverletzung / Schadenersatz statt Leistung / Ersatz vergeblicher Aufwendungen</li>
+<li>Schadenersatz: konkreter (leicht, z. B. Deckungskauf) vs abstrakter (schwer, z. B. verlorene Kundschaft) → in der Praxis Vertragsstrafe im Voraus</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3</span><h3>Unfallgefahr</h3>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.1</span><h3>Vorschriftarten zum Arbeitsschutz</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Рівень</th><th>Приклад</th></tr>
+<tr><td>Закони</td><td>Arbeitsschutzgesetz (ArbSchG)</td></tr>
+<tr><td>Постанови</td><td>Betriebssicherheitsverordnung, Gefahrstoffverordnung</td></tr>
+<tr><td>Правила DGUV</td><td>конкретні технічні вимоги (напр. складування, штабелювання)</td></tr>
+<tr><td>Внутрішні</td><td>Betriebsanweisung, Betriebsvereinbarung</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Ebene</th><th>Beispiel</th></tr>
+<tr><td>Gesetze</td><td>Arbeitsschutzgesetz (ArbSchG)</td></tr>
+<tr><td>Verordnungen</td><td>Betriebssicherheitsverordnung, Gefahrstoffverordnung</td></tr>
+<tr><td>DGUV-Regeln</td><td>konkrete technische Vorgaben (z. B. Lagern, Stapeln)</td></tr>
+<tr><td>Betrieblich</td><td>Betriebsanweisung, Betriebsvereinbarung</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.2</span><h3>Unfallverhütungsvorschriften</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>UVV від Berufsgenossenschaften + державні закони/постанови. Містять: права/обов'язки роботодавця й працівника, технічні вимоги до обладнання, правила поведінки на робочих місцях.</p>
+<p><strong>Обов'язки підприємства:</strong> заходи безпеки · інструктаж мін. 1×/рік · приписи на видному місці · Meldung нещасного випадку до BG протягом <strong>3 днів</strong></p>
+<p><strong>Обов'язки працівника:</strong> дотримання заходів · без алкоголю/наркотиків на роботі</p>
+<p>Підприємство надає PSA (засоби індив. захисту) — працівники зобов'язані носити.</p>
+</div>
+<div data-lang="de">
+<p>UVV der Berufsgenossenschaften + staatliche Gesetze/Verordnungen. Enthalten: Rechte/Pflichten von Arbeitgebenden/Arbeitnehmenden, techn. Anforderungen an Geräte, Verhaltensvorschriften.</p>
+<p><strong>Pflichten Unternehmen:</strong> Unfallverhütungsmaßnahmen · Unterweisung ≥1×/Jahr · Aushang · Meldung an BG binnen <strong>3 Tagen</strong></p>
+<p><strong>Pflichten Versicherte:</strong> Maßnahmen befolgen · kein Alkohol/Drogen bei der Arbeit</p>
+<p>Unternehmen stellt PSA bereit — Beschäftigte müssen sie tragen.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3>Sicherheitskennzeichen</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Категорія</th><th>Кольори</th></tr>
+<tr><td>Verbotszeichen</td><td>червона рамка/білий фон</td></tr>
+<tr><td>Warnzeichen</td><td>жовтий фон/чорна рамка</td></tr>
+<tr><td>Gebotszeichen</td><td>синій фон/білий символ</td></tr>
+<tr><td>Rettungszeichen</td><td>зелений фон/білий символ</td></tr>
+<tr><td>Brandschutzzeichen</td><td>червоний фон/білий символ</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Kategorie</th><th>Farben</th></tr>
+<tr><td>Verbotszeichen</td><td>rote Umrandung/weißer Grund</td></tr>
+<tr><td>Warnzeichen</td><td>gelber Grund/schwarze Umrandung</td></tr>
+<tr><td>Gebotszeichen</td><td>blauer Grund/weißes Symbol</td></tr>
+<tr><td>Rettungszeichen</td><td>grüner Grund/weißes Symbol</td></tr>
+<tr><td>Brandschutzzeichen</td><td>roter Grund/weißes Symbol</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.3</span><h3>Verhalten bei Unfällen</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li>Стати на рівень потерпілого, назвати ім'я, обережний контакт, пояснювати дії</li>
+<li>Rettungsdecke (накрити), при непритомності — стабільне бокове положення</li>
+<li>lebensrettende Sofortmaßnahmen (дихання/масаж серця) і Erstversorgung (шини/пов'язки) — робить Ersthelfer</li>
+<li>При прибутті швидкої — допомогти швидко дістатись потерпілого</li>
+</ul>
+<div class="rule">§ 26 DGUV Vorschrift 1: 2-20 осіб → 1 Ersthelfer; &gt;20 осіб → 5% (адмін/торгівля) або 10% (інше). Навчання в BG, курси кожні 2 роки.</div>
+<p><strong>5 "W" при виклику 112/110:</strong> Wo (де) · Was (що) · Wie viele (скільки) · Welche (які травми) · Warten (чекати уточнень)</p>
+</div>
+<div data-lang="de">
+<ul>
+<li>Auf Höhe des Verletzten gehen, Namen nennen, vorsichtiger Kontakt, Handlungen erklären</li>
+<li>Rettungsdecke (zudecken), bei Bewusstlosigkeit — stabile Seitenlage</li>
+<li>lebensrettende Sofortmaßnahmen (Beatmung/Herzdruckmassage) und Erstversorgung (Schienen/Verband) — durch Ersthelfer</li>
+<li>Bei Eintreffen des Rettungsdienstes — schnell zum Verletzten führen</li>
+</ul>
+<div class="rule">§ 26 DGUV Vorschrift 1: 2-20 Personen → 1 Ersthelfer; &gt;20 Personen → 5% (Verwaltung/Handel) oder 10% (sonstige). Ausbildung durch BG, Fortbildung alle 2 Jahre.</div>
+<p><strong>5 "W" beim Notruf:</strong> Wo · Was · Wie viele · Welche Art · Warten auf Rückfragen</p>
+</div>
+</div>
+</div>
+
+<div class="progress">
+<span data-lang="ua">✅ Lernfeld 1 (коротка версія) повністю завершено — усі 3 теми. Далі: Lernfeld 2</span>
+<span data-lang="de">✅ Lernfeld 1 (Kurzversion) vollständig abgeschlossen — alle 3 Themen. Weiter: Lernfeld 2</span>
+</div>
+
+</div>
+<!-- ============ END TAB: THEORIE ============ -->
+
+<!-- ============ TAB: KERNWISSEN ============ -->
+<div class="tab-content" id="tab-kernwissen">
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Хід Warenannahme</h4>
+<ol>
+<li>Доставка: Spediteur, Bahn, KEP-Dienst або постачальник сам</li>
+<li>При водії: чи для нас, чи замовлено, чи вчасно</li>
+<li>Розвантаження + огляд тари з усіх боків</li>
+<li>Перевірка кількості Colli</li>
+<li>Все ок → підпис + обмін палет</li>
+</ol>
+</div>
+<div data-lang="de">
+<h4>⭐ Ablauf der Warenannahme</h4>
+<ol>
+<li>Anlieferung: Spediteur, Bahn, KEP-Dienst oder Lieferant selbst</li>
+<li>Bei Fahrer: für uns, bestellt, rechtzeitig</li>
+<li>Abladen + Prüfung von allen Seiten</li>
+<li>Prüfung Colli-Anzahl</li>
+<li>Alles ok → Unterschrift + Palettentausch</li>
+</ol>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Строки заяви про дефекти</h4>
+<table>
+<tr><th>Кому</th><th>Строк</th></tr>
+<tr><td>Frachtführer — транспорт. пошкодження</td><td>7 днів</td></tr>
+<tr><td>Frachtführer — прострочення</td><td>21 день</td></tr>
+<tr><td>Lieferant — явні дефекти</td><td>негайно</td></tr>
+<tr><td>Lieferant — приховані дефекти</td><td>негайно після виявлення, макс. 2 роки</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<h4>⭐ Anzeigefristen bei Mängeln</h4>
+<table>
+<tr><th>An wen</th><th>Frist</th></tr>
+<tr><td>Frachtführer — Transportschäden</td><td>7 Tage</td></tr>
+<tr><td>Frachtführer — Verzug</td><td>21 Tage</td></tr>
+<tr><td>Lieferant — offene Mängel</td><td>unverzüglich</td></tr>
+<tr><td>Lieferant — versteckte Mängel</td><td>unverzüglich, max. 2 Jahre</td></tr>
+</table>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Codierung</h4>
+<ul>
+<li>Barcode: зоровий контакт потрібен</li>
+<li>RFID: Transponder = мікрочип+антена; без контакту, Pulkfähigkeit, більше даних</li>
+</ul>
+</div>
+<div data-lang="de">
+<h4>⭐ Codierung</h4>
+<ul>
+<li>Barcode: Sichtkontakt nötig</li>
+<li>RFID: Transponder = Mikrochip+Antenne; ohne Kontakt, Pulkfähigkeit, mehr Daten</li>
+</ul>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ MTV-Systeme</h4>
+<ul>
+<li>Bilateral: закрита система відправник↔отримувач</li>
+<li>Multilateral: Poolsystem/Pfandsystem, купівля/оренда можливі</li>
+<li>Пошкоджену MTV не зобов'язані приймати назад</li>
+</ul>
+</div>
+<div data-lang="de">
+<h4>⭐ MTV-Systeme</h4>
+<ul>
+<li>Bilateral: geschlossen zwischen Versender↔Empfänger</li>
+<li>Multilateral: Poolsystem/Pfandsystem, Kauf/Miete möglich</li>
+<li>Beschädigte MTV müssen nicht angenommen werden</li>
+</ul>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Gegenstand der Warenprüfung</h4>
+<p>Identität / Quantität / Beschaffenheit / Qualität — при великих партіях: stichprobenartige Kontrolle</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Gegenstand der Warenprüfung</h4>
+<p>Identität / Quantität / Beschaffenheit / Qualität — bei großen Mengen: stichprobenartige Kontrolle</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Mangel — 2 виміри</h4>
+<p><strong>Розпізнаваність:</strong> offen / versteckt / arglistig verschwiegen</p>
+<p><strong>Вид:</strong> Art (не той товар) / Menge (не та к-сть) / Beschaffenheit (стан) / Güte (якість)</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Mangel — 2 Dimensionen</h4>
+<p><strong>Erkennbarkeit:</strong> offen / versteckt / arglistig verschwiegen</p>
+<p><strong>Art:</strong> Art (falsches Produkt) / Menge / Beschaffenheit / Güte</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Lieferungsverzug</h4>
+<p><strong>3 умови:</strong> fällig · gemahnt (крім Fixgeschäft) · Verschulden</p>
+<p><strong>5 прав:</strong> вимагати поставки / Rücktritt / Schadenersatz (2 види) / компенсація витрат</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Lieferungsverzug</h4>
+<p><strong>3 Voraussetzungen:</strong> fällig · gemahnt (außer Fixgeschäft) · Verschulden</p>
+<p><strong>5 Rechte:</strong> Lieferung verlangen / Rücktritt / Schadenersatz (2 Arten) / Aufwendungsersatz</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Arbeitsschutz-обов'язки</h4>
+<p>Підприємство: заходи · інструктаж 1×/рік · приписи · Meldung до BG за 3 дні</p>
+<p>Працівник: дотримання · без алкоголю/наркотиків</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Arbeitsschutz-Pflichten</h4>
+<p>Unternehmen: Maßnahmen · Unterweisung 1×/Jahr · Aushang · Meldung an BG binnen 3 Tagen</p>
+<p>Versicherte: Befolgung · kein Alkohol/Drogen</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Ersthelfer + 5 "W"</h4>
+<p>§26 DGUV Vorschrift 1: 2-20 осіб→1; &gt;20→5%/10%. 5 "W": Wo/Was/Wie viele/Welche/Warten</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Ersthelfer + 5 "W"</h4>
+<p>§26 DGUV Vorschrift 1: 2-20 Pers.→1; &gt;20→5%/10%. 5 "W": Wo/Was/Wie viele/Welche/Warten</p>
+</div>
+</div>
+
+</div>
+<!-- ============ END TAB: KERNWISSEN ============ -->
+
+<!-- ============ TAB: AUFGABEN ============ -->
+<div class="tab-content" id="tab-aufgaben">
+
+<div data-lang="ua">
+<div class="aufg-item"><span class="aufg-num">1</span>Що перевіриш, поки водій ще на місці?</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Чому важливі окремо: підтвердження справного товару, підтвердження пошкоджень водієм, негайна заява постачальнику?</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Які процеси запускає Wareneingangsschein?</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Хто відповідає за пошкодження при розвантаженні?</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Явний дефект + підозра на транспортне пошкодження — що робити і в які строки?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Переваги штрих-кодів для складу?</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Як працює RFID і чим кращий за Barcode?</div>
+<div class="aufg-item"><span class="aufg-num">8</span>Різниця bilateral vs multilateral Mehrwegsystem?</div>
+<div class="aufg-item"><span class="aufg-num">9</span>Як працює Pfandsystem для MTV?</div>
+<div class="aufg-item"><span class="aufg-num">10</span>Плюси/мінуси Mehrweg проти Einweg?</div>
+<div class="aufg-item"><span class="aufg-num">11</span>Що перевіряють щодо ідентичності, кількості, якості, стану — і якими документами?</div>
+<div class="aufg-item"><span class="aufg-num">12</span>Кейс: не той товар / подряпини на частині виробів / частина не доставлена. Визнач вид дефекту для кожного і права покупця (першочергові й наступні).</div>
+<div class="aufg-item"><span class="aufg-num">13</span>Назви 3 умови Lieferungsverzug.</div>
+<div class="aufg-item"><span class="aufg-num">14</span>Сезонний товар мав прийти в жовтні, на 31.10 його немає, постачальник обіцяє кінець грудня. Варіанти дій покупця?</div>
+<div class="aufg-item"><span class="aufg-num">15</span>Обов'язки підприємства й працівника за UVV?</div>
+<div class="aufg-item"><span class="aufg-num">16</span>5 категорій Sicherheitskennzeichen — кольори і приклади?</div>
+<div class="aufg-item"><span class="aufg-num">17</span>Твоя поведінка при нещасному випадку поруч?</div>
+<div class="aufg-item"><span class="aufg-num">18</span>Що таке "5 W" при виклику 112?</div>
+</div>
+<div data-lang="de">
+<div class="aufg-item"><span class="aufg-num">1</span>Was prüfen Sie, solange der Fahrer noch da ist?</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Warum sind Quittierung, Bestätigung durch Fahrer und unverzügliche Anzeige beim Lieferanten je getrennt wichtig?</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Welche Vorgänge löst der Wareneingangsschein aus?</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Wer haftet für Schäden beim Abladen?</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Offener Mangel + Verdacht auf Transportschaden — was tun, welche Fristen?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Vorteile von Barcodes fürs Lager?</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Wie funktioniert RFID, Vorteil ggü. Barcode?</div>
+<div class="aufg-item"><span class="aufg-num">8</span>Unterschied bilateral vs multilateral Mehrwegsystem?</div>
+<div class="aufg-item"><span class="aufg-num">9</span>Wie funktioniert das Pfandsystem für MTV?</div>
+<div class="aufg-item"><span class="aufg-num">10</span>Vor-/Nachteile Mehrweg vs Einweg?</div>
+<div class="aufg-item"><span class="aufg-num">11</span>Was wird bzgl. Identität, Menge, Qualität, Zustand geprüft — mit welchen Unterlagen?</div>
+<div class="aufg-item"><span class="aufg-num">12</span>Fall: falsches Produkt / Kratzer bei einem Teil / fehlende Teillieferung. Mangelart je Position + vorrangige/nachrangige Käuferrechte?</div>
+<div class="aufg-item"><span class="aufg-num">13</span>Nennen Sie die 3 Voraussetzungen für Lieferungsverzug.</div>
+<div class="aufg-item"><span class="aufg-num">14</span>Saisonware sollte im Oktober kommen, ist am 31.10 nicht da, Lieferant verspricht Ende Dezember. Handlungsmöglichkeiten?</div>
+<div class="aufg-item"><span class="aufg-num">15</span>Pflichten von Unternehmen und Versicherten nach UVV?</div>
+<div class="aufg-item"><span class="aufg-num">16</span>5 Kategorien Sicherheitskennzeichen — Farben und Beispiele?</div>
+<div class="aufg-item"><span class="aufg-num">17</span>Ihr Verhalten bei einem Unfall in der Nähe?</div>
+<div class="aufg-item"><span class="aufg-num">18</span>Was sind die "5 W" beim Notruf?</div>
+</div>
+
+</div>
+<!-- ============ END TAB: AUFGABEN ============ -->
+
+</div>
+
+<script>
+let lang = 'ua';
+let tab = 'theorie';
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===l);
+  });
+}
+function setTab(t, btn){
+  tab = t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('on'));
+  document.getElementById('tab-'+t).classList.add('on');
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===lang);
+  });
+});
+</script>
+</body>
+</html>
