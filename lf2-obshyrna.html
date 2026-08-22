@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Lernfeld 2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --green-light:#4a9d5c;
+  --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd; --accent:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.hdr-mode{background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;margin-left:6px}
+.lang-btns{display:flex;gap:6px}
+.lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+.lb.on{background:#fff;color:var(--green-dark);border-color:#fff}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tab-btn{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;padding:9px 6px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;text-align:center}
+.tab-btn.on{background:var(--red);border-color:var(--red)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.lf-hdr{background:var(--green-dark);color:#fff;padding:14px 18px;border-radius:8px;margin:20px 0 12px;display:flex;align-items:baseline;gap:10px}
+.lf-num{font-size:13px;font-weight:800;background:var(--red);padding:3px 10px;border-radius:4px}
+.lf-title{font-size:17px;font-weight:800}
+.part-hdr{margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--green);color:var(--green-dark);font-weight:800;font-size:15px}
+.sec{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:16px 18px;margin-bottom:12px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--red);margin-right:6px}
+.sec h3{font-size:15px;font-weight:700;color:var(--green-dark);display:inline}
+.sec-body{margin-top:10px}
+.sec p{margin-bottom:10px}
+.sec ul,.sec ol{margin-left:20px;margin-bottom:8px}
+.sec li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{background:#eef3ec;color:var(--green-dark);text-align:left;padding:6px 8px;border:1px solid var(--border);font-size:12px}
+td{padding:6px 8px;border:1px solid var(--border)}
+.rule{background:#fdf2f0;border-left:3px solid var(--red);padding:10px 14px;margin-top:10px;font-size:13px;border-radius:4px}
+.formula{background:#0a1020;border:2px solid var(--green);border-radius:8px;padding:12px 14px;margin:10px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#93e0a8;white-space:pre-wrap}
+[data-lang]{display:none}
+[data-lang].active{display:block}
+span[data-lang]{display:none}
+span[data-lang].active{display:inline}
+.progress{font-size:12px;color:var(--muted);text-align:center;margin:16px 0;padding:10px;background:#eef3ec;border-radius:6px}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.kw-box{background:#eef3ec;border:2px solid var(--green);border-radius:8px;padding:16px 18px;margin-bottom:14px}
+.kw-box h4{color:var(--green-dark);font-size:14px;margin-bottom:8px}
+.aufg-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:8px}
+.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;margin-right:8px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">Lernfeld 2 / 11</div>
+      <div class="hdr-mode">📖 <span data-lang="ua">Обширна версія</span><span data-lang="de">Ausführliche Version</span></div>
+    </div>
+    <div class="lang-btns">
+      <button class="lb" onclick="setLang('de',this)">DE</button>
+      <button class="lb on" onclick="setLang('ua',this)">UA</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn on" onclick="setTab('theorie',this)"><span data-lang="ua">📘 Теорія</span><span data-lang="de">📘 Theorie</span></button>
+    <button class="tab-btn" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
+    <button class="tab-btn" onclick="setTab('aufgaben',this)"><span data-lang="ua">✏️ Завдання</span><span data-lang="de">✏️ Aufgaben</span></button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lf-hdr">
+  <span class="lf-num">LF 2</span>
+  <span class="lf-title">Güter lagern</span>
+</div>
+
+<!-- ============ TAB: THEORIE ============ -->
+<div class="tab-content on" id="tab-theorie">
+
+<div class="part-hdr">1 · <span data-lang="ua">Lager planen</span><span data-lang="de">Lager planen</span></div>
+
+<div class="sec">
+<span class="sec-num">1.1</span><h3>Aufgaben des Lagers</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Склад виконує не одну, а одразу кілька функцій, і кожна з них розв'язує окрему логістичну проблему підприємства:</p>
+<ul>
+<li><strong>Sicherungsaufgabe</strong> — захисна функція: запас на складі рятує виробництво від збоїв постачання (затримки, транспортні проблеми, раптовий підвищений попит)</li>
+<li><strong>Ausgleichsaufgabe (Überbrückungsaufgabe)</strong> — вирівнювання в часі й кількості між закупівлею, виробництвом і збутом. Класичний приклад: шоколадні зайці до Великодня виробляють задовго до свята, щоб встигнути задовольнити пік попиту</li>
+<li><strong>Spekulationsaufgabe</strong> — спекулятивна функція: якщо закупити заздалегідь дешевше, вигода від різниці цін перевищує витрати на зберігання (наприклад, закупівля пічного палива влітку, коли воно дешевше)</li>
+<li><strong>Umformungsaufgabe</strong> — перетворення великих партій на дрібні, зручні для збуту (борошно з мішків фасують у пакети по 500 г)</li>
+<li><strong>Veredelungsaufgabe</strong> — саме зберігання надає товару потрібної якості чи зрілості (сир, вино, тютюн дозрівають саме на складі)</li>
+</ul>
+</div>
+<div data-lang="de">
+<p>Das Lager erfüllt nicht nur eine, sondern gleich mehrere Funktionen, und jede davon löst ein eigenes logistisches Problem des Unternehmens:</p>
+<ul>
+<li><strong>Sicherungsaufgabe</strong> — der Vorrat schützt die Produktion vor Versorgungsstörungen (Lieferverzögerung, Transportprobleme, plötzlicher Mehrverbrauch)</li>
+<li><strong>Ausgleichsaufgabe (Überbrückungsaufgabe)</strong> — zeitlicher und mengenmäßiger Ausgleich zwischen Beschaffung, Produktion und Absatz. Klassisches Beispiel: Schokoladenosterhasen werden lange vor Ostern produziert, um die Nachfragespitze bedienen zu können</li>
+<li><strong>Spekulationsaufgabe</strong> — wird frühzeitig günstiger eingekauft, übersteigt der Preisvorteil oft die Lagerkosten (z. B. Heizölkauf im Sommer)</li>
+<li><strong>Umformungsaufgabe</strong> — große Liefermengen werden in kleine, absatzgerechte Portionen umgeformt (Mehl aus Säcken wird in 500-g-Päckchen abgefüllt)</li>
+<li><strong>Veredelungsaufgabe</strong> — die Ware erhält erst durch die Lagerung ihre gewünschte Reife oder Qualität (Käse, Wein, Tabak reifen im Lager)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2</span><h3>Lagerarten</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Склади класифікують одразу за п'ятьма різними критеріями, і жоден із них не виключає інші — реальний склад можна описати одночасно за всіма п'ятьма: за видом товару, за видом підприємства, за розташуванням, за власником, за конструкцією.</p>
+</div>
+<div data-lang="de">
+<p>Lager werden gleich nach fünf verschiedenen Kriterien klassifiziert, die sich gegenseitig nicht ausschließen — ein reales Lager lässt sich gleichzeitig nach allen fünf beschreiben: nach Güterart, Betriebsart, Standort, Eigentümer, Bauweise.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.1</span><h3>Unterscheidung nach den Güterarten</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Тип</th><th>Приклад</th></tr>
+<tr><td>Verschlusslager</td><td>для цінних, привабливих для крадіжки товарів (цигарки, дорогий віскі)</td></tr>
+<tr><td>Temperaturgeführtes Lager</td><td>для чутливих до температури товарів (м'ясо, заморожені продукти)</td></tr>
+<tr><td>Kleinteillager</td><td>для дрібних деталей у контейнерах (цвяхи, гвинти, шайби)</td></tr>
+<tr><td>Sperrigwarenlager</td><td>для товарів більшого розміру, ніж стандартна палета</td></tr>
+<tr><td>Schüttgutlager</td><td>для сипучих матеріалів (зерно, гравій, пісок)</td></tr>
+<tr><td>Stückgutlager</td><td>для штучного вантажу (упакований в коробки чи на палети товар)</td></tr>
+<tr><td>Gefahrstofflager</td><td>для небезпечних речовин (розчинники, фарби) — окремі закони й приписи</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Typ</th><th>Beispiel</th></tr>
+<tr><td>Verschlusslager</td><td>für hochwertige, diebstahlgefährdete Güter (Zigaretten, teurer Whiskey)</td></tr>
+<tr><td>Temperaturgeführtes Lager</td><td>für temperaturempfindliche Güter (Fleisch, Tiefkühlware)</td></tr>
+<tr><td>Kleinteillager</td><td>für Kleinteile in Behältern (Nägel, Schrauben, Unterlegscheiben)</td></tr>
+<tr><td>Sperrigwarenlager</td><td>für Güter größer als eine Standardpalette</td></tr>
+<tr><td>Schüttgutlager</td><td>für Schüttgüter (Getreide, Kies, Sand)</td></tr>
+<tr><td>Stückgutlager</td><td>für Stückgut (palettierte oder in Kartons verpackte Ware)</td></tr>
+<tr><td>Gefahrstofflager</td><td>für Gefahrstoffe (Verdünnung, Lacke) — eigene Gesetze und Vorschriften</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.2</span><h3>Unterscheidung nach den Betriebsarten</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Товар проходить через ланцюг Industrie → Großhandel → Einzelhandel (іноді ще й Spedition як посередник), і на кожному етапі складу потрібні різні типи складів.</p>
+</div>
+<div data-lang="de">
+<p>Die Ware durchläuft die Kette Industrie → Großhandel → Einzelhandel (manchmal noch mit Spedition als Vermittler), und auf jeder Stufe braucht das Lager andere Lagerarten.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.2.1</span><h3>Industriebetrieb</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<ul>
+<li><strong>Roh-, Hilfs- und Betriebsstofflager</strong> — Rohstoffe становлять основну частину готового виробу (дерево для столу); Hilfsstoffe виконують допоміжну функцію (шпон, гвинти, лак, клей); Betriebsstoffe не входять у сам виріб, але підтримують процес виробництва (бензин, електрика для машин)</li>
+<li><strong>Zwischenlager</strong> — буферний склад для напівфабрикатів між етапами виробництва</li>
+<li><strong>Fertigwarenlager</strong> — готова продукція</li>
+<li><strong>Handlager</strong> — часто потрібний дрібний матеріал (гвинти, шайби, ущільнювачі) прямо на робочому місці</li>
+<li><strong>Sonderlager</strong> — Ersatzteillager (запчастини, напр. в автомайстерні), Werkzeuglager (вимірювальні інструменти, форми), Büromateriallager, Packmittellager (стрічка, плівка, картон)</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li><strong>Roh-, Hilfs- und Betriebsstofflager</strong> — Rohstoffe bilden den Hauptbestandteil des Fertigprodukts (Holz für einen Schreibtisch); Hilfsstoffe erfüllen eine Hilfsfunktion (Furnier, Schrauben, Lacke, Leim); Betriebsstoffe gehen nicht ins Produkt ein, halten aber den Produktionsprozess am Laufen (Benzin, Strom für Maschinen)</li>
+<li><strong>Zwischenlager</strong> — Pufferlager für unfertige Produkte zwischen Fertigungsstufen</li>
+<li><strong>Fertigwarenlager</strong> — fertige Waren</li>
+<li><strong>Handlager</strong> — häufig benötigtes Kleinmaterial (Schrauben, Unterlegscheiben, Dichtungen) direkt am Arbeitsplatz</li>
+<li><strong>Sonderlager</strong> — Ersatzteillager (z. B. Autowerkstatt), Werkzeuglager (Messwerkzeuge, Gussformen), Büromateriallager, Packmittellager (Klebeband, Folie, Kartonagen)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.2.2</span><h3>Großhandel</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Auslieferungslager</strong> — товар чекає тут до продажу роздрібним чи промисловим клієнтам. <strong>Kommissions- чи Konsignationslager</strong> — склад постачальника, розташований безпосередньо у клієнта, з якого клієнт сам забирає потрібний товар. Важливо не плутати це з Kommissionierlager — складом, де відбувається комісіонування товару.</p>
+</div>
+<div data-lang="de">
+<p><strong>Auslieferungslager</strong> — hier wartet die Ware bis zum Verkauf an Einzelhandels- oder Industriekunden. <strong>Kommissions- oder Konsignationslager</strong> — Lager des Lieferanten direkt beim Kunden, aus dem sich der Kunde selbst die benötigte Ware entnimmt. Wichtig: nicht mit dem Kommissionierlager verwechseln — dem Lager, in dem Güter kommissioniert werden.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.2.3</span><h3>Einzelhandel</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Verkaufslager</strong> — сам торговий зал, де товар пропонують клієнту. <strong>Reservelager</strong> — резервний запас на випадок затримки поставок.</p>
+</div>
+<div data-lang="de">
+<p><strong>Verkaufslager</strong> — der Verkaufsraum selbst, in dem die Ware dem Kunden angeboten wird. <strong>Reservelager</strong> — Vorrat zur Überbrückung eventueller Lieferengpässe.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.2.4</span><h3>Spedition</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Auslieferungslager</strong> — товар готовий видати клієнту на запит. <strong>Umschlaglager</strong> — тут вантажі від різних відправників сортують за адресами отримувачів і одразу перевантажують далі: у місцевій розвозці забирають відправлення від різних відправників для різних отримувачів, розвантажують і сортують за напрямком доставки, а потім вантажать на транспорт, що прямує безпосередньо до місця призначення.</p>
+</div>
+<div data-lang="de">
+<p><strong>Auslieferungslager</strong> — auf Abruf für den Kunden bereitgehaltene Ware. <strong>Umschlaglager</strong> — hier werden Sendungen verschiedener Absender sortiert und direkt weiterverladen: im Nahverkehr werden Sendungen bei verschiedenen Absendern für verschiedene Empfänger abgeholt, im Umschlaglager entladen und nach Empfangsorten sortiert, danach zielrein weiterverladen.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.3</span><h3>Unterscheidung nach dem Lagerstandort</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<h3>Zentrales Lager</h3>
+<p>Більшість малих і середніх підприємств тримають один центральний склад.</p>
+<p><strong>Переваги:</strong> легше визначити загальну потребу · нижча зв'язана капіталовкладеність · краще використання площі · легше планувати персонал · легше контролювати приймання й видачу · великі закупівлі знижують витрати (менше замовлень, більші знижки за обсяг)</p>
+<p><strong>Недоліки:</strong> довший час транспортування · вищі транспортні витрати через довші маршрути · довші шляхи до виробництва чи клієнта</p>
+<h3>Dezentrales Lager</h3>
+<p>Коли відстань між складом і виробництвом/клієнтом дуже велика, доцільно створити кілька децентралізованих складів.</p>
+<p><strong>Переваги:</strong> коротші маршрути · нижчі транспортні витрати · швидша доставка · легше узгодження між складом і виробництвом/продажем · швидший обмін інформацією</p>
+<p><strong>Недоліки:</strong> більше персоналу · вищі витрати на запаси · вищі витрати на будівлі · більше адміністрування · вищі витрати на обладнання складу</p>
+<p>Багато підприємств поєднують обидва варіанти. Вибір залежить не тільки від близькості до постачальників і клієнтів, а й від законодавчих вимог, вартості й особливостей самого товару.</p>
+</div>
+<div data-lang="de">
+<h3>Zentrales Lager</h3>
+<p>Die meisten kleinen und mittleren Unternehmen führen ein Zentrallager.</p>
+<p><strong>Vorteile:</strong> leichtere Feststellung des Gesamtbedarfs · niedrigere Kapitalbindung · höhere Flächen- und Raumausnutzung · leichtere Personalplanung · leichtere Kontrolle bei Annahme/Ausgabe · größere Einkäufe senken Beschaffungskosten</p>
+<p><strong>Nachteile:</strong> längere Transportzeiten · höhere Transportkosten wegen längerer Wege · längere Wege zur Produktion bzw. zum Kunden</p>
+<h3>Dezentrales Lager</h3>
+<p>Ist die Entfernung zwischen Lager und Produktionsstätte/Kunde sehr groß, kann es sinnvoll sein, mehrere dezentrale Lager zu errichten.</p>
+<p><strong>Vorteile:</strong> kürzere Transportwege · geringere Transportkosten · kürzere Transportzeiten · leichtere Abstimmung zwischen Lager und Produktion/Verkauf · schnellerer Informationsfluss</p>
+<p><strong>Nachteile:</strong> höherer Personalbedarf · höhere Kosten für Warenvorräte · höhere Gebäudekosten · höherer Verwaltungsaufwand · höhere Kosten für Lagereinrichtung</p>
+<p>Viele Unternehmen kombinieren beide Formen. Die Wahl hängt neben Lieferer- und Kundennähe auch von gesetzlichen Vorschriften, Wert und Eigenschaften der Güter ab.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.4</span><h3>Unterscheidung nach der Bauweise</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Тип</th><th>Опис</th></tr>
+<tr><td>offenes Lager (Freilager)</td><td>просто неба, захищене від сторонніх (напр. огорожею); лише для товару, стійкого до погоди й малопривабливого для крадіжки (пісок, гравій, плити)</td></tr>
+<tr><td>halboffenes Lager</td><td>накрите зверху, без бокового захисту (деревина, машини, авто)</td></tr>
+<tr><td>geschlossenes Lager</td><td>будівля чи ангар — для чутливих до погоди й цінних товарів (харчі, текстиль, ювелірні вироби)</td></tr>
+</table>
+<p><strong>Geschlossene Lager за висотою:</strong> Flachlager (одноповерховий, до 7 м) · Hochflachlager (7-12 м) · Hochregallager (понад 12 м, до 45 м)</p>
+<p><strong>Etagenlager</strong> — по суті Flachlager, поділений на поверхи перекриттями; дозволяє суттєво збільшити площу зберігання на малій ділянці землі, але вимагає підвищеної несучої здатності перекриттів; поверхи з'єднуються сходами й ліфтами, причому ліфти часто стають вузьким місцем матеріалопотоку.</p>
+<p><strong>Traglufthallenlager</strong> — повітропроникна оболонка, надута вентиляторами як куля; вхід через повітряні шлюзи для підтримання надлишкового тиску всередині; швидко монтується й демонтується, але має відносно низьке використання об'єму через склепінчасту стелю.</p>
+<p><strong>Speziallager</strong> — резервуари, силоси, бункери; заповнюються зверху (конвеєрами чи насосами), розвантажуються переважно через отвір знизу.</p>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Typ</th><th>Beschreibung</th></tr>
+<tr><td>offenes Lager (Freilager)</td><td>unter freiem Himmel, vor Zugriff geschützt (z. B. Einzäunung); nur für witterungsunempfindliche, wenig diebstahlgefährdete Güter (Sand, Kies, Platten)</td></tr>
+<tr><td>halboffenes Lager</td><td>überdacht, ohne seitlichen Schutz (Holz, Maschinen, Autos)</td></tr>
+<tr><td>geschlossenes Lager</td><td>Gebäude/Halle — für witterungsempfindliche, wertvolle Güter (Lebensmittel, Textilien, Schmuck)</td></tr>
+</table>
+<p><strong>Geschlossene Lager nach Bauhöhe:</strong> Flachlager (eingeschossig, bis 7 m) · Hochflachlager (7-12 m) · Hochregallager (über 12 m, bis 45 m)</p>
+<p><strong>Etagenlager</strong> — im Prinzip ein Flachlager, durch Zwischendecken in Stockwerke unterteilt; erhöht die Lagerfläche auf kleinem Grundstück deutlich, erfordert aber höhere Tragfähigkeit der Decken; Etagen werden durch Treppen und Aufzüge verbunden, wobei Aufzüge oft zum Engpass im Materialfluss werden.</p>
+<p><strong>Traglufthallenlager</strong> — luftdurchlässige Hülle, ballonartig durch Gebläse aufgespannt; Zugang über Luftschleusen zur Aufrechterhaltung des Überdrucks; schnell auf-/abbaubar, aber relativ geringe Raumausnutzung durch die gewölbte Decke.</p>
+<p><strong>Speziallager</strong> — Tanks, Silos, Bunker; werden von oben befüllt (Förderbänder, Pumpen), die Entnahme erfolgt meist über eine Auslassöffnung am Boden.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2.5</span><h3>Unterscheidung nach dem Eigentümer</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Eigenlagerung</strong> — підприємство саме володіє й керує складом. <strong>Fremdlagerung</strong> — зберігання доручається зовнішньому логістичному провайдеру за плату. Вибір залежить від порівняння витрат: Eigenlagerung вигідніша при стабільно високому й постійному обсязі запасів, Fremdlagerung — при сезонних коливаннях чи браку власного капіталу для будівництва складу. Юридично Fremdlagerung регулюється Lagervertrag за §§ 467 і далі HGB, який визначає обов'язки зберігача (Lagerhalter) щодо збереження товару.</p>
+</div>
+<div data-lang="de">
+<p><strong>Eigenlagerung</strong> — das Unternehmen besitzt und betreibt das Lager selbst. <strong>Fremdlagerung</strong> — die Lagerung wird gegen Entgelt an einen externen Logistikdienstleister übergeben. Die Wahl hängt vom Kostenvergleich ab: Eigenlagerung lohnt sich bei stabil hohem, gleichmäßigem Bestand, Fremdlagerung bei saisonalen Schwankungen oder fehlendem Eigenkapital für einen Lagerbau. Rechtlich wird die Fremdlagerung durch den Lagervertrag nach §§ 467 ff. HGB geregelt, der die Pflichten des Lagerhalters zur sorgfältigen Aufbewahrung festlegt.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">2 · Lagertechnik</div>
+
+<div class="sec">
+<span class="sec-num">2.1-2.3</span><h3><span data-lang="ua">Bodenlagerung та Blocklagerung</span><span data-lang="de">Bodenlagerung und Blocklagerung</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Bodenlagerung ohne Lagergerät</strong> — товар складується прямо на підлозі без будь-якого допоміжного обладнання, найпростіший і найдешевший варіант, підходить для важких, стійких до штабелювання товарів. <strong>Bodenlagerung mit Lagergerät</strong> — використовуються прості засоби (піддони, підкладки), щоб захистити товар від вологи підлоги й полегшити переміщення. <strong>Blocklagerung (Reihenlagerung)</strong> — однорідний товар складується щільними блоками одне на одному й поруч, без стелажів; максимальна економія площі, але доступ можливий лише до товару на краю блоку, тому Fifo складно дотримати — типово застосовується Lifo.</p>
+</div>
+<div data-lang="de">
+<p><strong>Bodenlagerung ohne Lagergerät</strong> — die Ware wird direkt auf dem Boden ohne Hilfsmittel gelagert, die einfachste und günstigste Variante, geeignet für schwere, stapelfähige Güter. <strong>Bodenlagerung mit Lagergerät</strong> — einfache Hilfsmittel (Paletten, Unterlagen) schützen die Ware vor Bodenfeuchtigkeit und erleichtern den Transport. <strong>Blocklagerung (Reihenlagerung)</strong> — gleichartige Ware wird in dichten Blöcken übereinander und nebeneinander gestapelt, ohne Regale; maximale Flächenersparnis, aber Zugriff nur auf die Ware am Blockrand, weshalb Fifo schwer einzuhalten ist — meist wird Lifo angewendet.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.4</span><h3>Sicherheitsvorschriften bei der Bodenlagerung</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>При штабелюванні без стелажів висота й стійкість штабеля мають вирішальне значення для безпеки: враховують несучу здатність нижнього шару, стійкість форми упаковки, максимально дозволену висоту штабелювання (Stapelhöhe) за вказівками виробника, і залишають достатньо широкі проходи для огляду й доступу в разі падіння.</p>
+</div>
+<div data-lang="de">
+<p>Beim Stapeln ohne Regale sind Höhe und Standsicherheit des Stapels entscheidend für die Sicherheit: berücksichtigt werden die Tragfähigkeit der unteren Lage, die Formstabilität der Verpackung, die maximal zulässige Stapelhöhe laut Herstellerangabe, sowie ausreichend breite Gänge für Übersicht und Zugang im Falle eines Umsturzes.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">3 · Lager einrichten</div>
+
+<div class="sec">
+<span class="sec-num">3.1</span><h3>Regale als Lagereinrichtungen</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Регалі поділяють на статичні (товар нерухомий у комірці — Fachboden-, Paletten-, Kragarm-, Wabenregal) і динамічні (товар рухається всередині регалу за рахунок гравітації чи механізму — Durchlauf-, Verschiebe-, Einschub-, Umlaufregal).</p>
+</div>
+<div data-lang="de">
+<p>Regale werden in statische (Ware bleibt fest im Fach — Fachboden-, Paletten-, Kragarm-, Wabenregal) und dynamische (Ware bewegt sich im Regal durch Schwerkraft oder Mechanik — Durchlauf-, Verschiebe-, Einschub-, Umlaufregal) unterteilt.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.1.1-3.1.4</span><h3>Fachboden-, Paletten-, Einfahr-, Durchlaufregale</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Тип</th><th>Опис</th></tr>
+<tr><td><strong>Fachbodenregal</strong></td><td>рамка + полиці; для ручного зберігання дрібних/середніх партій; легко переналаштувати висоту полиць</td></tr>
+<tr><td><strong>Palettenregal</strong></td><td>палети лежать на траверсах (не на суцільній полиці); Quertraversenregal (палета впоперек) чи Längstraversenregal (уздовж) — залежно від розміру палети</td></tr>
+<tr><td><strong>Einfahrregal</strong></td><td>вилковий навантажувач заїжджає прямо в канал регалу; висока щільність зберігання, типово Lifo (вхід і вихід з одного боку)</td></tr>
+<tr><td><strong>Durchlaufregal</strong></td><td>похилі рол-доріжки; завантаження і розвантаження з протилежних сторін → природний Fifo; ідеально для товару з обмеженим терміном придатності</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Typ</th><th>Beschreibung</th></tr>
+<tr><td><strong>Fachbodenregal</strong></td><td>Rahmen + Fachböden; für manuelle Lagerung kleiner/mittlerer Mengen; Bodenhöhe leicht verstellbar</td></tr>
+<tr><td><strong>Palettenregal</strong></td><td>Paletten liegen auf Traversen; Quertraversenregal (Palette quer) oder Längstraversenregal (längs) — je nach Palettengröße</td></tr>
+<tr><td><strong>Einfahrregal</strong></td><td>Stapler fährt direkt in den Regalkanal; hohe Lagerdichte, meist Lifo (Ein-/Ausgang auf einer Seite)</td></tr>
+<tr><td><strong>Durchlaufregal</strong></td><td>geneigte Rollenbahnen; Be- und Entladung auf entgegengesetzten Seiten → natürliches Fifo; ideal für Ware mit begrenzter Haltbarkeit</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.1.5-3.1.11</span><h3>Kragarm-, Waben-, Verschiebe-, Umlauf-, Turm-, Einschub-, Kanalregale</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Тип</th><th>Опис</th></tr>
+<tr><td><strong>Kragarmregal</strong></td><td>без полиць — консолі, що виступають убік; для довгих/громіздких вантажів (труби, дошки, профілі)</td></tr>
+<tr><td><strong>Wabenregal (Kassettenregal)</strong></td><td>поділяє місце на окремі канали-"стільники" для довгого товару різної довжини чи сорту</td></tr>
+<tr><td><strong>Verschieberegal</strong></td><td>стелажі (Paletten-, Fachboden- чи Kragarmregal) стоять на рейках і зсуваються, залишаючи лише один прохід — суттєва економія площі</td></tr>
+<tr><td><strong>Umlaufregal</strong></td><td>полиці рухаються по замкненому циклу до оператора (принцип "товар до людини")</td></tr>
+<tr><td><strong>Turmregal</strong></td><td>вертикальний ліфт/шаттл, майже повністю автоматизований, типово в автомобільній промисловості</td></tr>
+<tr><td><strong>Einschubregal</strong></td><td>як Durchlaufregal, але завантаження й розвантаження з ОДНОГО боку → Lifo</td></tr>
+<tr><td><strong>Kanalregal (Tunnellager)</strong></td><td>глибокі канали для однорідного товару у великій кількості, дуже висока щільність зберігання</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Typ</th><th>Beschreibung</th></tr>
+<tr><td><strong>Kragarmregal</strong></td><td>ohne Fachböden — seitlich auskragende Arme; für Langgut/Sperrgut (Rohre, Bretter, Profile)</td></tr>
+<tr><td><strong>Wabenregal (Kassettenregal)</strong></td><td>teilt den Platz in einzelne "Waben"-Kanäle für Langgut unterschiedlicher Länge/Sorte</td></tr>
+<tr><td><strong>Verschieberegal</strong></td><td>Regale (Paletten-, Fachboden- oder Kragarmregal) stehen auf Schienen und verschieben sich, sodass nur ein Gang bleibt — erhebliche Flächenersparnis</td></tr>
+<tr><td><strong>Umlaufregal</strong></td><td>Fachböden bewegen sich im geschlossenen Kreislauf zum Bediener (Ware-zum-Mann-Prinzip)</td></tr>
+<tr><td><strong>Turmregal</strong></td><td>vertikaler Lift/Shuttle, fast vollautomatisch, typisch in der Automobilindustrie</td></tr>
+<tr><td><strong>Einschubregal</strong></td><td>wie Durchlaufregal, aber Be- und Entladung auf DERSELBEN Seite → Lifo</td></tr>
+<tr><td><strong>Kanalregal (Tunnellager)</strong></td><td>tiefe Kanäle für gleichartige Ware in großer Menge, sehr hohe Lagerdichte</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">3.1.12-3.1.14</span><h3><span data-lang="ua">Автоматизовані регалі та Materialfluss</span><span data-lang="de">Automatisierte Regale und Materialfluss</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Automatisches Behälterregal</strong> — регали, повністю обслуговувані Regalbediengerät без участі людини; типово в дуже великих логістичних центрах. <strong>Hochregallager</strong> — понад 12 м заввишки, вимагає спеціальної техніки (Regalbediengerät) і, як правило, автоматизації. <strong>Lagerung auf Stetigförderern</strong> — товар зберігається безпосередньо на конвеєрних лініях, що одночасно виконують функцію тимчасового буфера.</p>
+<p><strong>Lageraufbau nach dem Materialfluss (3.2):</strong> розташування регалів планують так, щоб мінімізувати шляхи переміщення — товари з високою частотою обороту (категорія A за ABC-аналізом) розміщують ближче до зони видачі, рідковживані — далі.</p>
+</div>
+<div data-lang="de">
+<p><strong>Automatisches Behälterregal</strong> — Regale, die vollständig durch Regalbediengeräte ohne Personaleinsatz bedient werden; typisch in sehr großen Logistikzentren. <strong>Hochregallager</strong> — über 12 m Höhe, erfordert spezielle Technik (Regalbediengerät) und in der Regel Automatisierung. <strong>Lagerung auf Stetigförderern</strong> — die Ware wird direkt auf Förderlinien gelagert, die gleichzeitig als temporärer Puffer dienen.</p>
+<p><strong>Lageraufbau nach dem Materialfluss (3.2):</strong> die Regalanordnung wird so geplant, dass Wegstrecken minimiert werden — Artikel mit hoher Umschlagshäufigkeit (A-Güter nach ABC-Analyse) werden näher an der Warenausgangszone platziert, selten benötigte weiter entfernt.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">4 · <span data-lang="ua">Передумови належного зберігання</span><span data-lang="de">Voraussetzungen für eine ordnungsgemäße Lagerung</span></div>
+
+<div class="sec">
+<span class="sec-num">4.1</span><h3>Sauberkeit</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Чистота стосується не тільки самого товару, а й приміщень, проходів, персоналу, обладнання й транспортних засобів — все це разом визначає базову передумову для правильного зберігання. Досягається щоденним прибиранням і своєчасним прибиранням непотрібного пакувального матеріалу.</p>
+<p><strong>Переваги чистого складу:</strong> знижується ризик нещасних випадків і травм · подовжується термін служби обладнання · товар довше зберігає товарний/придатний до використання вигляд · комфортніше робоче середовище · позитивне враження на постачальників, клієнтів і відвідувачів</p>
+</div>
+<div data-lang="de">
+<p>Sauberkeit betrifft nicht nur die Ware selbst, sondern auch Räume, Verkehrswege, Personal, Einrichtung und Fördermittel — all das zusammen bildet die Grundvoraussetzung für ordnungsgemäße Lagerung. Erreicht wird sie durch tägliches Fegen/Wischen und rechtzeitiges Wegräumen nicht mehr benötigten Verpackungsmaterials.</p>
+<p><strong>Vorteile eines sauberen Lagers:</strong> geringere Unfall- und Verletzungsgefahr · längere Nutzungsdauer der Lagereinrichtung · Ware bleibt länger verkaufs-/gebrauchsfähig · angenehmeres Arbeitsumfeld · positiver Eindruck bei Lieferern, Kunden, Besuchern</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">4.2</span><h3>Geräumigkeit</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Достатньо простору для проходів, проїздів і самого товару — передумова для оглядового й чистого складу.</p>
+<p><strong>Переваги:</strong> нижчий ризик нещасних випадків · товар зберігається оглядово · достатньо місця для техніки · швидше й зручніше приймання/видача товару</p>
+</div>
+<div data-lang="de">
+<p>Ausreichend Platz für Fahrwege, Gänge und die einzulagernde Ware — Voraussetzung für übersichtliche und saubere Lagerung.</p>
+<p><strong>Vorteile:</strong> geringere Unfallgefahr · übersichtliche Lagerung · ausreichend Platz für Fördermittel · schnellere, bequemere Ein-/Auslagerung</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">4.3</span><h3>Übersichtlichkeit</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Забагато простору без організації теж шкодить — якщо товар складають будь-де, огляд швидко втрачається. Оглядовість досягається поділом складу на зони, чітким маркуванням місць зберігання, веденням Lagerfachkarten (у системі, напр. SAP) і присвоєнням номерів матеріалів/деталей.</p>
+</div>
+<div data-lang="de">
+<p>Zu viel Raum ohne Organisation schadet ebenfalls — wird die Ware irgendwo abgestellt, geht der Überblick schnell verloren. Übersichtlichkeit erreicht man durch Einteilung des Lagers in Zonen, gute Stellplatzkennzeichnung, das Führen von Lagerfachkarten (im System, z. B. SAP) und die Vergabe von Material-/Teilenummern.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">5 · Arbeiten bei der Einlagerung</div>
+
+<div class="sec">
+<span class="sec-num">5.1-5.4</span><h3><span data-lang="ua">Обробка перед розміщенням</span><span data-lang="de">Bearbeitung vor der Einlagerung</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Vorverpackung und Portionierung</strong> — велика партія розфасовується у менші одиниці, зручні для подальшого продажу чи використання. <strong>Komplettierung</strong> — товари з різних поставок об'єднуються в один комплект (набір). <strong>Preisauszeichnung</strong> — товар маркується ціною, якщо це потрібно для роздрібного продажу. <strong>Buchung der Einlagerung</strong> — фінальне внесення даних про товар у систему керування складом, після чого товар офіційно доступний для комісіонування.</p>
+</div>
+<div data-lang="de">
+<p><strong>Vorverpackung und Portionierung</strong> — eine große Liefermenge wird in kleinere, für Verkauf oder Gebrauch geeignete Einheiten umgeformt. <strong>Komplettierung</strong> — Waren aus verschiedenen Lieferungen werden zu einem Set zusammengestellt. <strong>Preisauszeichnung</strong> — die Ware wird bei Bedarf für den Einzelhandelsverkauf mit dem Preis versehen. <strong>Buchung der Einlagerung</strong> — endgültige Erfassung der Warendaten im Lagerverwaltungssystem, danach ist die Ware offiziell für die Kommissionierung verfügbar.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">5.5-5.8</span><h3><span data-lang="ua">Güterart, Lagerplatz і принципи розміщення</span><span data-lang="de">Güterart, Lagerplatz und Einlagerungsgrundsätze</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Вибір конкретного місця зберігання (Lagerplatz) залежить від виду товару (Güterart) — його ваги, розміру, чутливості, частоти обороту. Існують два протилежні принципи присвоєння місць:</p>
+<ul>
+<li><strong>Starre Einlagerung (Festplatzsystem)</strong> — кожен артикул має власне постійне місце. Плюс: працівник завжди знає, де що лежить, навіть без системи; менші вимоги до IT. Мінус: гірше використання площі, місце простоює, якщо товару зараз немає</li>
+<li><strong>Flexible Einlagerung (chaotische Lagerhaltung)</strong> — товар кладеться на будь-яке вільне місце в момент надходження, місце відстежується виключно через систему. Плюс: максимальне використання площі. Мінус: без справної IT-системи товар узагалі не знайти</li>
+</ul>
+</div>
+<div data-lang="de">
+<p>Die Wahl des konkreten Lagerplatzes hängt von der Güterart ab — Gewicht, Größe, Empfindlichkeit, Umschlagshäufigkeit. Es gibt zwei gegensätzliche Prinzipien der Platzvergabe:</p>
+<ul>
+<li><strong>Starre Einlagerung (Festplatzsystem)</strong> — jeder Artikel hat einen festen, eigenen Platz. Vorteil: der Mitarbeiter weiß immer, wo etwas liegt, auch ohne System; geringere IT-Anforderungen. Nachteil: schlechtere Flächennutzung, der Platz bleibt leer, wenn gerade keine Ware da ist</li>
+<li><strong>Flexible Einlagerung (chaotische Lagerhaltung)</strong> — die Ware wird bei Ankunft auf einen beliebigen freien Platz gelegt, der Standort wird ausschließlich über das System verfolgt. Vorteil: maximale Flächennutzung. Nachteil: ohne funktionierendes IT-System ist die Ware überhaupt nicht auffindbar</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">6 · Gefahren im Lager</div>
+
+<div class="sec">
+<span class="sec-num">6.1-6.2</span><h3><span data-lang="ua">Види небезпек і законодавча база</span><span data-lang="de">Gefahrenarten und Rechtsgrundlagen</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Небезпеки на складі виникають від техніки, штабелювання, хімічних речовин, вогню й крадіжки. Регулюються одразу кількома законами й постановами — від загальних до вузькоспеціалізованих:</p>
+<table>
+<tr><th>Закон/постанова</th><th>Сфера</th></tr>
+<tr><td>Arbeitsschutzgesetz (ArbSchG)</td><td>загальний обов'язок роботодавця забезпечити безпеку праці</td></tr>
+<tr><td>Betriebssicherheitsverordnung</td><td>безпечна експлуатація обладнання й робочих засобів</td></tr>
+<tr><td>Bundesimmissionsschutzgesetz</td><td>захист від шуму, викидів, вібрації</td></tr>
+<tr><td>Geräte- und Produktsicherheitsgesetz</td><td>безпека техніки й продукції</td></tr>
+<tr><td>Arbeitsstättenverordnung</td><td>вимоги до самого робочого місця</td></tr>
+<tr><td>Chemikaliengesetz</td><td>захист від небезпечних хімічних речовин</td></tr>
+<tr><td>Gefahrstoffverordnung</td><td>поводження з Gefahrstoffe на робочому місці</td></tr>
+<tr><td>GHS</td><td>глобально узгоджена система класифікації й маркування хімікатів</td></tr>
+<tr><td>Flammpunktgrenzen</td><td>межі температури спалаху для горючих рідин — визначають клас небезпеки</td></tr>
+<tr><td>Wasserhaushaltsgesetz</td><td>захист водних ресурсів від забруднення (напр. розлив хімікатів)</td></tr>
+<tr><td>RAL-Druckschriften</td><td>технічні стандарти якості (RAL-Gütezeichen)</td></tr>
+<tr><td>DGUV-Regeln</td><td>конкретні технічні вимоги безпеки, включно зі складуванням і штабелюванням</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<p>Gefahren im Lager entstehen durch Technik, Stapeln, Chemikalien, Feuer und Diebstahl. Geregelt werden sie durch mehrere Gesetze und Verordnungen — von allgemein bis sehr speziell:</p>
+<table>
+<tr><th>Gesetz/Verordnung</th><th>Bereich</th></tr>
+<tr><td>Arbeitsschutzgesetz (ArbSchG)</td><td>allgemeine Pflicht des Arbeitgebers zur Sicherheit</td></tr>
+<tr><td>Betriebssicherheitsverordnung</td><td>sicherer Betrieb von Anlagen und Arbeitsmitteln</td></tr>
+<tr><td>Bundesimmissionsschutzgesetz</td><td>Schutz vor Lärm, Emissionen, Erschütterungen</td></tr>
+<tr><td>Geräte- und Produktsicherheitsgesetz</td><td>Sicherheit von Geräten und Produkten</td></tr>
+<tr><td>Arbeitsstättenverordnung</td><td>Anforderungen an den Arbeitsplatz selbst</td></tr>
+<tr><td>Chemikaliengesetz</td><td>Schutz vor gefährlichen Chemikalien</td></tr>
+<tr><td>Gefahrstoffverordnung</td><td>Umgang mit Gefahrstoffen am Arbeitsplatz</td></tr>
+<tr><td>GHS</td><td>weltweit einheitliches System zur Einstufung/Kennzeichnung von Chemikalien</td></tr>
+<tr><td>Flammpunktgrenzen</td><td>Temperaturgrenzen für brennbare Flüssigkeiten — bestimmen die Gefahrenklasse</td></tr>
+<tr><td>Wasserhaushaltsgesetz</td><td>Schutz der Gewässer vor Verunreinigung (z. B. Chemikalienaustritt)</td></tr>
+<tr><td>RAL-Druckschriften</td><td>technische Gütestandards (RAL-Gütezeichen)</td></tr>
+<tr><td>DGUV-Regeln</td><td>konkrete technische Sicherheitsanforderungen, inkl. Lagern und Stapeln</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">6.3-6.4</span><h3><span data-lang="ua">Brandgefahr і Diebstahlgefahr</span><span data-lang="de">Brandgefahr und Diebstahlgefahr</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Brandgefahr</strong> — виникає через горючі матеріали, неправильне зберігання хімікатів, несправну електропроводку. Заходи: протипожежні перегородки, вогнегасники в доступних місцях, дотримання Flammpunktgrenzen, заборона паління. <strong>Diebstahlgefahr</strong> — вища для дрібних, дорогих і ліквідних товарів. Заходи: Verschlusslager для цінного товару, контроль доступу, відеоспостереження, облік і регулярна інвентаризація.</p>
+</div>
+<div data-lang="de">
+<p><strong>Brandgefahr</strong> — entsteht durch brennbare Materialien, falsche Lagerung von Chemikalien, defekte Elektrik. Maßnahmen: Brandschutzwände, zugängliche Feuerlöscher, Einhaltung der Flammpunktgrenzen, Rauchverbot. <strong>Diebstahlgefahr</strong> — höher bei kleinen, teuren, leicht verwertbaren Gütern. Maßnahmen: Verschlusslager für Wertgüter, Zugangskontrolle, Videoüberwachung, Bestandsführung und regelmäßige Inventur.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">7 · Produktivitätskennzahlen eines Lagers</div>
+
+<div class="sec">
+<div class="sec-body">
+<div data-lang="ua">
+<p>Ефективність складу вимірюють через набір кількісних показників, які дозволяють порівнювати періоди чи різні склади між собою:</p>
+<div class="formula">Ø Lagerbestand = (Anfangsbestand + Endbestand) ÷ 2
+Umschlagshäufigkeit = Wareneinsatz ÷ Ø Lagerbestand
+Lagerdauer (Tage) = 360 ÷ Umschlagshäufigkeit
+Lagerzinssatz = (Marktzins × Lagerdauer) ÷ 360
+Lagerzinsen = Ø Lagerbestand × Lagerzinssatz ÷ 100
+Lagernutzungsgrad = (belegte Lagerplätze ÷ alle Lagerplätze) × 100
+Kommissionierleistung = Anzahl Positionen ÷ Zeit</div>
+<p>Висока оборотність зазвичай свідчить про хорошу ефективність, але водночас підвищує ризик дефіциту при непередбаченому попиті — тому показники ніколи не інтерпретують ізольовано, а завжди в комплексі.</p>
+</div>
+<div data-lang="de">
+<p>Die Effizienz eines Lagers wird über mehrere Kennzahlen gemessen, die Zeiträume oder verschiedene Lager miteinander vergleichbar machen:</p>
+<div class="formula">Ø Lagerbestand = (Anfangsbestand + Endbestand) ÷ 2
+Umschlagshäufigkeit = Wareneinsatz ÷ Ø Lagerbestand
+Lagerdauer (Tage) = 360 ÷ Umschlagshäufigkeit
+Lagerzinssatz = (Marktzins × Lagerdauer) ÷ 360
+Lagerzinsen = Ø Lagerbestand × Lagerzinssatz ÷ 100
+Lagernutzungsgrad = (belegte Lagerplätze ÷ alle Lagerplätze) × 100
+Kommissionierleistung = Anzahl Positionen ÷ Zeit</div>
+<p>Eine hohe Umschlagshäufigkeit deutet meist auf gute Effizienz hin, erhöht aber gleichzeitig das Risiko von Fehlmengen bei unerwarteter Nachfrage — deshalb werden Kennzahlen nie isoliert, sondern immer im Zusammenhang interpretiert.</p>
+</div>
+</div>
+</div>
+
+<div class="progress">
+<span data-lang="ua">✅ Lernfeld 2 (чернетка) — потребує звірки з Kernwissen твого підручника</span>
+<span data-lang="de">✅ Lernfeld 2 (Entwurf) — muss mit dem Kernwissen deines Lehrbuchs abgeglichen werden</span>
+</div>
+
+</div>
+<!-- ============ END TAB: THEORIE ============ -->
+
+<!-- ============ TAB: KERNWISSEN ============ -->
+<div class="tab-content" id="tab-kernwissen">
+<div class="kw-box">
+<div data-lang="ua">
+<p><em>Вкладку Kernwissen заповнимо разом, коли ти звіриш теорію зі своєю книгою.</em></p>
+</div>
+<div data-lang="de">
+<p><em>Der Kernwissen-Tab wird gemeinsam ausgefüllt, sobald du die Theorie mit deinem Buch abgeglichen hast.</em></p>
+</div>
+</div>
+</div>
+<!-- ============ END TAB: KERNWISSEN ============ -->
+
+<!-- ============ TAB: AUFGABEN ============ -->
+<div class="tab-content" id="tab-aufgaben">
+<div data-lang="ua">
+<div class="aufg-item"><span class="aufg-num">1</span>Наведи по прикладу для кожної з 5 Aufgaben des Lagers.</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Чим Kommissions-/Konsignationslager відрізняється від Kommissionierlager?</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Порівняй переваги й недоліки Zentrales vs Dezentrales Lager.</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Опиши різницю між Durchlaufregal і Einschubregal — де застосовується Fifo, де Lifo, і чому.</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Порівняй Starre і flexible Einlagerung — коли який варіант вигідніший?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Назви три переваги чистого й оглядового складу.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Розрахуй Umschlagshäufigkeit і Lagerdauer за заданими Anfangsbestand/Endbestand/Wareneinsatz.</div>
+</div>
+<div data-lang="de">
+<div class="aufg-item"><span class="aufg-num">1</span>Nennen Sie je ein Beispiel für die 5 Aufgaben des Lagers.</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Worin unterscheidet sich das Kommissions-/Konsignationslager vom Kommissionierlager?</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Vergleichen Sie Vor- und Nachteile von Zentrales vs Dezentrales Lager.</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Beschreiben Sie den Unterschied zwischen Durchlaufregal und Einschubregal — wo gilt Fifo, wo Lifo, und warum?</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Vergleichen Sie starre und flexible Einlagerung — wann lohnt sich welche Variante?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Nennen Sie drei Vorteile eines sauberen, übersichtlichen Lagers.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Berechnen Sie Umschlagshäufigkeit und Lagerdauer bei gegebenem Anfangsbestand/Endbestand/Wareneinsatz.</div>
+</div>
+</div>
+<!-- ============ END TAB: AUFGABEN ============ -->
+
+</div>
+
+<script>
+let lang = 'ua';
+let tab = 'theorie';
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===l);
+  });
+}
+function setTab(t, btn){
+  tab = t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('on'));
+  document.getElementById('tab-'+t).classList.add('on');
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===lang);
+  });
+});
+</script>
+</body>
+</html>
