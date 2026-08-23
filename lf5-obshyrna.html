@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Lernfeld 5</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.hdr-mode{background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;margin-left:6px}
+.lang-btns{display:flex;gap:6px}
+.lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+.lb.on{background:#fff;color:var(--green-dark);border-color:#fff}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tab-btn{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;padding:9px 6px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;text-align:center}
+.tab-btn.on{background:var(--red);border-color:var(--red)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.lf-hdr{background:var(--green-dark);color:#fff;padding:14px 18px;border-radius:8px;margin:20px 0 12px;display:flex;align-items:baseline;gap:10px}
+.lf-num{font-size:13px;font-weight:800;background:var(--red);padding:3px 10px;border-radius:4px}
+.lf-title{font-size:17px;font-weight:800}
+.part-hdr{margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--green);color:var(--green-dark);font-weight:800;font-size:15px}
+.sec{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:16px 18px;margin-bottom:12px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--red);margin-right:6px}
+.sec h3{font-size:15px;font-weight:700;color:var(--green-dark);display:inline}
+.sec-body{margin-top:10px}
+.sec p{margin-bottom:10px}
+.sec ul,.sec ol{margin-left:20px;margin-bottom:8px}
+.sec li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{background:#eef3ec;color:var(--green-dark);text-align:left;padding:6px 8px;border:1px solid var(--border);font-size:12px}
+td{padding:6px 8px;border:1px solid var(--border)}
+.rule{background:#fdf2f0;border-left:3px solid var(--red);padding:10px 14px;margin-top:10px;font-size:13px;border-radius:4px}
+.formula{background:#0a1020;border:2px solid var(--green);border-radius:8px;padding:12px 14px;margin:10px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#93e0a8;white-space:pre-wrap}
+[data-lang]{display:none}
+[data-lang].active{display:block}
+span[data-lang]{display:none}
+span[data-lang].active{display:inline}
+.progress{font-size:12px;color:var(--muted);text-align:center;margin:16px 0;padding:10px;background:#eef3ec;border-radius:6px}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.kw-box{background:#eef3ec;border:2px solid var(--green);border-radius:8px;padding:16px 18px;margin-bottom:14px}
+.kw-box h4{color:var(--green-dark);font-size:14px;margin-bottom:8px}
+.aufg-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:8px}
+.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;margin-right:8px}
+.step-list{counter-reset:step;list-style:none;margin-left:0}
+.step-list li{counter-increment:step;position:relative;padding:8px 12px 8px 38px;margin-bottom:6px;background:#eef3ec;border-radius:6px;font-size:13px}
+.step-list li::before{content:counter(step);position:absolute;left:10px;top:8px;background:var(--green);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">Lernfeld 5 / 11</div>
+      <div class="hdr-mode">📖 <span data-lang="ua">Обширна версія</span><span data-lang="de">Ausführliche Version</span></div>
+    </div>
+    <div class="lang-btns">
+      <button class="lb" onclick="setLang('de',this)">DE</button>
+      <button class="lb on" onclick="setLang('ua',this)">UA</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn on" onclick="setTab('theorie',this)"><span data-lang="ua">📘 Теорія</span><span data-lang="de">📘 Theorie</span></button>
+    <button class="tab-btn" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
+    <button class="tab-btn" onclick="setTab('aufgaben',this)"><span data-lang="ua">✏️ Завдання</span><span data-lang="de">✏️ Aufgaben</span></button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lf-hdr">
+  <span class="lf-num">LF 5</span>
+  <span class="lf-title">Güter kommissionieren</span>
+</div>
+
+<!-- ============ TAB: THEORIE ============ -->
+<div class="tab-content on" id="tab-theorie">
+
+<div class="part-hdr">1 · Systematik der Kommissionierung</div>
+
+<div class="sec">
+<h3>Kommissionieren — Grundbegriff</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Під <strong>Kommissionieren</strong> розуміють комплектування замовлення — тобто збір товару з різних місць зберігання відповідно до конкретного замовлення клієнта. До кожного акту комісіонування завжди належать три складові одночасно: <strong>Informationsfluss</strong> (потік інформації про замовлення), <strong>Materialfluss</strong> (фізичний рух товару) і відповідна <strong>Organisation</strong> (як саме все це організовано).</p>
+</div>
+<div data-lang="de">
+<p>Unter <strong>Kommissionieren</strong> versteht man das Zusammenstellen eines Auftrags — also das Sammeln von Waren aus verschiedenen Lagerorten gemäß einem konkreten Kundenauftrag. Zu jeder Kommissionierung gehören immer drei Bestandteile gleichzeitig: der <strong>Informationsfluss</strong>, der <strong>Materialfluss</strong> und die entsprechende <strong>Organisation</strong>.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3>Informationsfluss</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Дані про замовлення проходять чіткий послідовний ланцюг:</p>
+<ol class="step-list">
+<li>Erfassen der Daten des Kundenauftrags — фіксація даних замовлення клієнта</li>
+<li>Aufbereiten dieser Daten zu einem Kommissionierauftrag — перетворення в конкретне завдання для комісіонера</li>
+<li>Weitergeben der Daten an den Kommissionierer — передача завдання виконавцю</li>
+<li>Quittieren der Daten nach erfolgreicher Kommissionierung — підтвердження виконання</li>
+<li>Verbuchen der Warenentnahme — внесення в систему обліку</li>
+</ol>
+</div>
+<div data-lang="de">
+<p>Die Auftragsdaten durchlaufen eine klare Kette:</p>
+<ol class="step-list">
+<li>Erfassen der Daten des Kundenauftrags</li>
+<li>Aufbereiten dieser Daten zu einem Kommissionierauftrag</li>
+<li>Weitergeben der Daten an den Kommissionierer für die Ausführung des Auftrags</li>
+<li>Quittieren der Daten nach erfolgreicher Kommissionierung durch den Kommissionierer</li>
+<li>Verbuchen der Warenentnahme</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3>Materialfluss</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Фізичний рух товару складається з п'яти кроків:</p>
+<ol class="step-list">
+<li>Bereitstellung der Güter zur Entnahme — підготовка товару до вилучення</li>
+<li>Fortbewegung des Kommissionierers zur Entnahmestelle — переміщення комісіонера до місця вилучення</li>
+<li>Entnahme der Güter — саме вилучення товару</li>
+<li>Abgabe der Güter zur Weiterbearbeitung — передача товару далі</li>
+<li>Kontrollieren der Güter — контроль</li>
+</ol>
+</div>
+<div data-lang="de">
+<p>Der physische Warenfluss besteht aus fünf Schritten:</p>
+<ol class="step-list">
+<li>Bereitstellung der Güter zur Entnahme</li>
+<li>Fortbewegung des Kommissionierers zur Entnahmestelle</li>
+<li>Entnahme der Güter</li>
+<li>Abgabe der Güter zur Weiterbearbeitung</li>
+<li>Kontrollieren der Güter</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3><span data-lang="ua">Bereitstellung: статична vs динамічна</span><span data-lang="de">Bereitstellung: statisch vs dynamisch</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Statische Bereitstellung</strong> означає "людина йде до товару" (Person geht zur Ware) — товар нерухомий, комісіонер сам переміщується вздовж стелажів. <strong>Dynamische Bereitstellung</strong> означає протилежне — "товар приходить до людини" (Ware kommt zur Person): товар підвозиться до фіксованого робочого місця комісіонера автоматизованою системою.</p>
+</div>
+<div data-lang="de">
+<p><strong>Statische Bereitstellung</strong> bedeutet "Person geht zur Ware" — die Ware bleibt fest, der Kommissionierer bewegt sich entlang der Regale. <strong>Dynamische Bereitstellung</strong> bedeutet das Gegenteil — "Ware kommt zur Person": die Ware wird per automatisiertem System zum festen Arbeitsplatz des Kommissionierers gebracht.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3>16 Kommissioniersysteme</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Комбінація чотирьох базових функцій матеріалопотоку дає рівно <strong>16 різних систем комісіонування</strong>. П'ять функцій-рівнів вибору:</p>
+<table>
+<tr><th>Рівень</th><th>Варіанти</th></tr>
+<tr><td><strong>Bereitstellung</strong></td><td>statisch / dynamisch</td></tr>
+<tr><td><strong>Fortbewegung</strong></td><td>eindimensional / zweidimensional</td></tr>
+<tr><td><strong>Entnahme</strong></td><td>manuell / mechanisch</td></tr>
+<tr><td><strong>Abgabe</strong></td><td>zentral / dezentral</td></tr>
+</table>
+<p>Кожна комбінація цих чотирьох незалежних параметрів (2 × 2 × 2 × 2 = 16) утворює окремий тип системи (Typ 1–16), і саме за цією логікою класифікують будь-яку реально існуючу систему комісіонування на конкретному складі.</p>
+</div>
+<div data-lang="de">
+<p>Die Kombination der vier Grundfunktionen beim Materialfluss ergibt genau <strong>16 verschiedene Kommissioniersysteme</strong>. Die vier Auswahlebenen:</p>
+<table>
+<tr><th>Ebene</th><th>Varianten</th></tr>
+<tr><td><strong>Bereitstellung</strong></td><td>statisch / dynamisch</td></tr>
+<tr><td><strong>Fortbewegung</strong></td><td>eindimensional / zweidimensional</td></tr>
+<tr><td><strong>Entnahme</strong></td><td>manuell / mechanisch</td></tr>
+<tr><td><strong>Abgabe</strong></td><td>zentral / dezentral</td></tr>
+</table>
+<p>Jede Kombination dieser vier unabhängigen Parameter (2 × 2 × 2 × 2 = 16) bildet einen eigenen Systemtyp (Typ 1–16), und genau nach dieser Logik wird jedes real existierende Kommissioniersystem in einem Lager klassifiziert.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3><span data-lang="ua">Організаційні рішення</span><span data-lang="de">Organisatorische Entscheidungen</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Крім вибору технічної системи, потрібно ухвалити чотири організаційні рішення:</p>
+<ul>
+<li>чи готується товар в одній чи кількох Lagerzonen</li>
+<li>чи замовлення комісіонуються послідовно (seriell) чи паралельно (parallel)</li>
+<li>чи товар для одного, чи для кількох замовлень вилучається одночасно</li>
+<li>чи вилучена кількість передається далі поартикульно (artikelweise) чи поЗамовленнєво (auftragsweise)</li>
+</ul>
+<p>На основі цих рішень виділяють три основні методи:</p>
+<table>
+<tr><th>Метод</th><th>Опис</th></tr>
+<tr><td><strong>Auftragsorientiert, seriell</strong></td><td>один комісіонер самостійно виконує одне замовлення повністю</td></tr>
+<tr><td><strong>Auftragsorientiert, parallel</strong></td><td>кілька комісіонерів ділять між собою ОДНЕ замовлення</td></tr>
+<tr><td><strong>Serienorientiert, parallel</strong></td><td>кілька комісіонерів одночасно вилучають товар одразу для КІЛЬКОХ замовлень</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<p>Neben der Wahl des technischen Systems sind vier organisatorische Entscheidungen zu treffen:</p>
+<ul>
+<li>ob die Güter in einer oder mehreren Lagerzonen bereitgestellt werden</li>
+<li>ob die Aufträge seriell oder parallel kommissioniert werden</li>
+<li>ob die Güter für einen oder mehrere Aufträge gleichzeitig entnommen werden</li>
+<li>ob die entnommenen Mengen artikel- oder auftragsweise weitergegeben werden</li>
+</ul>
+<p>Daraus ergeben sich drei zentrale Methoden:</p>
+<table>
+<tr><th>Methode</th><th>Beschreibung</th></tr>
+<tr><td><strong>Auftragsorientiert, seriell</strong></td><td>ein Kommissionierer führt einen Auftrag allein aus</td></tr>
+<tr><td><strong>Auftragsorientiert, parallel</strong></td><td>mehrere Kommissionierer teilen sich EINEN Auftrag</td></tr>
+<tr><td><strong>Serienorientiert, parallel</strong></td><td>mehrere Kommissionierer entnehmen gleichzeitig Güter für MEHRERE Aufträge</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3>Beleglose Kommissionierung</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>При <strong>beleglose Kommissionierung</strong> комісіонер отримує завдання не на папері, а <strong>оптично</strong> через мобільний термінал даних або <strong>акустично</strong> через гарнітуру. Найпоширеніші варіанти: <strong>Pick by Scan</strong>, <strong>Pick by Light</strong>, <strong>Pick by Voice</strong>, <strong>Pick by RFID</strong>.</p>
+</div>
+<div data-lang="de">
+<p>Bei der <strong>beleglosen Kommissionierung</strong> erhält der Kommissionierer die Informationen nicht schriftlich, sondern <strong>optisch</strong> über mobile Datenterminals oder <strong>akustisch</strong> über Headset. Am häufigsten eingesetzt: <strong>Pick by Scan</strong>, <strong>Pick by Light</strong>, <strong>Pick by Voice</strong>, <strong>Pick by RFID</strong>.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3><span data-lang="ua">Приклад повного циклу: Kommissionier- і Lagerauffüllprozess</span><span data-lang="de">Beispielhafter vollständiger Zyklus: Kommissionier- und Lagerauffüllprozess</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Kommissionierprozess (типовий приклад із Turmregal):</strong></p>
+<ol class="step-list">
+<li>Надходить замовлення клієнта</li>
+<li>Обробка замовлення у WaWi (система товарного господарства)</li>
+<li>WaWi одразу перевіряє наявність товару в LVS (система керування складом)</li>
+<li>LVS підтверджує наявність і ініціює виведення товару з Turmregal</li>
+<li>Tablar із запитаним товаром подається на потрібному поверсі</li>
+<li>Працівник вилучає товар через вивідний отвір Turmregal</li>
+<li>Вилучення підтверджується скануванням штрих-коду</li>
+<li>Товар одразу транспортується на відвантаження (вручну чи конвеєром)</li>
+</ol>
+<p><strong>Lagerauffüllprozess (поповнення запасу, продовження того самого циклу):</strong></p>
+<ol class="step-list">
+<li>Коли досягнуто заданого Meldebestand, у WaWi надходить сигнал "Meldebestand erreicht"</li>
+<li>WaWi автоматично формує замовлення на поповнення до центрального складу</li>
+<li>З Wareneingang товар транспортується й розміщується в Turmregal аж до досягнення максимального запасу</li>
+</ol>
+</div>
+<div data-lang="de">
+<p><strong>Kommissionierprozess (typisches Beispiel mit Turmregal):</strong></p>
+<ol class="step-list">
+<li>Eingang Kundenbestellung</li>
+<li>Auftragsbearbeitung im WaWi (Warenwirtschaftssystem)</li>
+<li>Das WaWi überprüft sofort die Verfügbarkeit der Ware im Lagerverwaltungssystem</li>
+<li>Das Lagerverwaltungssystem meldet die Verfügbarkeit und veranlasst die Auslagerung an das Turmregal</li>
+<li>Das Tablar mit der angeforderten Ware wird auf dem gewünschten Stockwerk bereitgestellt</li>
+<li>Der/die Mitarbeitende entnimmt die Ware aus der Bedienöffnung des Turmregals</li>
+<li>Die Entnahme wird per Barcodescan bestätigt</li>
+<li>Die Ware wird anschließend sofort zum Versand transportiert (manuell oder per Fördersystem)</li>
+</ol>
+<p><strong>Lagerauffüllprozess:</strong></p>
+<ol class="step-list">
+<li>Ist ein vordefinierter Meldebestand erreicht, erfolgt die Information "Meldebestand erreicht" an das WaWi</li>
+<li>Die Bestellung an das Zentrallager wird über das WaWi ausgelöst</li>
+<li>Vom Wareneingang erfolgt der Transport und die Einlagerung im Turmregal zur Erreichung des maximalen Bestands</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">2 · Kommissionierzeiten und -leistung</div>
+
+<div class="sec">
+<h3>Zeitkomponenten</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Kommissionierzeit складається з п'яти компонентів: <strong>Basiszeit</strong> (базовий час на замовлення), <strong>Wegzeit</strong> (час на переміщення), <strong>Greifzeit</strong> (час на вилучення), <strong>Totzeit</strong> (непродуктивний час) і <strong>Verteilzeit</strong> (особистий час — перерви, підготовка).</p>
+<div class="formula">Середня кількість позицій на замовлення = Загальна кількість позицій ÷ Кількість замовлень
+Приклад: 6.650 позицій ÷ 950 замовлень = 7 позицій/замовлення</div>
+<p><strong>Durchlaufregale</strong> дають до <strong>60% економії Wegzeit</strong> і до <strong>30% економії площі</strong> порівняно з Fachbodenregalen.</p>
+</div>
+<div data-lang="de">
+<p>Die Kommissionierzeit setzt sich aus fünf Komponenten zusammen: <strong>Basiszeit</strong>, <strong>Wegzeit</strong>, <strong>Greifzeit</strong>, <strong>Totzeit</strong> und <strong>Verteilzeit</strong>.</p>
+<div class="formula">Durchschnittliche Anzahl der Kommissionierpositionen je Auftrag
+= Gesamtzahl der Kommissionierpositionen ÷ Anzahl der Aufträge
+Beispiel: 6.650 ÷ 950 = 7</div>
+<p><strong>Durchlaufregale</strong> bringen bis <strong>60% Wegzeiteinsparungen</strong> und bis zu <strong>30% Raumeinsparungen</strong> gegenüber den Fachbodenregalen.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<h3><span data-lang="ua">Від чого залежить Kommissionierleistung</span><span data-lang="de">Wovon die Kommissionierleistung abhängt</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Продуктивність комісіонування залежить одразу від восьми факторів: Kommissioniersystem, Kommissioniermethode, застосовані Fördermittel, вид товару (Güterart), обсяг асортименту (Sortimentsumfang), обсяг замовлення (Auftragsumfang), кількість позицій на замовлення, спосіб подачі інформації, і навіть мотивація самого комісіонера.</p>
+<p>Продуктивність регальних систем зростає зі зростанням автоматизації. Порівнювати продуктивність між періодами чи підприємствами дозволяють саме Kennzahlen — і чим довший період спостереження чи ширше порівняння, тим точнішими стають ці показники.</p>
+</div>
+<div data-lang="de">
+<p>Die Kommissionierleistung hängt gleich von acht Faktoren ab: vom Kommissioniersystem, von der Kommissioniermethode, von den eingesetzten Fördermitteln, von der Güterart, vom Sortimentsumfang, vom Auftragsumfang, von der Zahl der Positionen pro Auftrag, von der Art der Bereitstellung der Informationen, und von der Motivation des Kommissionierers.</p>
+<p>Die Kommissionierleistung der Regalsysteme steigt mit zunehmender Automatisierung. Kennzahlen ermöglichen Vergleiche über Zeiträume oder Betriebe hinweg — je länger der Beobachtungszeitraum oder je breiter der Vergleich, desto aussagekräftiger werden diese Kennzahlen.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">3 · Kommissionierfehler</div>
+
+<div class="sec">
+<h3><span data-lang="ua">Причини, наслідки, запобігання</span><span data-lang="de">Ursachen, Folgen, Vermeidung</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Kommissionierfehler мають суттєві економічні наслідки для підприємства й напряму становлять конкурентний недолік (Wettbewerbsnachteil) — клієнт, що отримав неправильне замовлення, втрачає довіру.</p>
+<p><strong>Формула Fehlerquote (частка помилок):</strong></p>
+<div class="formula">Fehlerquote в % = (Кількість помилок × 100) ÷ Загальна кількість комісіонувань
+Приклад: 69 помилок, 2.300 комісіонувань → 69 × 100 ÷ 2.300 = 3%</div>
+<p>Одним із дієвих заходів запобігання є інтенсивне навчання персоналу (Mitarbeiterschulung), яке має охоплювати три аспекти:</p>
+<ul>
+<li>чіткість щодо одиниць пакування (Verpackungseinheiten, VE) — плутанина в тому, скільки штук в одній упаковці, часто спричиняє помилки в кількості</li>
+<li>ознайомлення працівників із товаром (warenkundig machen)</li>
+<li>пояснення організації складу (Lagerorganisation)</li>
+</ul>
+</div>
+<div data-lang="de">
+<p>Die wirtschaftlichen Folgen von Kommissionierfehlern sind erheblich und stellen einen direkten Wettbewerbsnachteil dar.</p>
+<p><strong>Formel zur Berechnung der Fehlerquote:</strong></p>
+<div class="formula">Fehlerquote in % = (Kommissionierfehler × 100) ÷ Anzahl der Kommissionierungen insgesamt
+Beispiel: 69 Fehler, 2.300 Kommissionierungen → 69 × 100 ÷ 2.300 = 3%</div>
+<p>Eine wirksame Vermeidungsmaßnahme ist die intensive Mitarbeiterschulung, die drei Aspekte umfassen sollte:</p>
+<ul>
+<li>Klarheit über die Verpackungseinheiten (VE) schaffen — Unsicherheit über die Stückzahl je Verpackung führt oft zu Mengenfehlern</li>
+<li>die Mitarbeitenden warenkundig machen</li>
+<li>die Lagerorganisation erklären</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="progress">
+<span data-lang="ua">✅ Lernfeld 5 — написано за Kernwissen, звірено з ним заздалегідь</span>
+<span data-lang="de">✅ Lernfeld 5 — nach Kernwissen geschrieben, vorab damit abgeglichen</span>
+</div>
+
+</div>
+<!-- ============ END TAB: THEORIE ============ -->
+
+<!-- ============ TAB: KERNWISSEN ============ -->
+<div class="tab-content" id="tab-kernwissen">
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Основи комісіонування</h4>
+<p>Kommissionieren = комплектування замовлення. 3 складові: Informationsfluss + Materialfluss + Organisation</p>
+<p>Informationsfluss: Erfassen → Aufbereiten → Weitergeben → Quittieren → Verbuchen</p>
+<p>Materialfluss: Bereitstellung → Fortbewegung → Entnahme → Abgabe → Kontrolle</p>
+<p>Statische Bereitstellung = людина до товару · Dynamische = товар до людини</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Grundlagen der Kommissionierung</h4>
+<p>Kommissionieren = Zusammenstellen eines Auftrags. 3 Bestandteile: Informationsfluss + Materialfluss + Organisation</p>
+<p>Informationsfluss: Erfassen → Aufbereiten → Weitergeben → Quittieren → Verbuchen</p>
+<p>Materialfluss: Bereitstellung → Fortbewegung → Entnahme → Abgabe → Kontrolle</p>
+<p>Statische Bereitstellung = Person zur Ware · Dynamische = Ware zur Person</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ 16 систем і методи</h4>
+<p>4 функції × 2 варіанти = 16 Kommissioniersysteme (Bereitstellung, Fortbewegung, Entnahme, Abgabe)</p>
+<p>Методи: auftragsorientiert-seriell (1 людина, 1 замовлення) / auftragsorientiert-parallel (кілька людей, 1 замовлення) / serienorientiert-parallel (кілька людей, кілька замовлень)</p>
+<p>Beleglose Kommissionierung: optisch (термінал) або akustisch (Headset) — Pick by Scan/Light/Voice/RFID</p>
+</div>
+<div data-lang="de">
+<h4>⭐ 16 Systeme und Methoden</h4>
+<p>4 Funktionen × 2 Varianten = 16 Kommissioniersysteme</p>
+<p>Methoden: auftragsorientiert-seriell / auftragsorientiert-parallel / serienorientiert-parallel</p>
+<p>Beleglose Kommissionierung: optisch oder akustisch — Pick by Scan/Light/Voice/RFID</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Час і продуктивність</h4>
+<p>Kommissionierzeit = Basiszeit + Wegzeit + Greifzeit + Totzeit + Verteilzeit</p>
+<p>Durchlaufregale: до 60% економії Wegzeit, до 30% економії площі</p>
+<p>Kommissionierleistung залежить від 8 факторів (система, метод, Fördermittel, Güterart, Sortiment, Auftragsumfang, к-сть позицій, спосіб інформування, мотивація)</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Zeit und Leistung</h4>
+<p>Kommissionierzeit = Basiszeit + Wegzeit + Greifzeit + Totzeit + Verteilzeit</p>
+<p>Durchlaufregale: bis 60% Wegzeiteinsparung, bis 30% Raumeinsparung</p>
+<p>Kommissionierleistung hängt von 8 Faktoren ab</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Kommissionierfehler</h4>
+<div class="formula">Fehlerquote % = (Fehler × 100) ÷ Anzahl Kommissionierungen</div>
+<p>Значні економічні наслідки + Wettbewerbsnachteil. Профілактика: Schulung (VE, warenkundig, Lagerorganisation)</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Kommissionierfehler</h4>
+<div class="formula">Fehlerquote % = (Fehler × 100) ÷ Anzahl Kommissionierungen</div>
+<p>Erhebliche wirtschaftliche Folgen + Wettbewerbsnachteil. Vermeidung: Schulung (VE, warenkundig, Lagerorganisation)</p>
+</div>
+</div>
+
+</div>
+<!-- ============ END TAB: KERNWISSEN ============ -->
+
+<!-- ============ TAB: AUFGABEN ============ -->
+<div class="tab-content" id="tab-aufgaben">
+<div data-lang="ua">
+<div class="aufg-item"><span class="aufg-num">1</span>Опиши 5 кроків Informationsfluss і 5 кроків Materialfluss при комісіонуванні.</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Поясни різницю між statische і dynamische Bereitstellung на власному прикладі.</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Чим auftragsorientierte parallele Kommissionierung відрізняється від serienorientierte parallele?</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Назви 4 системи beleglose Kommissionierung.</div>
+<div class="aufg-item"><span class="aufg-num">5</span>З яких 5 компонентів складається Kommissionierzeit?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>При 6.000 позицій і 12.000,00 € витрат на комісіонування визнач середню кількість позицій на замовлення (750 замовлень) і витрати на позицію.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>При 90 помилках на 3.000 комісіонувань розрахуй Fehlerquote у відсотках.</div>
+<div class="aufg-item"><span class="aufg-num">8</span>Назви 3 аспекти, які має охоплювати навчання персоналу для зменшення Kommissionierfehler.</div>
+</div>
+<div data-lang="de">
+<div class="aufg-item"><span class="aufg-num">1</span>Beschreiben Sie die 5 Schritte des Informationsflusses und die 5 Schritte des Materialflusses bei der Kommissionierung.</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Erklären Sie den Unterschied zwischen statischer und dynamischer Bereitstellung an einem eigenen Beispiel.</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Worin unterscheidet sich die auftragsorientierte parallele Kommissionierung von der serienorientierten parallelen?</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Nennen Sie 4 Systeme der beleglosen Kommissionierung.</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Aus welchen 5 Komponenten setzt sich die Kommissionierzeit zusammen?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Bei 6.000 Positionen und 12.000,00 € Kommissionierkosten: ermitteln Sie die durchschnittliche Positionszahl je Auftrag (750 Aufträge) und die Kosten je Position.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Bei 90 Fehlern auf 3.000 Kommissionierungen: berechnen Sie die Fehlerquote in Prozent.</div>
+<div class="aufg-item"><span class="aufg-num">8</span>Nennen Sie 3 Aspekte, die eine Mitarbeiterschulung zur Reduzierung von Kommissionierfehlern umfassen sollte.</div>
+</div>
+</div>
+<!-- ============ END TAB: AUFGABEN ============ -->
+
+</div>
+
+<script>
+let lang = 'ua';
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===l);
+  });
+}
+function setTab(t, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('on'));
+  document.getElementById('tab-'+t).classList.add('on');
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===lang);
+  });
+});
+</script>
+</body>
+</html>
