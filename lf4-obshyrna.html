@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Lernfeld 4</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.hdr-mode{background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;margin-left:6px}
+.lang-btns{display:flex;gap:6px}
+.lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+.lb.on{background:#fff;color:var(--green-dark);border-color:#fff}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tab-btn{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;padding:9px 6px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;text-align:center}
+.tab-btn.on{background:var(--red);border-color:var(--red)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.lf-hdr{background:var(--green-dark);color:#fff;padding:14px 18px;border-radius:8px;margin:20px 0 12px;display:flex;align-items:baseline;gap:10px}
+.lf-num{font-size:13px;font-weight:800;background:var(--red);padding:3px 10px;border-radius:4px}
+.lf-title{font-size:17px;font-weight:800}
+.part-hdr{margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--green);color:var(--green-dark);font-weight:800;font-size:15px}
+.sec{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:16px 18px;margin-bottom:12px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--red);margin-right:6px}
+.sec h3{font-size:15px;font-weight:700;color:var(--green-dark);display:inline}
+.sec-body{margin-top:10px}
+.sec p{margin-bottom:10px}
+.sec ul,.sec ol{margin-left:20px;margin-bottom:8px}
+.sec li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{background:#eef3ec;color:var(--green-dark);text-align:left;padding:6px 8px;border:1px solid var(--border);font-size:12px}
+td{padding:6px 8px;border:1px solid var(--border)}
+.rule{background:#fdf2f0;border-left:3px solid var(--red);padding:10px 14px;margin-top:10px;font-size:13px;border-radius:4px}
+.formula{background:#0a1020;border:2px solid var(--green);border-radius:8px;padding:12px 14px;margin:10px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#93e0a8;white-space:pre-wrap}
+[data-lang]{display:none}
+[data-lang].active{display:block}
+span[data-lang]{display:none}
+span[data-lang].active{display:inline}
+.progress{font-size:12px;color:var(--muted);text-align:center;margin:16px 0;padding:10px;background:#eef3ec;border-radius:6px}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.kw-box{background:#eef3ec;border:2px solid var(--green);border-radius:8px;padding:16px 18px;margin-bottom:14px}
+.kw-box h4{color:var(--green-dark);font-size:14px;margin-bottom:8px}
+.aufg-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:8px}
+.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;margin-right:8px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">Lernfeld 4 / 11</div>
+      <div class="hdr-mode">📖 <span data-lang="ua">Обширна версія</span><span data-lang="de">Ausführliche Version</span></div>
+    </div>
+    <div class="lang-btns">
+      <button class="lb" onclick="setLang('de',this)">DE</button>
+      <button class="lb on" onclick="setLang('ua',this)">UA</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn on" onclick="setTab('theorie',this)"><span data-lang="ua">📘 Теорія</span><span data-lang="de">📘 Theorie</span></button>
+    <button class="tab-btn" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
+    <button class="tab-btn" onclick="setTab('aufgaben',this)"><span data-lang="ua">✏️ Завдання</span><span data-lang="de">✏️ Aufgaben</span></button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lf-hdr">
+  <span class="lf-num">LF 4</span>
+  <span class="lf-title">Güter im Betrieb transportieren</span>
+</div>
+
+<!-- ============ TAB: THEORIE ============ -->
+<div class="tab-content on" id="tab-theorie">
+
+<div class="part-hdr">1 · Förderhilfsmittel und Fördermittel</div>
+
+<div class="sec">
+<span class="sec-num">1.1.1-1.1.4</span><h3>Innerbetrieblicher Materialfluss</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Materialfluss</strong> — це узагальнений термін для переміщення товару всередині і поза межами підприємства, і він протиставляється поняттю <strong>Informationsfluss</strong> (потік інформації, що супроводжує рух товару документально). Materialfluss поділяється на два види: <strong>außerbetrieblich</strong> (за межами підприємства — від постачальника до складу чи від складу до клієнта) і <strong>innerbetrieblich</strong> (усередині самого підприємства — між зонами складу, між складом і виробництвом).</p>
+<p>Саме innerbetrieblicher Materialfluss переслідує п'ять чітких цілей:</p>
+<ul>
+<li><strong>Verkürzung der Durchlaufzeit</strong> — скорочення часу проходження товару через підприємство</li>
+<li><strong>Verminderung des Ausschusses</strong> — зменшення браку (менше переміщень — менше пошкоджень)</li>
+<li><strong>Verbesserung der Arbeitsbedingungen</strong> — покращення умов праці персоналу</li>
+<li><strong>Einsparung von Kosten</strong> — економія витрат</li>
+<li><strong>Vermeidung von Energieverschwendung und Umweltbelastung</strong> — уникнення марного витрачання енергії й шкоди довкіллю</li>
+</ul>
+</div>
+<div data-lang="de">
+<p><strong>Materialfluss</strong> ist der übergeordnete Begriff für die Bewegung von Gütern innerhalb und außerhalb des Unternehmens, und er steht dem <strong>Informationsfluss</strong> gegenüber (dem Informationsstrom, der die Warenbewegung dokumentarisch begleitet). Materialfluss gliedert sich in zwei Arten: <strong>außerbetrieblich</strong> (außerhalb des Unternehmens — vom Lieferanten zum Lager oder vom Lager zum Kunden) und <strong>innerbetrieblich</strong> (innerhalb des Unternehmens selbst — zwischen Lagerzonen, zwischen Lager und Produktion).</p>
+<p>Der innerbetriebliche Materialfluss verfolgt fünf klare Ziele:</p>
+<ul>
+<li><strong>Verkürzung der Durchlaufzeit</strong></li>
+<li><strong>Verminderung des Ausschusses</strong> — weniger Bewegungen bedeuten weniger Beschädigungen</li>
+<li><strong>Verbesserung der Arbeitsbedingungen</strong></li>
+<li><strong>Einsparung von Kosten</strong></li>
+<li><strong>Vermeidung von Energieverschwendung und Umweltbelastung</strong></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.2</span><h3>Förderhilfsmittel</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Förderhilfsmittel</strong> — це Packmittel (пакувальні засоби), які захищають вантаж і роблять його придатним для завантаження, транспортування й зберігання. До них належать дві великі категорії: <strong>Paletten</strong> (палети) і <strong>Behälter, Säcke</strong> (контейнери, мішки). Важливо не плутати Förderhilfsmittel із самим транспортним засобом — це саме допоміжний засіб, який робить товар готовим до переміщення, а не те, що його рухає.</p>
+</div>
+<div data-lang="de">
+<p><strong>Förderhilfsmittel</strong> sind Packmittel, die das Fördergut schützen und es lade-, transport- und lagerfähig machen. Dazu zählen zwei große Kategorien: <strong>Paletten</strong> und <strong>Behälter, Säcke</strong>. Wichtig: Förderhilfsmittel nicht mit dem eigentlichen Transportmittel verwechseln — es handelt sich um das Hilfsmittel, das die Ware transportbereit macht, nicht um das, was sie tatsächlich bewegt.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3</span><h3>Fördermittel</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p><strong>Fördermittel</strong> — узагальнений термін для всіх транспортних засобів, що виконують внутрішньозаводське переміщення. Головний поділ — за характером маршруту:</p>
+<table>
+<tr><th>Тип</th><th>Ознака</th></tr>
+<tr><td><strong>Stetigförderer</strong></td><td>однаковий маршрут переміщення, постійний (безперервний) транспорт</td></tr>
+<tr><td><strong>Unstetigförderer</strong></td><td>різний маршрут переміщення, транспорт за потреби (не постійний)</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<p><strong>Fördermittel</strong> ist der Oberbegriff für alle Transportmittel für den innerbetrieblichen Transport. Die Hauptunterscheidung erfolgt nach der Art des Förderwegs:</p>
+<table>
+<tr><th>Typ</th><th>Merkmal</th></tr>
+<tr><td><strong>Stetigförderer</strong></td><td>gleicher Transportweg, ständiger (kontinuierlicher) Transport</td></tr>
+<tr><td><strong>Unstetigförderer</strong></td><td>unterschiedlicher Transportweg, Transport bei Bedarf</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.1</span><h3>Stetigförderer</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Stetigförderer поділяються за розташуванням щодо підлоги:</p>
+<table>
+<tr><th>Вид</th><th>Ознака</th><th>Приклади</th></tr>
+<tr><td><strong>flurfrei</strong></td><td>переміщення під стелею</td><td>Kreiskettenförderer, Power-and-Free-Förderer, Elektrohängebahn</td></tr>
+<tr><td><strong>flurgebunden</strong></td><td>переміщення по підлозі</td><td>Kettenförderer, Gurtförderer, Rollenbahn</td></tr>
+</table>
+<p><strong>Elektrohängebahn</strong> — характерний приклад flurfreier Stetigförderer: моторизовані візки рухаються по підвішеній до стелі рейці, а вантаж кріпиться безпосередньо до цих візків.</p>
+</div>
+<div data-lang="de">
+<p>Stetigförderer werden nach der Lage zum Boden unterschieden:</p>
+<table>
+<tr><th>Art</th><th>Merkmal</th><th>Beispiele</th></tr>
+<tr><td><strong>flurfrei</strong></td><td>Beförderung an der Decke</td><td>Kreiskettenförderer, Power-and-Free-Förderer, Elektrohängebahn</td></tr>
+<tr><td><strong>flurgebunden</strong></td><td>Beförderung am Boden</td><td>Kettenförderer, Gurtförderer, Rollenbahn</td></tr>
+</table>
+<p><strong>Elektrohängebahn</strong> — typisches Beispiel eines flurfreien Stetigförderers: motorbetriebene Fahrzeuge bewegen sich auf einer an der Decke befestigten Schiene, die Last wird direkt an diesen Fahrzeugen befestigt.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">1.3.2</span><h3>Unstetigförderer</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<table>
+<tr><th>Вид</th><th>Ознака</th><th>Приклади</th></tr>
+<tr><td><strong>Hebezeuge</strong></td><td>вертикальне переміщення</td><td>Aufzüge, Hebebühnen, Krane</td></tr>
+<tr><td><strong>Flurförderzeuge</strong></td><td>рух по підлозі, не по рейках</td><td>Stapler, Hubwagen, Schlepper, Wagen, ручні засоби (напр. Sackkarre)</td></tr>
+</table>
+<h3>Fahrerlose Transportsysteme (FTS)</h3>
+<p>Автоматичні транспортні системи без водія орієнтуються в просторі одним із п'яти способів:</p>
+<ul>
+<li><strong>induktiv gesteuert</strong> — за прихованими в підлозі проводами</li>
+<li><strong>Lasernavigation</strong> — за допомогою лазерного сканування простору</li>
+<li><strong>magnetische Navigation</strong> — за магнітними мітками в підлозі</li>
+<li><strong>optische Navigation</strong> — за нанесеною на підлогу лінією або відбивачами (Reflektoren)</li>
+<li><strong>RFID</strong> — за радіочастотними мітками</li>
+</ul>
+<h3>Regalbediengeräte</h3>
+<p>Поділяються на <strong>regalabhängig</strong> (жорстко прив'язані до конкретного стелажа, рухаються тільки вздовж нього) і <strong>regalunabhängig</strong> (можуть обслуговувати кілька різних стелажів).</p>
+<p>Приклад сучасної технології: <strong>Halbautomatischer Kommissionierstapler</strong> з RFID-навігацією складу — водій лише керує штабелером у межах регального проходу, заданого системою; система керування складом (LVS) сама надсилає наступну Pickposition, до якої штабелер їде по діагоналі з оптимальною швидкістю.</p>
+</div>
+<div data-lang="de">
+<table>
+<tr><th>Art</th><th>Merkmal</th><th>Beispiele</th></tr>
+<tr><td><strong>Hebezeuge</strong></td><td>vertikaler Transport</td><td>Aufzüge, Hebebühnen, Krane</td></tr>
+<tr><td><strong>Flurförderzeuge</strong></td><td>bodengebunden, nicht auf Schienen fahrend</td><td>Stapler, Hubwagen, Schlepper, Wagen, manuelle Transporthelfer (z. B. Sackkarre)</td></tr>
+</table>
+<h3>Fahrerlose Transportsysteme (FTS)</h3>
+<p>Fahrerlose Systeme orientieren sich auf eine von fünf Arten:</p>
+<ul>
+<li><strong>induktiv gesteuert</strong> — über im Boden verlegte Leitdrähte</li>
+<li><strong>Lasernavigation</strong></li>
+<li><strong>magnetische Navigation</strong></li>
+<li><strong>optische Navigation</strong> — über eine Bodenmarkierung oder Reflektoren</li>
+<li><strong>RFID</strong></li>
+</ul>
+<h3>Regalbediengeräte</h3>
+<p>Unterschieden werden <strong>regalabhängig</strong> (fest an ein bestimmtes Regal gebunden, bewegen sich nur entlang diesem) und <strong>regalunabhängig</strong> (können mehrere verschiedene Regale bedienen).</p>
+<p>Beispiel moderner Technik: <strong>Halbautomatischer Kommissionierstapler</strong> mit RFID-Lagernavigation — der Fahrer steuert den Stapler nur noch im vom System vorgegebenen Regalgang. Das Lagerverwaltungssystem (LVS) sendet selbst die nächste Pickposition, die per Diagonalfahrt mit optimaler Geschwindigkeit angefahren wird.</p>
+</div>
+</div>
+</div>
+
+<div class="part-hdr">2 · Gefahren beim Transport</div>
+
+<div class="sec">
+<span class="sec-num">2.1.1-2.1.2</span><h3>Organisation des Arbeitsschutzes</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Усередині підприємства за охорону праці відповідають одразу кілька осіб: <strong>Arbeitgeber</strong> (роботодавець), <strong>Sicherheitsbeauftragte</strong> (уповноважені з безпеки), <strong>Fachkräfte für Arbeitssicherheit</strong>, штатні <strong>Ersthelfer/-innen</strong> та <strong>Betriebsärzte</strong>. Усі вони об'єднані в <strong>Arbeitsschutzausschuss</strong> (комітет з охорони праці). Окрему роль відіграє <strong>Betriebsrat</strong> (виробнича рада), яка має право на інформацію, участь у формуванні заходів і співвизначення (Informations-, Gestaltungs- und Mitbestimmungsrecht).</p>
+<p>Поза межами підприємства охорону праці забезпечують <strong>zuständige Stellen</strong> (компетентні державні органи) і <strong>Berufsgenossenschaften</strong> — саме вони є носіями обов'язкового страхування від нещасних випадків (Träger der Unfallversicherung).</p>
+<p>Важливий практичний обов'язок: якщо через нещасний випадок на роботі працівник непрацездатний більше <strong>трьох днів</strong>, це потрібно повідомити і компетентному органу, і Berufsgenossenschaft.</p>
+</div>
+<div data-lang="de">
+<p>Innerbetrieblich sind für den Arbeitsschutz mehrere Personen verantwortlich: <strong>Arbeitgeber</strong>, <strong>Sicherheitsbeauftragte</strong>, <strong>Fachkräfte für Arbeitssicherheit</strong>, betriebliche <strong>Ersthelfer/-innen</strong> und <strong>Betriebsärzte</strong>. Sie sind im <strong>Arbeitsschutzausschuss</strong> organisiert. Eine besondere Rolle spielt der <strong>Betriebsrat</strong> mit Informations-, Gestaltungs- und Mitbestimmungsrecht.</p>
+<p>Überbetrieblich sorgen die <strong>zuständigen Stellen</strong> und die <strong>Berufsgenossenschaften</strong> für Arbeitsschutz — sie sind Träger der Unfallversicherung.</p>
+<p>Wichtige Pflicht: Bei mehr als <strong>drei Tagen</strong> Arbeitsunfähigkeit durch einen Arbeitsunfall ist dies der zuständigen Stelle und der Berufsgenossenschaft zu melden.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.2.1-2.2.2</span><h3><span data-lang="ua">UVV та Gesundheitsschutz beim Heben und Tragen</span><span data-lang="de">UVV und Gesundheitsschutz beim Heben und Tragen</span></h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Приписи щодо охорони праці при транспортуванні містяться насамперед у <strong>Unfallverhütungsvorschriften der Berufsgenossenschaften</strong> (різних, залежно від галузі).</p>
+<p>При ручному перенесенні вантажів (Handtransport) з погляду медицини праці важливо дотримуватись базових правил підйому й перенесення (Grundregeln für das Heben und Tragen), а також враховувати граничнодопустимі ваги (Lastgrenzen) для конкретних груп працівників — вони різняться залежно від статі, віку й фізичної підготовки.</p>
+</div>
+<div data-lang="de">
+<p>Vorschriften zum Arbeitsschutz beim Transport finden sich vor allem in den <strong>Unfallverhütungsvorschriften der Berufsgenossenschaften</strong> (branchenspezifisch unterschiedlich).</p>
+<p>Beim Handtransport sind aus arbeitsmedizinischer Sicht die Grundregeln für das Heben und Tragen sowie die Lastgrenzen für bestimmte Personengruppen zu beachten — diese unterscheiden sich je nach Geschlecht, Alter und körperlicher Verfassung.</p>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.2.3</span><h3>Unfallverhütung Flurförderzeuge</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Безпека при роботі з Flurförderzeug (напр. вилковим навантажувачем) залежить одразу від двох факторів: <strong>стану самого засобу</strong> (Zustand des Flurförderzeugs) і <strong>поведінки водія</strong> (Verhalten des Fahrzeugführers) — обидва мають значення однаково.</p>
+<p><strong>Умови для керування Gabelstapler:</strong></p>
+<ul>
+<li>мінімальний вік — 18 років</li>
+<li>розумова й фізична придатність</li>
+<li>Staplerschein (посвідчення водія навантажувача)</li>
+<li>Fahrauftrag — письмове доручення від роботодавця на керування конкретною технікою</li>
+</ul>
+</div>
+<div data-lang="de">
+<p>Die Sicherheit beim Umgang mit einem Flurförderzeug hängt gleich von zwei Faktoren ab: dem <strong>Zustand des Flurförderzeugs</strong> und dem <strong>Verhalten des Fahrzeugführers</strong> — beide sind gleich wichtig.</p>
+<p><strong>Voraussetzungen für das Fahren mit dem Gabelstapler:</strong></p>
+<ul>
+<li>Mindestalter von 18 Jahren</li>
+<li>geistige und körperliche Eignung</li>
+<li>Staplerschein</li>
+<li>Fahrauftrag durch den Arbeitgeber</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="sec">
+<span class="sec-num">2.2.4</span><h3>Unfallverhütung Krane</h3>
+<div class="sec-body">
+<div data-lang="ua">
+<p>Безпечна робота крана вимагає злагодженої командної роботи між <strong>Kranführer</strong> (кранівником) і <strong>Anschläger</strong> (стропальником, який кріпить вантаж) — без чіткої взаємодії цих двох ролей безпечне краніння неможливе.</p>
+<p><strong>Фізика кріплення вантажу:</strong> чим більший кут нахилу (Neigungswinkel β) стропа, тим нижча несуча здатність (Tragfähigkeit) кріпильного засобу. Це означає: при однаковому діаметрі троса зі збільшенням кута нахилу вантажопідйомність падає; а щоб утримати однакове навантаження при більшому куті, потрібен міцніший (товщий) кріпильний засіб.</p>
+<div class="formula">Приклад (ланцюги): вантаж 2500 кг, Neigungswinkel 60°, 4 ланцюги
+→ ланцюг 7 мм витримує лише 2250 кг (замало)
+→ потрібна номінальна товщина ланцюга 8 мм</div>
+<p>Якщо кут нахилу менший за допустимий (напр. менше 60°) і це неможливо змінити геометрично — використовують <strong>Traverse</strong> (спеціальну балку-розпірку), яка дозволяє утримувати трос вертикально й безпечно транспортувати вантаж краном.</p>
+<p><strong>Розташування точок кріплення (Anschlagpunkte):</strong> для одностропного кріплення точка має бути точно над центром ваги вантажу; для двострропного — точки розташовуються по обидва боки й вище центру ваги; для три- й чотиристропного — точки рівномірно розподілені навколо центру ваги, бажано вище нього.</p>
+</div>
+<div data-lang="de">
+<p>Für unfallsicheres Kranen ist eine gute Teamarbeit zwischen <strong>Kranführer</strong> und <strong>Anschläger</strong> erforderlich — ohne abgestimmtes Zusammenspiel dieser beiden Rollen ist sicheres Kranen nicht möglich.</p>
+<p><strong>Physik der Lastsicherung:</strong> je größer der Neigungswinkel β des Anschlagmittels, desto geringer die Tragfähigkeit. Das heißt: bei gleichem Seildurchmesser sinkt mit zunehmendem Neigungswinkel die Belastbarkeit; um bei größerem Winkel die gleiche Last zu halten, wird ein stärkeres (dickeres) Anschlagmittel benötigt.</p>
+<div class="formula">Beispiel (Ketten): Last 2500 kg, Neigungswinkel 60°, 4 Kettenstränge
+→ 7-mm-Kette trägt nur 2250 kg (zu wenig)
+→ nötige Ketten-Nenndicke: 8 mm</div>
+<p>Ist ein kleinerer Neigungswinkel geometrisch nicht möglich, wird eine <strong>Traverse</strong> eingesetzt, die es erlaubt, das Seil senkrecht zu halten und die Last sicher mit dem Kran zu transportieren.</p>
+<p><strong>Lage der Anschlagpunkte:</strong> bei einsträngigen Anschlagmitteln muss der Anschlagpunkt senkrecht über dem Lastschwerpunkt liegen; bei zweisträngigen beiderseits und oberhalb des Lastschwerpunkts; bei drei- und vierstrangigen gleichmäßig um den Lastschwerpunkt verteilt und möglichst darüber.</p>
+</div>
+</div>
+</div>
+
+<div class="progress">
+<span data-lang="ua">✅ Lernfeld 4 — написано за Kernwissen, звірено з ним заздалегідь</span>
+<span data-lang="de">✅ Lernfeld 4 — nach Kernwissen geschrieben, vorab damit abgeglichen</span>
+</div>
+
+</div>
+<!-- ============ END TAB: THEORIE ============ -->
+
+<!-- ============ TAB: KERNWISSEN ============ -->
+<div class="tab-content" id="tab-kernwissen">
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Materialfluss і Fördermittel</h4>
+<p>Materialfluss: außerbetrieblich / innerbetrieblich. 5 цілей innerbetrieblich: Durchlaufzeit↓, Ausschuss↓, Arbeitsbedingungen↑, Kosten↓, Energieverschwendung/Umweltbelastung↓</p>
+<p>Förderhilfsmittel (захищають вантаж): Paletten / Behälter, Säcke</p>
+<p>Fördermittel: Stetigförderer (однаковий шлях, постійно) vs Unstetigförderer (різний шлях, за потреби)</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Materialfluss und Fördermittel</h4>
+<p>Materialfluss: außerbetrieblich / innerbetrieblich. 5 Ziele: Durchlaufzeit↓, Ausschuss↓, Arbeitsbedingungen↑, Kosten↓, Energieverschwendung/Umweltbelastung↓</p>
+<p>Förderhilfsmittel: Paletten / Behälter, Säcke</p>
+<p>Fördermittel: Stetigförderer (gleicher Weg, ständig) vs Unstetigförderer (unterschiedlicher Weg, bei Bedarf)</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Stetig-/Unstetigförderer — типи</h4>
+<p>Stetig: flurfrei (Kreiskettenförderer, Power-and-Free, Elektrohängebahn) / flurgebunden (Kettenförderer, Gurtförderer, Rollenbahn)</p>
+<p>Unstetig: Hebezeuge (Aufzüge, Hebebühnen, Krane) / Flurförderzeuge (Stapler, Hubwagen, Schlepper, Sackkarre)</p>
+<p>FTS-навігація: induktiv / Laser / magnetisch / optisch (відбивачі) / RFID</p>
+<p>Regalbediengeräte: regalabhängig / regalunabhängig</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Stetig-/Unstetigförderer — Typen</h4>
+<p>Stetig: flurfrei (Kreiskettenförderer, Power-and-Free, Elektrohängebahn) / flurgebunden (Kettenförderer, Gurtförderer, Rollenbahn)</p>
+<p>Unstetig: Hebezeuge (Aufzüge, Hebebühnen, Krane) / Flurförderzeuge (Stapler, Hubwagen, Schlepper, Sackkarre)</p>
+<p>FTS-Navigation: induktiv / Laser / magnetisch / optisch (Reflektoren) / RFID</p>
+<p>Regalbediengeräte: regalabhängig / regalunabhängig</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Arbeitsschutz — хто відповідає</h4>
+<p>Innerbetrieblich: Arbeitgeber, Sicherheitsbeauftragte, Fachkräfte für Arbeitssicherheit, Ersthelfer, Betriebsärzte (в Arbeitsschutzausschuss) + Betriebsrat (право інформації/участі/співвизначення)</p>
+<p>Überbetrieblich: zuständige Stellen + Berufsgenossenschaften</p>
+<p>&gt;3 дні непрацездатності через нещасний випадок → повідомити обидва органи</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Arbeitsschutz — Verantwortliche</h4>
+<p>Innerbetrieblich: Arbeitgeber, Sicherheitsbeauftragte, Fachkräfte für Arbeitssicherheit, Ersthelfer, Betriebsärzte (Arbeitsschutzausschuss) + Betriebsrat</p>
+<p>Überbetrieblich: zuständige Stellen + Berufsgenossenschaften</p>
+<p>&gt;3 Tage Arbeitsunfähigkeit durch Unfall → beide Stellen informieren</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Gabelstapler + Kran</h4>
+<p>Умови для Gabelstapler: 18+ років, придатність, Staplerschein, Fahrauftrag</p>
+<p>Безпека Flurförderzeug = стан техніки + поведінка водія</p>
+<p>Безпечне краніння = командна робота Kranführer + Anschläger</p>
+<p><strong>Правило:</strong> більший Neigungswinkel β → менша Tragfähigkeit кріплення</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Gabelstapler + Kran</h4>
+<p>Voraussetzungen Gabelstapler: 18+ Jahre, Eignung, Staplerschein, Fahrauftrag</p>
+<p>Sicherheit Flurförderzeug = Zustand + Verhalten des Fahrers</p>
+<p>Unfallsicheres Kranen = Teamarbeit Kranführer + Anschläger</p>
+<p><strong>Regel:</strong> größerer Neigungswinkel β → geringere Tragfähigkeit</p>
+</div>
+</div>
+
+</div>
+<!-- ============ END TAB: KERNWISSEN ============ -->
+
+<!-- ============ TAB: AUFGABEN ============ -->
+<div class="tab-content" id="tab-aufgaben">
+<div data-lang="ua">
+<div class="aufg-item"><span class="aufg-num">1</span>Наведи по прикладу для кожної з 5 цілей innerbetrieblicher Materialfluss.</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Чим Förderhilfsmittel відрізняється від Fördermittel?</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Наведи по два приклади flurfreier і flurgebundener Stetigförderer.</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Опиши 5 способів навігації для fahrerlose Transportsysteme.</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Хто відповідає за охорону праці на підприємстві і поза ним?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Назви 4 умови, необхідні для керування Gabelstapler.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Вантаж 4000 кг, Neigungswinkel 45°, 2 ланцюги. Що станеться з потрібною товщиною ланцюга, якщо кут збільшити до 60° за тієї ж ваги?</div>
+</div>
+<div data-lang="de">
+<div class="aufg-item"><span class="aufg-num">1</span>Nennen Sie je ein Beispiel für die 5 Ziele des innerbetrieblichen Materialflusses.</div>
+<div class="aufg-item"><span class="aufg-num">2</span>Worin unterscheidet sich Förderhilfsmittel von Fördermittel?</div>
+<div class="aufg-item"><span class="aufg-num">3</span>Nennen Sie je zwei Beispiele für flurfreie und flurgebundene Stetigförderer.</div>
+<div class="aufg-item"><span class="aufg-num">4</span>Beschreiben Sie die 5 Navigationsarten für fahrerlose Transportsysteme.</div>
+<div class="aufg-item"><span class="aufg-num">5</span>Wer ist innerbetrieblich und überbetrieblich für den Arbeitsschutz verantwortlich?</div>
+<div class="aufg-item"><span class="aufg-num">6</span>Nennen Sie 4 Voraussetzungen für das Fahren mit dem Gabelstapler.</div>
+<div class="aufg-item"><span class="aufg-num">7</span>Last 4000 kg, Neigungswinkel 45°, 2 Kettenstränge. Was passiert mit der nötigen Kettendicke, wenn der Winkel bei gleichem Gewicht auf 60° steigt?</div>
+</div>
+</div>
+<!-- ============ END TAB: AUFGABEN ============ -->
+
+</div>
+
+<script>
+let lang = 'ua';
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===l);
+  });
+}
+function setTab(t, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('on'));
+  document.getElementById('tab-'+t).classList.add('on');
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===lang);
+  });
+});
+</script>
+</body>
+</html>
