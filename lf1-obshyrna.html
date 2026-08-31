@@ -18,6 +18,9 @@ body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-s
 .hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
 .hdr-title{font-size:20px;font-weight:800;margin-top:2px}
 .hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.lf-nav{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.lf-nav a{background:rgba(255,255,255,.15);color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.3)}
+.lf-nav a:hover{background:rgba(255,255,255,.28)}
 .hdr-mode{background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;margin-left:6px}
 .lang-btns{display:flex;gap:6px}
 .lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
@@ -50,7 +53,27 @@ span[data-lang].active{display:inline}
 .kw-box{background:#eef3ec;border:2px solid var(--green);border-radius:8px;padding:16px 18px;margin-bottom:14px}
 .kw-box h4{color:var(--green-dark);font-size:14px;margin-bottom:8px}
 .aufg-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:8px}
-.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;margin-right:8px}
+.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:11px;min-width:22px;height:22px;line-height:22px;text-align:center;padding:0 6px;margin-right:8px;flex-shrink:0}
+.aufg-topic{font-size:12px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;background:var(--green-dark);padding:8px 14px;border-radius:6px;margin:18px 0 10px}
+.aufg-topic:first-child{margin-top:0}
+.aufg-q{cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.aufg-q-text{flex:1}
+.aufg-arrow{color:var(--green);font-weight:700;flex-shrink:0;transition:transform .2s;font-size:12px;margin-top:3px}
+.aufg-arrow.open{transform:rotate(90deg)}
+.aufg-ans{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:13.5px;color:var(--muted);line-height:1.6}
+.aufg-ans.open{display:block}
+.aufg-ans strong{color:var(--green-dark)}
+.aufg-note{background:#fdf2f0;border-left:3px solid var(--red);padding:8px 12px;margin-bottom:10px;font-size:12.5px;border-radius:4px;color:var(--ink)}
+.aufg-q-text ol{margin:10px 0 0 22px}
+.aufg-q-text ol li{margin-bottom:6px}
+.aufg-ans ol{margin:8px 0 0 22px}
+.aufg-ans ol li{margin-bottom:6px}
+.aufg-ans p{margin-bottom:8px}
+.aufg-ans p:last-child{margin-bottom:0}
+.kw-box ul,.kw-box ol{margin:8px 0 0 20px}
+.kw-box li{margin-bottom:6px}
+.kw-box p{margin-bottom:6px}
+.kw-box p:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -61,7 +84,6 @@ span[data-lang].active{display:inline}
       <div class="hdr-brand">Logistische Prozesse</div>
       <div class="hdr-title">Berufe der Lagerlogistik</div>
       <div class="hdr-badge">Lernfeld 1 / 11</div>
-      <div class="hdr-mode">📖 <span data-lang="ua">Обширна версія</span><span data-lang="de">Ausführliche Version</span></div>
     </div>
     <div class="lang-btns">
       <button class="lb" onclick="setLang('de',this)">DE</button>
@@ -69,9 +91,12 @@ span[data-lang].active{display:inline}
     </div>
   </div>
   <div class="tabs">
-    <button class="tab-btn on" onclick="setTab('theorie',this)"><span data-lang="ua">📘 Теорія</span><span data-lang="de">📘 Theorie</span></button>
-    <button class="tab-btn" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
+    <button class="tab-btn on" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
     <button class="tab-btn" onclick="setTab('aufgaben',this)"><span data-lang="ua">✏️ Завдання</span><span data-lang="de">✏️ Aufgaben</span></button>
+  </div>
+  <div class="lf-nav">
+    <a href="index.html">🏠 Головна</a>
+    <a href="lf2-obshyrna.html">LF2 →</a>
   </div>
 </div>
 
@@ -82,323 +107,199 @@ span[data-lang].active{display:inline}
   <span class="lf-title">Güter annehmen und kontrollieren</span>
 </div>
 
-<!-- ============ TAB: THEORIE ============ -->
-<div class="tab-content on" id="tab-theorie">
 
-<div class="sec">
-<span class="sec-num">1</span><h3>Warenannahme</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Warenannahme — це перший і найважливіший етап роботи складу, оскільки саме тут вирішується, чи потрапить товар до підприємства взагалі, і в якому стані він буде зафіксований. Помилка на цьому етапі тягне за собою наслідки для всіх подальших процесів — від обліку запасів до задоволеності клієнта.</p>
-</div>
-<div data-lang="de">
-<p>Die Warenannahme ist der erste und zugleich wichtigste Schritt im Ablauf des Lagers, denn hier entscheidet sich, ob die Ware überhaupt ins Unternehmen gelangt und in welchem Zustand sie erfasst wird. Ein Fehler an dieser Stelle wirkt sich auf alle nachfolgenden Prozesse aus — von der Bestandsführung bis zur Kundenzufriedenheit.</p>
-</div>
-</div>
-</div>
 
-<div class="sec">
-<span class="sec-num">1.1</span><h3>Wege der Warenanlieferung</h3>
-<div class="sec-body">
+<!-- ============ TAB: KERNWISSEN ============ -->
+<div class="tab-content on" id="tab-kernwissen">
+<div class="kw-box">
 <div data-lang="ua">
-<p>Товар може потрапити на склад різними шляхами, і від обраного способу залежить, як саме буде організовано приймання. Найпростіший варіант — коли постачальник сам доставляє товар своїм транспортом. Але часто до процесу залучається ще й перевізник або експедитор (Frachtführer/Spediteur), який діє від імені постачальника або одержувача. Крім того, доставка може відбуватись напряму (Direktbelieferung) або через проміжний склад чи термінал, якщо йдеться про великі мережі логістики. Залежно від виду товару та відстані обирається і вид транспорту — вантажівка, залізниця, судно, літак чи навіть службa посилок (Paketdienst), і кожен із цих варіантів має свої особливості приймання.</p>
-</div>
-<div data-lang="de">
-<p>Die Ware kann auf verschiedenen Wegen ins Lager gelangen, und die gewählte Anlieferungsart bestimmt maßgeblich, wie die Annahme organisiert wird. Am einfachsten ist es, wenn der Lieferant die Ware mit eigenem Fuhrpark selbst anliefert. Häufig wird jedoch zusätzlich ein Frachtführer oder Spediteur eingeschaltet, der im Auftrag des Lieferanten oder Empfängers handelt. Außerdem kann die Anlieferung entweder direkt (Direktbelieferung) oder über ein Zwischenlager bzw. Terminal erfolgen, insbesondere bei größeren Logistiknetzwerken. Je nach Warenart und Entfernung kommt ein passender Verkehrsträger zum Einsatz — Lkw, Bahn, Schiff, Flugzeug oder auch ein Paketdienst —, wobei jede dieser Varianten eigene Besonderheiten bei der Annahme mit sich bringt.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.2</span><h3>Abladen der angelieferten Ware</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Після прибуття транспорту починається фізичне розвантаження — тобто зняття вантажу з транспортного засобу. Зазвичай за цю дію відповідає сам водій або перевізник, якщо інше прямо не погоджено в договорі поставки. Проте розвантаження — це не просто механічна дія: саме в цей момент працівник складу вперше візуально оглядає тару та палети з усіх боків, щоб виявити можливі пошкодження, які виникли під час транспортування. Тому важливо не поспішати і фіксувати будь-які підозрілі сліди одразу, поки транспорт ще на місці.</p>
-</div>
-<div data-lang="de">
-<p>Nach Ankunft des Transportmittels beginnt das physische Abladen, also die Entnahme der Ladung aus dem Fahrzeug. Zuständig dafür ist in der Regel der Fahrer bzw. Frachtführer, sofern im Liefervertrag nichts anderes vereinbart wurde. Das Abladen ist dabei jedoch keine rein mechanische Handlung: Genau in diesem Moment nimmt der Lagermitarbeiter Verpackung und Paletten erstmals von allen Seiten in Augenschein, um mögliche Transportschäden zu erkennen. Deshalb ist es wichtig, nicht zu hetzen und auffällige Spuren sofort zu dokumentieren, solange das Fahrzeug noch vor Ort ist.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.3</span><h3>Kontrollen in Anwesenheit des Überbringers</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Поки водій чи перевізник ще присутній на місці, працівник складу проводить низку швидких, але важливих перевірок. Це критичний момент, адже саме доки перевізник ще тут, можна одразу зафіксувати розбіжність і отримати від нього підтвердження — після його від'їзду довести щось буде значно складніше.</p>
-</div>
-<div data-lang="de">
-<p>Solange der Fahrer oder Frachtführer noch vor Ort ist, führt der Lagermitarbeiter mehrere schnelle, aber wichtige Kontrollen durch. Dies ist ein entscheidender Moment, denn nur solange der Überbringer noch anwesend ist, lässt sich eine Abweichung sofort festhalten und von ihm bestätigen — nach seiner Abfahrt wäre dies deutlich schwieriger nachzuweisen.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.3.1</span><h3>Ist die Ware für uns bestimmt?</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Перш ніж узагалі братися за розвантаження, потрібно переконатися, що поставка справді призначена саме цьому підприємству. Для цього дані одержувача — ім'я, адреса — та номер замовлення на накладній звіряються з власними документами. Якщо тут виявляється розбіжність, поставку можна одразу не приймати — товар просто не буде прийнято.</p>
-</div>
-<div data-lang="de">
-<p>Bevor überhaupt mit dem Entladen begonnen wird, muss sichergestellt sein, dass die Lieferung tatsächlich für dieses Unternehmen bestimmt ist. Dazu werden die Empfängerangaben — Name, Adresse — sowie die Bestellnummer auf dem Lieferschein mit den eigenen Unterlagen abgeglichen. Stellt sich hier eine Abweichung heraus, kann die Lieferung sofort abgelehnt werden — die Ware wird dann schlicht nicht angenommen.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.3.2</span><h3>Stimmt die Anzahl der Packstücke?</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Далі підраховується кількість вантажних одиниць (Colli) — палет, коробок, мішків — і зіставляється з тим, що зазначено в супровідних документах. Якщо кількість не сходиться, наслідки залежать від напрямку розбіжності: при <strong>Mehrlieferung</strong> (надлишку) водій підтверджує факт, і підприємство може відмовитись від зайвої кількості; при <strong>Minderlieferung</strong> (нестачі) водій так само підтверджує розбіжність, а постачальник за потреби організовує довезення.</p>
-</div>
-<div data-lang="de">
-<p>Anschließend wird die Anzahl der Ladeeinheiten (Colli) — Paletten, Kartons, Säcke — gezählt und mit den Versandpapieren verglichen. Stimmt die Menge nicht überein, hängen die Folgen von der Richtung der Abweichung ab: bei <strong>Mehrlieferung</strong> (Überschuss) bestätigt der Fahrer den Sachverhalt, und das Unternehmen kann die überschüssige Menge ablehnen; bei <strong>Minderlieferung</strong> (Fehlmenge) bestätigt der Fahrer ebenso die Abweichung, und der Lieferant organisiert bei Bedarf eine Nachlieferung.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.3.3</span><h3>Stimmt die äußere Beschaffenheit?</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Окрім кількості, перевіряється й зовнішній стан упаковки та тари з усіх боків: чи немає проколів, вологих плям, деформацій чи інших ознак того, що товар міг постраждати під час перевезення. Якщо пошкодження виявлено, підприємство — залежно від внутрішніх правил і домовленостей із постачальником — або одразу відмовляється від приймання (Annahmeverweigerung), або ж водій підтверджує пошкодження безпосередньо на транспортних документах. Якщо ж є підозра саме на транспортне пошкодження (а не заводський брак), додатково складається протокол (Tatbestandsaufnahme), і перевізника потрібно повідомити протягом семи днів.</p>
-</div>
-<div data-lang="de">
-<p>Neben der Menge wird auch der äußere Zustand von Verpackung und Ladeeinheit von allen Seiten geprüft: liegen Löcher, feuchte Stellen, Verformungen oder andere Anzeichen dafür vor, dass die Ware während des Transports gelitten haben könnte. Wird ein Schaden festgestellt, wird je nach betrieblichen Regeln und Vereinbarung mit dem Lieferanten entweder die Annahme sofort verweigert, oder der Fahrer bestätigt den Schaden direkt auf den Frachtpapieren. Besteht der Verdacht auf einen echten Transportschaden (statt eines werksseitigen Mangels), wird zusätzlich eine Tatbestandsaufnahme erstellt, und der Frachtführer muss innerhalb von sieben Tagen benachrichtigt werden.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.3.4</span><h3>Liegen Mehrwegtransportverpackungen vor?</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Якщо поставка прибуває на багаторазовій тарі (MTV) — наприклад, на Europaletten чи в Gitterboxen — цей факт потрібно зафіксувати окремо, адже така тара підлягає обміну або поверненню постачальнику. Важливо: пошкоджену багаторазову тару підприємство не зобов'язане приймати назад в обмін — вона просто залишається у постачальника чи перевізника.</p>
-</div>
-<div data-lang="de">
-<p>Erfolgt die Lieferung auf Mehrwegtransportverpackung (MTV) — etwa auf Europaletten oder in Gitterboxen —, muss dies gesondert erfasst werden, denn solche Verpackung unterliegt einem Tausch- oder Rückgabesystem. Wichtig: beschädigte MTV müssen vom Unternehmen nicht im Austausch angenommen werden — sie verbleiben schlicht beim Lieferanten bzw. Frachtführer.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.3.5</span><h3>Die Warenannahme quittieren</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Коли всі попередні перевірки завершені й зовні товар у порядку, приймання підтверджується підписом (Empfangsbestätigung) на транспортних документах, і за потреби одразу відбувається обмін палет. Але якщо під час огляду виявлено видимі дефекти, підпис не можна ставити просто так — спочатку обов'язково вписується <strong>Vorbehalt</strong> (застереження), і лише потім ставиться підпис.</p>
-</div>
-<div data-lang="de">
-<p>Sind alle vorherigen Kontrollen abgeschlossen und ist die Ware äußerlich in Ordnung, wird die Annahme durch eine Empfangsbestätigung auf den Frachtpapieren bestätigt, wobei bei Bedarf gleich ein Palettentausch erfolgt. Wurden bei der Prüfung jedoch erkennbare Mängel festgestellt, darf nicht einfach unterschrieben werden — zunächst muss unbedingt ein <strong>Vorbehalt</strong> eingetragen werden, und erst danach erfolgt die Unterschrift.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.3.6</span><h3>Wareneingangsschein</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Паралельно з підписанням транспортних документів складається ще один документ — Wareneingangsschein, внутрішній документ складу. Цей документ важливий не лише для самого складу: він одночасно запускає низку процесів у різних відділах підприємства — від бухгалтерії, яка чекає підтвердження надходження для оплати рахунку, до відділу закупівель, який звіряє поставку із замовленням.</p>
-</div>
-<div data-lang="de">
-<p>Parallel zur Unterschrift auf den Frachtpapieren wird ein weiteres Dokument erstellt — der Wareneingangsschein, ein internes Lagerdokument. Dieses Dokument ist nicht nur für das Lager selbst wichtig: Es löst gleichzeitig mehrere Vorgänge in verschiedenen Abteilungen des Unternehmens aus — von der Buchhaltung, die die Bestätigung des Wareneingangs für die Rechnungsfreigabe benötigt, bis zum Einkauf, der die Lieferung mit der Bestellung abgleicht.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.4</span><h3>Beleglose Wareneingangskontrolle</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>У сучасних складах паперовий Wareneingangsschein все частіше замінюється електронним варіантом — так званою beleglose Wareneingangskontrolle. У цьому випадку дані про товар вводяться напряму в систему через сканер штрих-коду або мобільний MDE-термінал, без будь-якого паперового проміжного етапу. Завдяки цьому процес не лише пришвидшується, а й стає менш вразливим до помилок ручного вводу, оскільки дані одразу потрапляють у систему керування складом (LVS) і доступні всім, кому вони потрібні.</p>
-</div>
-<div data-lang="de">
-<p>In modernen Lagern wird der Papierbeleg des Wareneingangsscheins zunehmend durch eine elektronische Variante ersetzt — die sogenannte beleglose Wareneingangskontrolle. Dabei werden die Warendaten direkt per Barcode-Scanner oder mobilem MDE-Terminal ins System eingegeben, ganz ohne einen zwischengeschalteten Papierschritt. Dadurch wird der Prozess nicht nur schneller, sondern auch weniger anfällig für manuelle Eingabefehler, da die Daten sofort im Lagerverwaltungssystem (LVS) landen und allen zur Verfügung stehen, die sie benötigen.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.5</span><h3>Codierung der Ware</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Щоб beleglose Kontrolle взагалі могла працювати, товар має бути закодований — тобто позначений машиночитним кодом, який дозволяє однозначно ідентифікувати товар за допомогою пристрою зчитування і передавати дані далі без помилок ручного вводу. Найпоширенішим варіантом досі залишається штрих-код (Barcode): він складається зі штрихів різної ширини і зчитується лазерним або камерним сканером. Більш сучасна альтернатива — технологія RFID, серцем якої є <strong>Transponder (Tag)</strong> — пристрій, що складається з мікрочипа й антени. Дані, збережені на такій електронній мітці, передаються на пристрій зчитування радіочастотними хвилями, а не оптично. Саме тому RFID-мітки мають кілька суттєвих переваг перед звичайним штрих-кодом: не потрібен прямий візуальний контакт зі сканером, можна зчитувати одразу цілу групу товарів одночасно (Pulkfähigkeit), і, крім того, на самій мітці можна додатково зберігати більше даних, ніж на простому штрих-коді.</p>
-<table>
-<tr><th>Система</th><th>Принцип</th></tr>
-<tr><td>Barcode</td><td>штрихи різної ширини, зчитуються лазерним/камерним сканером, потрібен прямий візуальний контакт</td></tr>
-<tr><td>RFID (Transponder/Tag = мікрочип + антена)</td><td>передача радіохвилями; без прямого контакту, групове зчитування (Pulkfähigkeit), більше місця для даних</td></tr>
-</table>
-</div>
-<div data-lang="de">
-<p>Damit die beleglose Kontrolle überhaupt funktionieren kann, muss die Ware codiert sein, also mit einem maschinenlesbaren Code versehen werden, der eine eindeutige Identifikation per Lesegerät ermöglicht und die Daten fehlerfrei weiterleitet. Nach wie vor am weitesten verbreitet ist dabei der Barcode: Er besteht aus unterschiedlich breiten Strichen und wird per Laser- oder Kamerascanner gelesen. Eine modernere Alternative ist die RFID-Technologie, deren Kernstück der <strong>Transponder (Tag)</strong> ist — ein Bauteil aus Mikrochip und Antenne. Die auf einem solchen elektronischen Etikett gespeicherten Daten werden mittels radiofrequenter Wellen an das Lesegerät gesendet, nicht optisch. Genau deshalb bieten RFID-Tags gegenüber dem klassischen Barcode mehrere wesentliche Vorteile: es ist kein direkter Sichtkontakt zum Lesegerät notwendig, mehrere Waren können gleichzeitig im Bündel gelesen werden (Pulkfähigkeit), und zudem lässt sich auf dem Tag selbst mehr an zusätzlichen Daten speichern als auf einem einfachen Barcode.</p>
-<table>
-<tr><th>System</th><th>Prinzip</th></tr>
-<tr><td>Barcode</td><td>unterschiedlich breite Striche, per Laser-/Kamerascanner gelesen, Sichtkontakt nötig</td></tr>
-<tr><td>RFID (Transponder/Tag = Mikrochip + Antenne)</td><td>Funkübertragung; kein Sichtkontakt, Pulkfähigkeit, mehr Speicherplatz für Daten</td></tr>
-</table>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.6</span><h3>Untersuchungs- und Anzeigepflichten</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Тут вступає в дію важлива юридична норма — § 377 Handelsgesetzbuch (HGB). Вона діє тоді, коли обидві сторони угоди є комерційними підприємствами (Kaufleute), і зобов'язує покупця перевірити отриманий товар та повідомити про дефекти. Але конкретні строки заяви розрізняються залежно від того, кому саме адресується претензія:</p>
-<ul>
-<li><strong>Перед Frachtführer</strong> (перевізником): за транспортні пошкодження — протягом <strong>7 днів</strong>; за перевищення строку поставки — протягом <strong>21 дня</strong> (адже саме перевізник відповідає за збитки від затримки)</li>
-<li><strong>Перед Lieferant</strong> (постачальником): за явні дефекти — негайно (unverzüglich); за приховані дефекти — негайно після виявлення, але не пізніше <strong>двох років</strong> від моменту поставки</li>
-</ul>
-<p>Якщо покупець не дотримається цих строків, наслідки серйозні: товар вважатиметься прийнятим без зауважень, і подальша рекламація стане неможливою.</p>
-</div>
-<div data-lang="de">
-<p>Hier greift eine wichtige Rechtsnorm — § 377 des Handelsgesetzbuches (HGB). Sie gilt, wenn beide Vertragsparteien Kaufleute sind, und verpflichtet den Käufer, die erhaltene Ware zu untersuchen und Mängel anzuzeigen. Die konkreten Anzeigefristen unterscheiden sich jedoch danach, an wen sich die Anzeige richtet:</p>
-<ul>
-<li><strong>Gegenüber dem Frachtführer</strong>: bei Transportmängeln innerhalb von <strong>sieben Tagen</strong>; bei Überschreiten der Lieferfrist innerhalb von <strong>21 Tagen</strong> (denn der Frachtführer haftet für Verspätungsschäden)</li>
-<li><strong>Gegenüber dem Lieferanten</strong>: bei offenen Mängeln unverzüglich; bei versteckten Mängeln unverzüglich nach Entdeckung, jedoch spätestens vor Ablauf von <strong>zwei Jahren</strong></li>
-</ul>
-<p>Hält der Käufer diese Fristen nicht ein, sind die Folgen erheblich: Die Ware gilt dann als beanstandungsfrei angenommen, und eine spätere Reklamation ist ausgeschlossen.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">1.7</span><h3>Mehrwegtransportverpackungen</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Одноразова упаковка (Einwegverpackung) після використання або застосовується повторно для інших цілей, або утилізується як вторсировина. Багаторазова ж транспортна тара (MTV) — Europaletten, Gitterboxen — циркулює у спеціально організованих системах обміну, і тут варто розрізняти два типи таких систем. <strong>Білатеральна система</strong> діє в замкненому колі між одним конкретним відправником і одним отримувачем, або ж у межах однієї галузі. <strong>Мультилатеральна система</strong>, натомість, доступна одразу багатьом відправникам і отримувачам, і може працювати як Poolsystem (спільний пул тари) чи Pfandsystem (застава за тару) — причому таку тару можна не лише обмінювати, а й купувати або орендувати. Залежно від конкретної системи, отриману тару потрібно або одразу обміняти в постачальника (порожню на повну), або тимчасово зберігати на складі, доки її не забере оператор системи.</p>
-</div>
-<div data-lang="de">
-<p>Einwegverpackung wird nach Gebrauch entweder für andere Zwecke weiterverwendet oder als Wertstoff entsorgt. Mehrwegtransportverpackung (MTV) hingegen — Europaletten, Gitterboxen — zirkuliert in eigens organisierten Tauschsystemen, wobei zwei Systemtypen zu unterscheiden sind. Ein <strong>bilaterales System</strong> läuft in einem geschlossenen Kreislauf zwischen einem konkreten Versender und einem Empfänger, oder innerhalb einer einzelnen Branche. Ein <strong>multilaterales System</strong> ist dagegen für mehrere Versender und Empfänger gleichzeitig zugänglich und kann als Poolsystem (gemeinsamer Verpackungspool) oder als Pfandsystem betrieben werden — wobei MTV in solchen Systemen auch gekauft oder gemietet werden können. Je nach System muss die erhaltene Verpackung entweder direkt beim Versender im Austausch zurückgegeben werden (leer gegen voll), oder sie wird vorübergehend im Lager aufbewahrt, bis der Systembetreiber sie abholt.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">2</span><h3>Warenprüfung</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Тоді як Warenannahme стосується першого, поверхового контакту з товаром, Warenprüfung йде значно глибше: тут перевіряється вже не лише кількість вантажних одиниць, а зміст самої поставки — чи справді все відповідає замовленню.</p>
-</div>
-<div data-lang="de">
-<p>Während sich die Warenannahme auf den ersten, oberflächlichen Kontakt mit der Ware bezieht, geht die Warenprüfung deutlich weiter: Hier wird nicht mehr nur die Anzahl der Ladeeinheiten geprüft, sondern der Inhalt der Lieferung selbst — ob wirklich alles der Bestellung entspricht.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">2.1</span><h3>Gegenstand der Prüfung</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Перед тим як товар потрапить на постійне місце зберігання, його перевіряють за чотирма аспектами, і кожен із них по суті — це окреме питання, на яке потрібно дати відповідь:</p>
-<ul>
-<li><strong>Identität</strong> — чи доставлено саме той товар, який замовляли?</li>
-<li><strong>Quantität</strong> — чи доставлено замовлену кількість?</li>
-<li><strong>Beschaffenheit</strong> — чи має товар пошкодження?</li>
-<li><strong>Qualität</strong> — чи відповідає товар узгодженій якості (Güte)?</li>
-</ul>
-<p>При великих партіях товару перевірити кожну одиницю окремо нереально, тому застосовується вибіркова перевірка (stichprobenartige Kontrolle) — контроль певної частини партії, результат якої поширюється на всю поставку.</p>
-</div>
-<div data-lang="de">
-<p>Bevor die Ware ihren endgültigen Lagerplatz erreicht, wird sie anhand von vier Aspekten geprüft, wobei jeder davon im Grunde eine eigene Frage darstellt, die beantwortet werden muss:</p>
-<ul>
-<li><strong>Identität</strong> — wurde die richtige Ware geliefert?</li>
-<li><strong>Quantität</strong> — wurde die bestellte Menge geliefert?</li>
-<li><strong>Beschaffenheit</strong> — weist die Ware Beschädigungen auf?</li>
-<li><strong>Qualität</strong> — hat die Ware die vereinbarte Güte?</li>
-</ul>
-<p>Bei größeren Mengen ist es unrealistisch, jede einzelne Einheit zu prüfen, weshalb eine stichprobenartige Kontrolle erfolgt — die Prüfung eines Teils der Charge, deren Ergebnis auf die gesamte Lieferung übertragen wird.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">2.2</span><h3>Leistungsstörungen seitens des Lieferanten</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Якщо один із перелічених вище пунктів не підтверджується, йдеться про так звану Leistungsstörung — порушення з боку постачальника. Розрізняють два основні типи таких порушень.</p>
-</div>
-<div data-lang="de">
-<p>Bestätigt sich einer der oben genannten Punkte nicht, spricht man von einer Leistungsstörung seitens des Lieferanten. Dabei werden grundsätzlich zwei Arten unterschieden.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">2.2.1</span><h3>Schlechtlieferung</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Перший тип — Schlechtlieferung, тобто поставка з дефектом (Sachmangel). Такі дефекти класифікують одразу за двома незалежними ознаками, і важливо не плутати їх між собою.</p>
-<p><strong>За розпізнаваністю (Erkennbarkeit)</strong> — наскільки легко дефект виявити:</p>
-<table>
-<tr><th>Тип</th><th>Пояснення</th></tr>
-<tr><td>offener Mangel</td><td>явний дефект, видно одразу при огляді</td></tr>
-<tr><td>versteckter Mangel</td><td>прихований дефект, виявляється лише пізніше, під час використання</td></tr>
-<tr><td>arglistig verschwiegener Mangel</td><td>дефект, про який продавець знав і навмисно замовчав</td></tr>
-</table>
-<p><strong>За видом (Art)</strong> — що саме не так із товаром:</p>
-<table>
-<tr><th>Вид</th><th>Пояснення</th></tr>
-<tr><td>Mangel in der Art (Falschlieferung)</td><td>доставлено інший товар, ніж замовляли</td></tr>
-<tr><td>Mangel in der Menge (Minderlieferung)</td><td>доставлено занадто багато або занадто мало</td></tr>
-<tr><td>Mangel in der Beschaffenheit</td><td>товар у поганому стані, або відсутні обіцяні (zugesicherte) властивості</td></tr>
-<tr><td>Mangel in der Güte</td><td>товар не відповідає узгодженій якості/сорту</td></tr>
-</table>
-<p>Незалежно від того, який саме дефект виявлено, покупець не може одразу вимагати повернення грошей чи розірвання договору. § 437 BGB встановлює чітку послідовність: спочатку — за умови, що покупець дотримався строків заяви про дефект (Rügefristen) — діє <strong>vorrangiges Recht auf Nacherfüllung</strong> (усунення недоліку через Nachbesserung — ремонт, або Neulieferung — нову поставку). Лише коли строк, наданий на усунення недоліку, безрезультатно спливає (erfolgloser Ablauf der Nacherfüllungsfrist), покупець отримує доступ до <strong>nachrangige Rechte</strong>: Rücktritt vom Kaufvertrag (відмова від договору), Minderung des Kaufpreises (зниження ціни) або Schadenersatz (відшкодування збитків).</p>
-<div class="rule">Sachmangel → дотримано Rügefristen → Nacherfüllung (Nachbesserung/Neulieferung) → безрезультатний строк → Rücktritt / Minderung / Schadenersatz</div>
-</div>
-<div data-lang="de">
-<p>Die erste Art ist die Schlechtlieferung, also eine Lieferung mit einem Sachmangel. Solche Mängel werden gleich nach zwei unabhängigen Merkmalen eingeteilt, die man nicht verwechseln sollte.</p>
-<p><strong>Nach der Erkennbarkeit</strong> — wie leicht der Mangel zu entdecken ist:</p>
-<table>
-<tr><th>Typ</th><th>Erklärung</th></tr>
-<tr><td>offener Mangel</td><td>sofort bei der Prüfung erkennbar</td></tr>
-<tr><td>versteckter Mangel</td><td>zeigt sich erst später, z. B. beim Gebrauch</td></tr>
-<tr><td>arglistig verschwiegener Mangel</td><td>der Verkäufer wusste davon und hat ihn absichtlich verschwiegen</td></tr>
-</table>
-<p><strong>Nach der Art</strong> — was genau an der Ware nicht stimmt:</p>
-<table>
-<tr><th>Art</th><th>Erklärung</th></tr>
-<tr><td>Mangel in der Art (Falschlieferung)</td><td>eine andere Ware wurde geliefert als bestellt</td></tr>
-<tr><td>Mangel in der Menge (Minderlieferung)</td><td>zu viel oder zu wenig wurde geliefert</td></tr>
-<tr><td>Mangel in der Beschaffenheit</td><td>schlechter Zustand, oder zugesicherte Eigenschaften fehlen</td></tr>
-<tr><td>Mangel in der Güte</td><td>die Ware entspricht nicht der vereinbarten Qualität</td></tr>
-</table>
-<p>Unabhängig davon, welcher Mangel vorliegt, kann der Käufer nicht sofort Geld zurückverlangen oder vom Vertrag zurücktreten. § 437 BGB legt eine klare Reihenfolge fest: Zunächst gilt — vorausgesetzt, der Käufer hat die Rügefristen eingehalten — das <strong>vorrangige Recht auf Nacherfüllung</strong> (Beseitigung des Mangels durch Nachbesserung oder Neulieferung). Erst wenn die dem Verkäufer gesetzte Frist erfolglos abläuft, erhält der Käufer Zugang zu den <strong>nachrangigen Rechten</strong>: Rücktritt vom Kaufvertrag, Minderung des Kaufpreises oder Schadenersatz.</p>
-<div class="rule">Sachmangel → Rügefristen eingehalten → Nacherfüllung (Nachbesserung/Neulieferung) → erfolgloser Fristablauf → Rücktritt / Minderung / Schadenersatz</div>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">2.2.2</span><h3>Nicht-rechtzeitig-Lieferung (Lieferungsverzug)</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Другий тип порушення стосується не якості товару, а строку його доставки. Однак просте "запізнення" саме по собі ще не означає юридичний <strong>Verzug</strong> (прострочення) — для цього мають одночасно виконуватись три умови:</p>
+<h4>⭐ Ablauf einer Warenannahme</h4>
+<p><strong>Доставка товару</strong> здійснюється через експедитора (Spediteur), залізницю (Bahn), кур'єрську службу (KEP-Dienst) або самим постачальником.</p>
+<p>Поки перевізник (водій) присутній, перевіряється, чи:</p>
 <ol>
-<li><strong>Die Lieferung muss fällig sein</strong> — строк поставки вже настав</li>
-<li><strong>Der Verkäufer muss gemahnt werden</strong> — покупець повинен нагадати (Mahnung) продавцю про поставку</li>
-<li><strong>Den Verkäufer muss Verschulden treffen</strong> — затримка сталась з вини продавця</li>
+<li>товар призначений саме нам,</li>
+<li>товар був нами замовлений,</li>
+<li>товар доставлений вчасно.</li>
 </ol>
-<p>Є важливий виняток щодо другої умови: якщо строк поставки був чітко узгоджений як Fixgeschäft (тобто його дотримання є суттєвою умовою угоди — наприклад, товар для конкретного сезону), нагадування взагалі не потрібне — прострочення настає автоматично, щойно строк минув.</p>
-<p>Коли Verzug настав, покупець має одразу кілька прав на вибір, і може комбінувати деякі з них:</p>
+<p><strong>Якщо ні — товар не приймається.</strong></p>
+<p><strong>Розвантаження товару:</strong></p>
+<ol start="4">
+<li>Перевірка, чи мають товар або упаковка зовнішні пошкодження — вантажні місця (Colli) та тару оглядають з усіх боків.</li>
+<li>Перевірка, чи кількість доставлених Colli збігається з кількістю, зазначеною в транспортних документах.</li>
+</ol>
+<p><strong>Якщо є розбіжності:</strong> при пошкодженнях — залежно від підприємства та домовленості з постачальником: або відмова від приймання, або підтвердження пошкоджень водієм на транспортних документах чи складання акта; при підозрі на транспортне пошкодження — повідомлення перевізника протягом семи днів. При надлишку — підтвердження водієм, можлива відмова від зайвої кількості. При нестачі — підтвердження водієм, за потреби довезення постачальником. При простроченні поставки — можливе відшкодування збитків; заява перевізнику протягом 21 дня (перевізник відповідає за збитки через затримку).</p>
+<p><strong>Якщо все гаразд:</strong> підтвердження отримання на транспортних документах і, за потреби, обмін палет.</p>
+<p>Пошкоджену багаторазову тару (MTV) не зобов'язані приймати назад в обмін.</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Ablauf einer Warenannahme</h4>
+<p><strong>Anlieferung der Ware</strong> per Spediteur, Bahn, KEP-Dienst oder Lieferant selbst.</p>
+<p>In Anwesenheit des Frachtführers (Fahrers) wird kontrolliert, ob</p>
+<ol>
+<li>die Ware für uns bestimmt ist,</li>
+<li>die Ware von uns bestellt wurde,</li>
+<li>die Ware rechtzeitig geliefert wurde.</li>
+</ol>
+<p><strong>Wenn nicht, wird die Ware nicht angenommen.</strong></p>
+<p><strong>Abladen der Ware:</strong></p>
+<ol start="4">
+<li>Kontrolle, ob Waren oder Verpackung äußerliche Beschädigungen aufweisen — Anschauen der Colli und Packmittel von allen Seiten.</li>
+<li>Prüfen, ob die Anzahl der angelieferten Colli mit der in den Versandpapieren angegebenen Anzahl übereinstimmt.</li>
+</ol>
+<p><strong>Bei Abweichungen:</strong> bei Beschädigungen je nach Betrieb und Vereinbarung mit dem Lieferanten entweder Annahmeverweigerung oder Bestätigung der Beschädigungen durch den Fahrer auf den Frachtpapieren bzw. Tatbestandsaufnahme; bei Verdacht auf Transportschaden Benachrichtigung des Frachtführers innerhalb von sieben Tagen. Bei Mehrlieferung: Bestätigung durch den Fahrer, evtl. Ablehnung der Mehrlieferung. Bei Minderlieferung: Bestätigung durch den Fahrer, ggf. Nachlieferung durch den Lieferanten. Bei Nicht-rechtzeitig-Lieferung: ggf. Schadenersatz; Anzeige an den Frachtführer innerhalb von 21 Tagen (der Frachtführer haftet für Verspätungsschäden).</p>
+<p><strong>Ist alles in Ordnung?</strong> Empfangsbestätigung auf den Frachtpapieren und ggf. Palettentausch.</p>
+<p>Beschädigte MTV brauchen nicht im Austausch angenommen zu werden.</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Anzeigefristen bei Mängeln</h4>
+<table>
+<tr><th>Кому заявляти</th><th>Строк</th></tr>
+<tr><td>Frachtführer — при транспортних пошкодженнях</td><td>7 днів</td></tr>
+<tr><td>Frachtführer — при перевищенні строку поставки</td><td>21 день</td></tr>
+<tr><td>Lieferant — при явних (відкритих) дефектах</td><td>негайно (unverzüglich)</td></tr>
+<tr><td>Lieferant — при прихованих дефектах</td><td>негайно після виявлення, але не пізніше 2 років</td></tr>
+</table>
+</div>
+<div data-lang="de">
+<h4>⭐ Anzeigefristen bei Mängeln</h4>
+<table>
+<tr><th>Gegenüber</th><th>Frist</th></tr>
+<tr><td>Frachtführer — bei Transportmängeln</td><td>innerhalb von sieben Tagen</td></tr>
+<tr><td>Frachtführer — bei Überschreiten der Lieferfrist</td><td>innerhalb von 21 Tagen</td></tr>
+<tr><td>Lieferant — bei offenen Mängeln</td><td>unverzüglich</td></tr>
+<tr><td>Lieferant — bei versteckten Mängeln</td><td>unverzüglich nach Entdeckung, jedoch spätestens vor Ablauf von zwei Jahren</td></tr>
+</table>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Codierung: Barcode und RFID</h4>
+<p><strong>Кодування у формі штрих-кодів (Barcodes)</strong> дає змогу однозначно ідентифікувати товар за допомогою зчитувальних пристроїв. Зафіксовані дані можна просто і без помилок передавати далі — наприклад, до системи обліку товару.</p>
+<p><strong>Основа технології RFID</strong> — транспондер (Tag), що складається з мікрочипа й антени. Дані, збережені на електронних етикетках, передаються радіохвилями на зчитувачі. Порівняно зі штрих-кодовими етикетками теги мають такі переваги: не потрібен прямий зоровий контакт зі зчитувачем, можливість групового зчитування кількох міток одночасно (Pulkfähigkeit), а також додаткова можливість зберігання даних.</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Codierung: Barcode und RFID</h4>
+<p><strong>Die Codierung in Form von Barcodes</strong> ermöglicht, dass die Ware mithilfe von Lesegeräten eindeutig identifiziert werden kann. Die erfassten Daten können einfach und fehlerfrei weitergeleitet werden.</p>
+<p><strong>Kernstück der RFID-Technologie</strong> ist der Transponder (Tag), der aus einem Mikrochip und einer Antenne besteht. Die auf den elektronischen Etiketten gespeicherten Daten werden mittels radiofrequenter Wellen an Lesegeräte gesendet. Tags bieten gegenüber Barcodelabeln u. a. folgende Vorteile: kein Sichtkontakt zum Lesegerät notwendig, Pulkfähigkeit sowie zusätzliche Speicherung von Daten.</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Einwegverpackungen und Mehrwegtransportverpackungen (MTV)</h4>
+<p><strong>Одноразову упаковку (Einwegverpackungen)</strong> або використовують повторно, або здають як вторсировину на утилізацію.</p>
+<p><strong>Багаторазова тара (MTV)</strong> обертається у закритих системах між відправником і отримувачем (білатерально) або в межах однієї галузі.</p>
+<p><strong>Мультилатеральні системи багаторазової тари</strong> доступні для кількох відправників і отримувачів. Вони можуть організовуватись у формі пул-систем (Poolsysteme) або застáвних систем (Pfandsysteme). Можливі також купівля або оренда MTV.</p>
+<p>Залежно від системи багаторазового обігу, доставлену тару потрібно повернути відправнику в обмін (порожню на повну) або зберігати до забору оператором системи.</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Einwegverpackungen und Mehrwegtransportverpackungen (MTV)</h4>
+<p><strong>Einwegverpackungen</strong> werden entweder weiterverwendet oder als Wertstoff entsorgt.</p>
+<p><strong>Mehrwegtransportverpackungen (MTV)</strong> werden in geschlossenen Systemen zwischen Versender und Empfänger (bilateral) oder innerhalb einer Branche getauscht.</p>
+<p><strong>Multilaterale Mehrwegsysteme</strong> sind für mehrere Versender und Empfänger zugänglich. Sie können in Form von Poolsystemen oder Pfandsystemen betrieben werden. Auch der Kauf oder die Miete von MTV ist möglich.</p>
+<p>Je nach Mehrwegsystem müssen die angelieferten MTV im Austausch (leere gegen volle MTV) an den Versender zurückgegeben oder bis zur Abholung durch den Systembetreiber gelagert werden.</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Gegenstand der Warenprüfung</h4>
+<p>Перед розміщенням на складі товар перевіряється за чотирма критеріями. При великих партіях проводиться вибіркова перевірка (stichprobenartige Kontrolle).</p>
 <ul>
-<li>наполягати на поставці (auf Lieferung bestehen)</li>
-<li>відмовитись від договору (vom Vertrag zurücktreten)</li>
-<li>вимагати відшкодування за порушення обов'язку (Schadenersatz wegen Pflichtverletzung)</li>
+<li><strong>Identität</strong> — чи доставлено той товар, що замовляли?</li>
+<li><strong>Quantität</strong> — чи доставлена замовлена кількість?</li>
+<li><strong>Beschaffenheit</strong> — чи має товар пошкодження?</li>
+<li><strong>Qualität</strong> — чи має товар обумовлену якість (Güte)?</li>
+</ul>
+</div>
+<div data-lang="de">
+<h4>⭐ Gegenstand der Warenprüfung</h4>
+<p>Vor der Einlagerung ist die Ware im Hinblick auf vier Kriterien zu überprüfen. Bei größeren Mengen erfolgt eine stichprobenartige Kontrolle.</p>
+<ul>
+<li><strong>Identität</strong> — Wurde die richtige Ware geliefert?</li>
+<li><strong>Quantität</strong> — Wurde die bestellte Menge geliefert?</li>
+<li><strong>Beschaffenheit</strong> — Weist die Ware Beschädigungen auf?</li>
+<li><strong>Qualität</strong> — Hat die Ware die vereinbarte Güte?</li>
+</ul>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Sachmängel bei Schlechtlieferung</h4>
+<p><strong>За розпізнаваністю:</strong></p>
+<ul>
+<li><strong>offener Mangel</strong> — явний дефект, помітний одразу</li>
+<li><strong>versteckter Mangel</strong> — прихований дефект, виявляється лише пізніше</li>
+<li><strong>arglistig verschwiegener Mangel</strong> — навмисно прихований продавцем дефект</li>
+</ul>
+<p><strong>За видом:</strong></p>
+<ul>
+<li><strong>Beschaffenheitsmängel</strong> (дефект стану) — доставлений товар не в належному стані, або йому бракує обумовлених властивостей</li>
+<li><strong>Falschlieferung</strong> (дефект в асортименті / Mangel in der Art) — доставлено інший товар, ніж замовлено</li>
+<li><strong>Minderlieferung</strong> (дефект у кількості / Mangel in der Menge) — доставлено більше або менше, ніж замовлено</li>
+</ul>
+</div>
+<div data-lang="de">
+<h4>⭐ Sachmängel bei Schlechtlieferung</h4>
+<p><strong>Nach Erkennbarkeit:</strong></p>
+<ul>
+<li><strong>offener Mangel</strong> — sofort erkennbar</li>
+<li><strong>versteckter Mangel</strong> — erst später erkennbar</li>
+<li><strong>arglistig verschwiegener Mangel</strong> — vom Verkäufer bewusst verschwiegen</li>
+</ul>
+<p><strong>Nach Art:</strong></p>
+<ul>
+<li><strong>Beschaffenheitsmängel</strong> — die gelieferte Ware ist in keinem guten Zustand bzw. der gelieferten Ware fehlen zugesicherte Eigenschaften</li>
+<li><strong>Falschlieferung</strong> (Mangel in der Art) — es wurde eine andere Ware geliefert als bestellt</li>
+<li><strong>Minderlieferung</strong> (Mangel in der Menge) — es wurde zu viel oder zu wenig geliefert</li>
+</ul>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Schadenersatz bei Lieferungsverzug</h4>
+<p>Вимога відшкодування збитків може стосуватися <strong>конкретного збитку</strong> (напр., різниці в ціні при заміщувальній закупівлі — Deckungskauf) або <strong>абстрактного збитку</strong>. Абстрактний збиток довести складно: наприклад, через прострочену чи невиконану поставку покупець втратив клієнтуру. Оскільки розмір такого збитку важко встановити (часто лише в судовому порядку), на практиці зазвичай наперед домовляються про договірну неустойку (Vertragsstrafe / Konventionalstrafe). Вона стає обов'язковою до сплати, щойно продавець потрапляє у прострочення.</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Schadenersatz bei Lieferungsverzug</h4>
+<p>Der Schadenersatzanspruch kann sich auf einen <strong>konkreten Schaden</strong> (z. B. die Preisdifferenz beim Deckungskauf) oder auf einen <strong>abstrakten Schaden</strong> beziehen. Beim abstrakten Schaden ist der Nachweis schwierig zu führen — Beispiel: Dem Käufer ist durch die verspätete oder ausgebliebene Lieferung Kundschaft verlorengegangen. Weil die Höhe des Schadens schwer festzustellen ist (häufig nur in einem gerichtlichen Verfahren möglich), wird in der Praxis oft eine Vertragsstrafe (Konventionalstrafe) vereinbart. Sie wird fällig, sobald der Verkäufer im Verzug ist.</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Lieferungsverzug — умови та права покупця</h4>
+<p><strong>Умови (мають виконуватись одночасно):</strong></p>
+<ol>
+<li>Lieferung fällig — настав строк поставки</li>
+<li>Verkäufer gemahnt — продавця письмово попереджено (крім Fixgeschäft)</li>
+<li>Verkäufer trifft Verschulden — продавець винен у простроченні</li>
+</ol>
+<p><strong>Права покупця при простроченні поставки:</strong></p>
+<ul>
+<li>наполягати на поставці</li>
+<li>відмовитись від договору (Rücktritt)</li>
+<li>вимагати відшкодування збитків через порушення обов'язку (Schadenersatz wegen Pflichtverletzung)</li>
 <li>вимагати відшкодування замість виконання (Schadenersatz statt Leistung)</li>
 <li>вимагати компенсації марних витрат (Ersatz vergeblicher Aufwendungen)</li>
 </ul>
-<p>Щодо самого Schadenersatz варто розрізняти: <strong>конкретний збиток</strong> (konkreter Schaden) — наприклад, різницю в ціні при заміщувальній закупівлі (Deckungskauf) в іншого постачальника — довести відносно легко. А от <strong>абстрактний збиток</strong> (abstrakter Schaden), наприклад втрачені через затримку клієнти, довести значно складніше — часто це можливо лише через суд. Саме тому на практиці сторони заздалегідь домовляються про <strong>Vertragsstrafe</strong> (договірний штраф, Konventionalstrafe) — фіксовану суму, яка стає обов'язковою до сплати одразу, щойно продавець опиняється у стані Verzug, без потреби доводити реальний розмір збитків.</p>
+<p>Якщо існує дефект товару (Sachmangel) і покупець дотримався строків рекламації, першочергово діє право на <strong>додаткове виконання</strong> (Nacherfüllung — усунення недоліку або нова поставка). Лише після безрезультатного спливу строку на додаткове виконання настають нижчерангові права: відмова від договору, зменшення ціни (Minderung) або відшкодування збитків.</p>
 </div>
 <div data-lang="de">
-<p>Die zweite Art der Störung betrifft nicht die Qualität der Ware, sondern den Liefertermin. Eine einfache "Verspätung" allein bedeutet jedoch noch keinen rechtlichen <strong>Verzug</strong> — dafür müssen gleichzeitig drei Voraussetzungen erfüllt sein:</p>
+<h4>⭐ Lieferungsverzug — Voraussetzungen und Käuferrechte</h4>
+<p><strong>Voraussetzungen (müssen gleichzeitig erfüllt sein):</strong></p>
 <ol>
-<li><strong>Die Lieferung muss fällig sein</strong> — der Liefertermin ist bereits eingetreten</li>
-<li><strong>Der Verkäufer muss gemahnt werden</strong> — der Käufer muss den Verkäufer an die Lieferung erinnern (Mahnung)</li>
-<li><strong>Den Verkäufer muss Verschulden treffen</strong> — die Verzögerung liegt in seiner Verantwortung</li>
+<li>Die Lieferung muss fällig sein.</li>
+<li>Der Verkäufer muss gemahnt werden (außer bei einem Fixgeschäft).</li>
+<li>Den Verkäufer muss ein Verschulden treffen.</li>
 </ol>
-<p>Bei der zweiten Voraussetzung gibt es eine wichtige Ausnahme: War der Liefertermin ausdrücklich als Fixgeschäft vereinbart (der Termin also eine wesentliche Vertragsbedingung — z. B. Saisonware), ist keine Mahnung nötig — der Verzug tritt automatisch mit Ablauf des Termins ein.</p>
-<p>Ist der Verzug eingetreten, stehen dem Käufer gleich mehrere Rechte zur Auswahl, die teilweise kombinierbar sind:</p>
+<p><strong>Rechte von Käufern bei Nicht-Rechtzeitig-Lieferung:</strong></p>
 <ul>
 <li>auf Lieferung bestehen</li>
 <li>vom Vertrag zurücktreten</li>
@@ -406,107 +307,76 @@ span[data-lang].active{display:inline}
 <li>Schadenersatz statt Leistung verlangen</li>
 <li>Ersatz vergeblicher Aufwendungen verlangen</li>
 </ul>
-<p>Beim Schadenersatz selbst ist zu unterscheiden: Ein <strong>konkreter Schaden</strong> — etwa die Preisdifferenz bei einem Deckungskauf bei einem anderen Lieferanten — lässt sich relativ einfach nachweisen. Ein <strong>abstrakter Schaden</strong>, etwa durch die Verzögerung verlorene Kundschaft, ist dagegen deutlich schwerer zu belegen — oft nur gerichtlich. Deshalb wird in der Praxis häufig im Voraus eine <strong>Vertragsstrafe</strong> (Konventionalstrafe) vereinbart — ein fester Betrag, der fällig wird, sobald der Verkäufer in Verzug gerät, ohne dass die tatsächliche Schadenshöhe nachgewiesen werden muss.</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">3</span><h3>Unfallgefahr</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Робота на складі, особливо в зоні Wareneingang, пов'язана з підвищеним ризиком нещасних випадків — вантажна техніка, важкі палети, постійний рух транспорту. Тому охорона праці тут регулюється не однією нормою, а цілою системою приписів різного рівня.</p>
-</div>
-<div data-lang="de">
-<p>Die Arbeit im Lager, insbesondere im Bereich des Wareneingangs, ist mit einem erhöhten Unfallrisiko verbunden — Flurförderzeuge, schwere Paletten, ständiger Fahrzeugverkehr. Deshalb wird der Arbeitsschutz hier nicht durch eine einzelne Norm geregelt, sondern durch ein ganzes System von Vorschriften unterschiedlicher Ebenen.</p>
-</div>
+<p>Liegt ein Sachmangel vor und hat der Käufer die Rügefristen eingehalten, gilt vorrangig das Recht auf <strong>Nacherfüllung</strong> (Nachbesserung oder Neulieferung). Erst nach erfolglosem Ablauf der Nacherfüllungsfrist gelten die nachrangigen Rechte: Rücktritt vom Kaufvertrag, Minderung des Kaufpreises oder Schadenersatz.</p>
 </div>
 </div>
 
-<div class="sec">
-<span class="sec-num">3.1</span><h3>Vorschriftarten zum Arbeitsschutz</h3>
-<div class="sec-body">
+<div class="kw-box">
 <div data-lang="ua">
-<p>Ці приписи діють на кількох рівнях одночасно, від загальних законів до конкретних внутрішніх правил підприємства:</p>
-<table>
-<tr><th>Рівень</th><th>Приклад</th></tr>
-<tr><td>Закони</td><td>Arbeitsschutzgesetz (ArbSchG)</td></tr>
-<tr><td>Постанови</td><td>Betriebssicherheitsverordnung, Gefahrstoffverordnung</td></tr>
-<tr><td>Правила DGUV</td><td>конкретні технічні вимоги (напр. складування, штабелювання)</td></tr>
-<tr><td>Внутрішні</td><td>Betriebsanweisung, Betriebsvereinbarung</td></tr>
-</table>
-<p>Що нижче рівень у цій ієрархії, то конкретнішими та практичнішими стають вимоги — від загального обов'язку роботодавця забезпечити безпеку (закон) до чіткої інструкції, як саме штабелювати конкретний вид товару на конкретному складі (внутрішня Betriebsanweisung).</p>
-</div>
-<div data-lang="de">
-<p>Diese Vorschriften gelten auf mehreren Ebenen gleichzeitig, von allgemeinen Gesetzen bis zu konkreten betriebsinternen Regelungen:</p>
-<table>
-<tr><th>Ebene</th><th>Beispiel</th></tr>
-<tr><td>Gesetze</td><td>Arbeitsschutzgesetz (ArbSchG)</td></tr>
-<tr><td>Verordnungen</td><td>Betriebssicherheitsverordnung, Gefahrstoffverordnung</td></tr>
-<tr><td>DGUV-Regeln</td><td>konkrete technische Vorgaben (z. B. Lagern, Stapeln)</td></tr>
-<tr><td>Betrieblich</td><td>Betriebsanweisung, Betriebsvereinbarung</td></tr>
-</table>
-<p>Je weiter unten in dieser Hierarchie, desto konkreter und praxisnäher werden die Anforderungen — von der allgemeinen Pflicht des Arbeitgebers, Sicherheit zu gewährleisten (Gesetz), bis zur genauen Anweisung, wie eine bestimmte Warenart in einem konkreten Lager zu stapeln ist (betriebliche Betriebsanweisung).</p>
-</div>
-</div>
-</div>
-
-<div class="sec">
-<span class="sec-num">3.2</span><h3>Unfallverhütungsvorschriften</h3>
-<div class="sec-body">
-<div data-lang="ua">
-<p>Для охорони праці й здоров'я в комерційному секторі діють одразу два джерела вимог: <strong>UVV</strong> (Unfallverhütungsvorschriften) від Berufsgenossenschaften, а також державні закони й постанови. UVV охоплюють права й обов'язки роботодавців та працівників, технічні вимоги безпеки до інструментів і обладнання, а також правила поведінки для конкретних робочих місць і процесів.</p>
+<h4>⭐ Unfallverhütungsvorschriften (UVV)</h4>
+<p>Для охорони праці та здоров'я на виробництві існують Unfallverhütungsvorschriften (UVV) від Berufsgenossenschaften, а також державні закони й постанови.</p>
+<p>UVV містять положення про права та обов'язки роботодавців і працівників, технічні вимоги безпеки до інструментів і обладнання, а також правила поведінки для окремих робочих місць і виробничих процесів.</p>
 <p><strong>Обов'язки підприємства:</strong></p>
 <ul>
-<li>вживати необхідних заходів для запобігання нещасним випадкам</li>
-<li>проводити інструктаж працівників щонайменше раз на рік</li>
+<li>вживати необхідних заходів з профілактики нещасних випадків</li>
+<li>проводити інструктаж застрахованих мінімум раз на рік</li>
 <li>розміщувати приписи на видному місці на підприємстві</li>
-<li>повідомляти Berufsgenossenschaft про нещасні випадки на роботі протягом <strong>трьох днів</strong></li>
+<li>повідомляти Berufsgenossenschaft про нещасні випадки на виробництві протягом трьох днів</li>
 </ul>
-<p><strong>Обов'язки застрахованих (працівників):</strong></p>
+<p><strong>Обов'язки застрахованих:</strong></p>
 <ul>
 <li>дотримуватись заходів безпеки, встановлених підприємством</li>
-<li>не приводити себе в стан алкогольного чи наркотичного сп'яніння, який може становити небезпеку для себе й інших</li>
+<li>не доводити себе алкоголем чи наркотиками до стану, що загрожує їм самим та іншим</li>
 </ul>
-<p>Підприємство зобов'язане надавати працівникам засоби індивідуального захисту (PSA), а працівники, у свою чергу, зобов'язані їх носити.</p>
 </div>
 <div data-lang="de">
-<p>Für den Arbeits- und Gesundheitsschutz in der gewerblichen Wirtschaft gibt es gleich zwei Quellen von Anforderungen: die <strong>UVV</strong> (Unfallverhütungsvorschriften) der Berufsgenossenschaften sowie staatliche Gesetze und Verordnungen. Die UVV enthalten Rechte und Pflichten von Arbeitgebenden und Arbeitnehmenden, sicherheitstechnische Anforderungen an Werkzeuge und Geräte sowie Verhaltensvorschriften für bestimmte Arbeitsplätze und Arbeitsverfahren.</p>
-<p><strong>Pflichten des Unternehmens:</strong></p>
+<h4>⭐ Unfallverhütungsvorschriften (UVV)</h4>
+<p>Für den Arbeits- und Gesundheitsschutz in der gewerblichen Wirtschaft gibt es die Unfallverhütungsvorschriften der Berufsgenossenschaften sowie staatliche Gesetze und Verordnungen.</p>
+<p>Die UVV enthalten Vorschriften über die Rechte und Pflichten von Arbeitgebenden und Arbeitnehmenden, sicherheitstechnische Anforderungen an Werkzeuge und Geräte sowie Verhaltensvorschriften für bestimmte Arbeitsplätze und Arbeitsverfahren.</p>
+<p><strong>Pflichten von Unternehmen:</strong></p>
 <ul>
 <li>Treffen der erforderlichen Maßnahmen zur Unfallverhütung</li>
 <li>Unterweisung der Versicherten mindestens einmal jährlich</li>
 <li>Aushang der Vorschriften an geeigneter Stelle im Betrieb</li>
-<li>Meldung von Arbeitsunfällen an die Berufsgenossenschaft innerhalb von <strong>drei Tagen</strong></li>
+<li>Meldung von Arbeitsunfällen an die Berufsgenossenschaft innerhalb von drei Tagen</li>
 </ul>
 <p><strong>Pflichten der Versicherten:</strong></p>
 <ul>
 <li>Befolgung der vom Unternehmen zur Unfallverhütung angeordneten Maßnahmen</li>
 <li>sich nicht durch Alkohol oder Drogen in einen Zustand versetzen, durch den sie sich und andere gefährden könnten</li>
 </ul>
-<p>Das Unternehmen ist verpflichtet, persönliche Schutzausrüstung (PSA) bereitzustellen, und die Beschäftigten sind verpflichtet, diese zu tragen.</p>
-</div>
 </div>
 </div>
 
-<div class="sec">
-<h3><span data-lang="ua">Sicherheitskennzeichen</span><span data-lang="de">Sicherheitskennzeichen</span></h3>
-<div class="sec-body">
+<div class="kw-box">
 <div data-lang="ua">
-<p>Знаки безпеки на складі поділяються на п'ять категорій, і кожна має власне колірне кодування, яке варто знати напам'ять:</p>
+<h4>⭐ Persönliche Schutzausrüstung (PSA)</h4>
+<p>Підприємства зобов'язані надавати своїм працівникам засоби індивідуального захисту (PSA); працівники, у свою чергу, зобов'язані їх носити.</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Persönliche Schutzausrüstung (PSA)</h4>
+<p>Unternehmen müssen ihren Beschäftigten persönliche Schutzausrüstungen zur Verfügung stellen; die Beschäftigten sind verpflichtet, diese zu tragen.</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Sicherheitskennzeichen</h4>
+<p>Знаки безпеки поділяються на п'ять категорій:</p>
 <table>
-<tr><th>Категорія</th><th>Кольори</th></tr>
-<tr><td>Verbotszeichen (заборона)</td><td>червона рамка, білий фон, чорний символ</td></tr>
-<tr><td>Warnzeichen (попередження)</td><td>жовтий фон, чорна рамка, чорний символ</td></tr>
-<tr><td>Gebotszeichen (наказ)</td><td>синій фон, білий символ</td></tr>
-<tr><td>Rettungszeichen (порятунок)</td><td>зелений фон, білий символ</td></tr>
-<tr><td>Brandschutzzeichen (пожежна безпека)</td><td>червоний фон, білий символ</td></tr>
+<tr><th>Категорія</th><th>Кольорове кодування</th></tr>
+<tr><td>Verbotszeichen (заборонні)</td><td>червона рамка, білий фон, чорний символ</td></tr>
+<tr><td>Warnzeichen (попереджувальні)</td><td>жовтий фон, чорна рамка, чорний символ</td></tr>
+<tr><td>Gebotszeichen (наказові)</td><td>синій фон, білий символ</td></tr>
+<tr><td>Rettungszeichen (рятувальні)</td><td>зелений фон, білий символ</td></tr>
+<tr><td>Brandschutzzeichen (пожежної безпеки)</td><td>червоний фон, білий символ</td></tr>
 </table>
 </div>
 <div data-lang="de">
-<p>Die Sicherheitskennzeichen im Lager gliedern sich in fünf Kategorien, jede mit eigener Farbkodierung:</p>
+<h4>⭐ Sicherheitskennzeichen</h4>
+<p>Die Sicherheitskennzeichen werden in fünf Kategorien unterteilt:</p>
 <table>
-<tr><th>Kategorie</th><th>Farben</th></tr>
+<tr><th>Kategorie</th><th>Farbkodierung</th></tr>
 <tr><td>Verbotszeichen</td><td>rote Umrandung, weißer Hintergrund, schwarzes Symbol</td></tr>
 <tr><td>Warnzeichen</td><td>gelber Grund, schwarze Umrandung, schwarzes Symbol</td></tr>
 <tr><td>Gebotszeichen</td><td>blauer Grund, weißes Symbol</td></tr>
@@ -515,319 +385,470 @@ span[data-lang].active{display:inline}
 </table>
 </div>
 </div>
-</div>
 
-<div class="sec">
-<span class="sec-num">3.3</span><h3>Verhalten bei Unfällen</h3>
-<div class="sec-body">
+<div class="kw-box">
 <div data-lang="ua">
-<p>Попри всі заходи безпеки, нещасні випадки повністю виключити неможливо, тому кожен працівник має знати чіткий порядок дій, якщо таке трапиться поруч. Спершу варто наблизитись до рівня потерпілого (стати навколішки чи присісти), уважно на нього подивитись і назвати своє ім'я — це створює довіру ще до фізичного контакту. Далі обережно встановлюється тілесний контакт, і потерпілому постійно пояснюють, що саме зараз роблять або вже зробили — навіть якщо він, здається, не реагує. За потреби варто попросити допомоги в людей поруч. Потерпілого по можливості кладуть на рятувальну ковдру і накривають, щоб уникнути втрати тепла, а при втраті свідомості — переводять у стабільне бокове положення.</p>
-<p>Дії, що виходять за межі базової першої допомоги — <strong>lebensrettende Sofortmaßnahmen</strong> (штучне дихання, непрямий масаж серця при непритомності) та <strong>Erstversorgung</strong> (шинування при переломах, стерильна пов'язка при порізах, застосування води при опіках чи хімічних ушкодженнях) — виконує саме Ersthelfer або підготовлений рятувальник. Коли прибуває швидка чи лікар, головне завдання — допомогти їм якнайшвидше дістатись до потерпілого, особливо якщо місце події важко знайти.</p>
-<p>За <strong>§ 26 DGUV Vorschrift 1</strong> підприємство зобов'язане мати визначену мінімальну кількість Ersthelfer:</p>
+<h4>⭐ Erste Hilfe bei Unfällen</h4>
+<p>Усі зобов'язані надавати першу допомогу при нещасних випадках чи захворюваннях. Окрім виклику екстреної служби (112 або 110), важливо піклуватися про потерпілого (потерпілих) до прибуття рятувальної служби.</p>
+<p><strong>При виклику екстреної допомоги слід дотримуватись "п'яти W":</strong></p>
+<ol>
+<li><strong>Wo</strong> — де сталася подія?</li>
+<li><strong>Was</strong> — що сталося?</li>
+<li><strong>Wie viele</strong> — скільки постраждалих потрібно обслужити?</li>
+<li><strong>Welche</strong> — які травми чи ознаки захворювання мають постраждалі?</li>
+<li><strong>Warten</strong> — чекати на можливі уточнювальні запитання від диспетчерської служби!</li>
+</ol>
+<p>Особа, що надає першу допомогу (Ersthelfer), або підготовлений рятувальник має до прибуття рятувальної служби вживати подальших рятувальних заходів. При цьому розрізняють:</p>
 <ul>
-<li>при 2-20 присутніх застрахованих — щонайменше 1 Ersthelfer</li>
-<li>при понад 20 застрахованих: 5% в адміністративних/торговельних підприємствах, 10% в інших видах підприємств</li>
+<li><strong>рятівні невідкладні заходи</strong> (приклади: штучне дихання, непрямий масаж серця при непритомності),</li>
+<li><strong>первинну допомогу потерпілому</strong> (приклади: шинування при переломах, стерильна пов'язка при порізах, обробка водою при опіках чи хімічних ураженнях).</li>
 </ul>
-<p>Такі Ersthelfer мають пройти навчання в уповноваженій Berufsgenossenschaft установі, і рекомендовано проходити підвищення кваліфікації кожні два роки.</p>
-<p>Виклик швидкої (112 або 110) супроводжується так званими <strong>п'ятьма "W"</strong> — питаннями, які диспетчер обов'язково задає:</p>
-<ul>
-<li><strong>Wo</strong> — де сталась подія?</li>
-<li><strong>Was</strong> — що сталось?</li>
-<li><strong>Wie viele</strong> — скільки постраждалих?</li>
-<li><strong>Welche</strong> — які саме травми чи симптоми?</li>
-<li><strong>Warten</strong> — не класти слухавку, чекати на можливі уточнюючі питання диспетчерської</li>
-</ul>
+<p>Коли прибуває рятувальна служба чи лікар швидкої допомоги, слід допомогти їм якнайшвидше дістатися до потерпілого, особливо якщо місцевість погано проглядається.</p>
 </div>
 <div data-lang="de">
-<p>Trotz aller Sicherheitsmaßnahmen lassen sich Unfälle nie vollständig ausschließen, weshalb jeder Mitarbeiter einen klaren Handlungsablauf kennen sollte. Zunächst begibt man sich auf die Höhe des Verletzten (knien oder hocken), schaut ihn aufmerksam an und nennt seinen eigenen Namen — das schafft Vertrauen noch vor dem körperlichen Kontakt. Danach wird vorsichtig Körperkontakt hergestellt, und dem Verletzten wird durchgehend gesagt, was man gerade tut bzw. schon getan hat — auch wenn er scheinbar nicht reagiert. Bei Bedarf werden Umstehende um Mithilfe gebeten. Der Verletzte wird nach Möglichkeit auf eine (Rettungs-)Decke gelegt und zugedeckt, um Wärmeverlust zu vermeiden — bei Bewusstlosigkeit wird er in die stabile Seitenlage gebracht.</p>
-<p>Maßnahmen, die über die Basis-Erste-Hilfe hinausgehen — <strong>lebensrettende Sofortmaßnahmen</strong> (Mund-zu-Mund-Beatmung, Herzdruckmassage bei Bewusstlosigkeit) und <strong>Erstversorgung</strong> (Schienen bei Knochenbrüchen, keimfreier Druckverband bei Schnittverletzungen, Wasseranwendungen bei Verbrennungen oder Verätzungen) — führt der Ersthelfer bzw. ausgebildete Rettungssanitäter durch. Trifft der Rettungsdienst bzw. Notarzt ein, besteht die Hauptaufgabe darin, ihm zu helfen, möglichst schnell zum Verletzten zu gelangen, besonders bei unübersichtlichen örtlichen Gegebenheiten.</p>
-<p>Nach <strong>§ 26 DGUV Vorschrift 1</strong> muss das Unternehmen eine Mindestzahl an Ersthelfern vorhalten:</p>
-<ul>
-<li>bei 2 bis 20 anwesenden Versicherten — mindestens 1 Ersthelfer/in</li>
-<li>bei mehr als 20 Versicherten: 5 % in Verwaltungs- und Handelsbetrieben, 10 % in sonstigen Betrieben</li>
-</ul>
-<p>Betriebliche Ersthelfer müssen von einer durch die Berufsgenossenschaft autorisierten Stelle ausgebildet worden sein und sollen alle zwei Jahre fortgebildet werden.</p>
-<p>Beim Notruf (112 oder 110) gelten die sogenannten <strong>fünf „W"</strong> — Fragen, die die Leitstelle stellt:</p>
-<ul>
+<h4>⭐ Erste Hilfe bei Unfällen</h4>
+<p>Alle sind zur Ersten Hilfe bei Unfällen oder Krankheiten verpflichtet. Neben dem Notruf (112 oder 110) ist es wichtig, sich um den/die Verletzten zu kümmern, bis der Rettungsdienst eintrifft.</p>
+<p><strong>Beim Notruf sollten die fünf „Ws" beachtet werden:</strong></p>
+<ol>
 <li><strong>Wo</strong> ist der Notfall?</li>
 <li><strong>Was</strong> ist geschehen?</li>
-<li><strong>Wie viele</strong> Verletzte sind zu versorgen?</li>
-<li><strong>Welche</strong> Art von Verletzungen liegt vor?</li>
+<li><strong>Wie viele</strong> Verletzte/Betroffene sind zu versorgen?</li>
+<li><strong>Welche</strong> Art von Verletzungen oder Krankheitszeichen haben die Betroffenen?</li>
 <li><strong>Warten</strong> auf mögliche Rückfragen der Rettungsleitstelle!</li>
+</ol>
+<p>Ersthelfer oder ein ausgebildeter Rettungssanitäter sollten bis zum Eintreffen des Rettungsdienstes weitere Rettungsmaßnahmen einleiten. Dabei ist zu unterscheiden zwischen:</p>
+<ul>
+<li><strong>lebensrettenden Sofortmaßnahmen</strong> (Beispiele: Mund-zu-Mund-Beatmung, Herzdruckmassage bei Bewusstlosigkeit),</li>
+<li><strong>Erstversorgung des/der Verletzten</strong> (Beispiele: Schienen bei Knochenbrüchen, keimfreier Druckverband bei Schnittverletzungen, Wasseranwendungen bei Verbrennungen oder Verätzungen).</li>
 </ul>
-</div>
+<p>Wenn der Rettungsdienst bzw. Notarzt eintrifft, sollte man ihm helfen, schnell zum Verletzten zu gelangen — vor allem bei unübersichtlichen örtlichen Gegebenheiten.</p>
 </div>
 </div>
 
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Ersthelfer (§ 26 DGUV Vorschrift 1)</h4>
+<p>Згідно з § 26 DGUV Vorschrift 1, підприємства зобов'язані забезпечити наявність осіб, що надають першу допомогу (Ersthelfer), у такій мінімальній кількості:</p>
+<ul>
+<li>при 2–20 присутніх застрахованих — щонайменше один Ersthelfer</li>
+<li>при понад 20 присутніх застрахованих: 5% — в адміністративних та торговельних підприємствах; 10% — на інших підприємствах</li>
+</ul>
+<p>Штатні Ersthelfer мають бути навчені уповноваженою Berufsgenossenschaft установою та проходити підвищення кваліфікації кожні два роки.</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Ersthelfer (§ 26 DGUV Vorschrift 1)</h4>
+<p>Nach § 26 DGUV Vorschrift 1 haben Unternehmen dafür zu sorgen, dass für die Erste-Hilfe-Leistung Ersthelfer mindestens in folgender Zahl grundsätzlich zur Verfügung stehen:</p>
+<ul>
+<li>bei zwei bis 20 anwesenden Versicherten eine Ersthelferin/ein Ersthelfer</li>
+<li>bei mehr als 20 anwesenden Versicherten: 5 % in Verwaltungs- und Handelsbetrieben, 10 % in sonstigen Betrieben</li>
+</ul>
+<p>Betriebliche Ersthelfer müssen von einer durch die Berufsgenossenschaft autorisierten Stelle entsprechend ausgebildet worden sein und sollen alle zwei Jahre fortgebildet werden.</p>
+</div>
+</div>
+
+</div>
 <div class="progress">
 <span data-lang="ua">✅ Lernfeld 1 повністю завершено (усі 3 теми: Warenannahme, Warenprüfung, Unfallgefahr). Далі: Lernfeld 2 (Güter lagern)</span>
 <span data-lang="de">✅ Lernfeld 1 vollständig abgeschlossen (alle 3 Themen: Warenannahme, Warenprüfung, Unfallgefahr). Weiter: Lernfeld 2 (Güter lagern)</span>
 </div>
 
-</div>
-<!-- ============ END TAB: THEORIE ============ -->
-
-<!-- ============ TAB: KERNWISSEN ============ -->
-<div class="tab-content" id="tab-kernwissen">
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Хід Warenannahme — коротко</h4>
-<ol>
-<li>Доставка: через Spediteur, Bahn, KEP-Dienst або самим постачальником</li>
-<li>Поки водій присутній — перевірка: чи для нас, чи замовлено, чи вчасно (якщо ні — не приймається)</li>
-<li>Розвантаження + огляд тари з усіх боків на пошкодження</li>
-<li>Перевірка кількості Colli проти документів</li>
-<li>Все гаразд → підпис + за потреби обмін палет</li>
-</ol>
-</div>
-<div data-lang="de">
-<h4>⭐ Ablauf der Warenannahme — kurz</h4>
-<ol>
-<li>Anlieferung: per Spediteur, Bahn, KEP-Dienst oder Lieferant selbst</li>
-<li>Solange der Fahrer da ist — Prüfung: für uns bestimmt, bestellt, rechtzeitig (wenn nein — keine Annahme)</li>
-<li>Abladen + Prüfung der Verpackung von allen Seiten auf Schäden</li>
-<li>Prüfung der Colli-Anzahl gegen Papiere</li>
-<li>Alles ok → Unterschrift + ggf. Palettentausch</li>
-</ol>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Наслідки при розбіжностях</h4>
-<ul>
-<li>Не вчасно: можливе відшкодування; заява перевізнику протягом 21 дня (він відповідає за прострочення)</li>
-<li>Пошкодження: відмова від приймання АБО підтвердження водієм на документах; при підозрі на транспортне пошкодження — повідомити перевізника протягом 7 днів</li>
-<li>Надлишок: підтвердження водієм, можлива відмова від зайвого</li>
-<li>Нестача: підтвердження водієм, довезення постачальником</li>
-<li>Пошкоджену MTV не зобов'язані приймати назад в обмін</li>
-</ul>
-</div>
-<div data-lang="de">
-<h4>⭐ Konsequenzen bei Abweichungen</h4>
-<ul>
-<li>Nicht rechtzeitig: ggf. Schadenersatz; Anzeige an Frachtführer innerhalb 21 Tagen (haftet für Verspätung)</li>
-<li>Beschädigung: Annahmeverweigerung ODER Bestätigung durch Fahrer auf Papieren; bei Verdacht auf Transportschaden — Frachtführer innerhalb 7 Tagen benachrichtigen</li>
-<li>Mehrlieferung: Bestätigung durch Fahrer, ggf. Ablehnung des Überschusses</li>
-<li>Minderlieferung: Bestätigung durch Fahrer, Nachlieferung durch Lieferanten</li>
-<li>Beschädigte MTV müssen nicht im Austausch angenommen werden</li>
-</ul>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Строки заяви про дефекти</h4>
-<table>
-<tr><th>Кому</th><th>Строк</th></tr>
-<tr><td>Frachtführer — транспортні пошкодження</td><td>7 днів</td></tr>
-<tr><td>Frachtführer — прострочення поставки</td><td>21 день</td></tr>
-<tr><td>Lieferant — явні дефекти</td><td>негайно (unverzüglich)</td></tr>
-<tr><td>Lieferant — приховані дефекти</td><td>негайно після виявлення, макс. 2 роки</td></tr>
-</table>
-</div>
-<div data-lang="de">
-<h4>⭐ Anzeigefristen bei Mängeln</h4>
-<table>
-<tr><th>An wen</th><th>Frist</th></tr>
-<tr><td>Frachtführer — Transportschäden</td><td>7 Tage</td></tr>
-<tr><td>Frachtführer — Lieferverzug</td><td>21 Tage</td></tr>
-<tr><td>Lieferant — offene Mängel</td><td>unverzüglich</td></tr>
-<tr><td>Lieferant — versteckte Mängel</td><td>unverzüglich nach Entdeckung, max. 2 Jahre</td></tr>
-</table>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Codierung: Barcode vs RFID</h4>
-<ul>
-<li>Barcode: однозначна ідентифікація сканером, дані передаються без помилок, потрібен зоровий контакт</li>
-<li>RFID: Transponder (Tag) = мікрочип + антена; передача радіохвилями; переваги — без зорового контакту, Pulkfähigkeit (групове зчитування), більше місця для даних</li>
-</ul>
-</div>
-<div data-lang="de">
-<h4>⭐ Codierung: Barcode vs RFID</h4>
-<ul>
-<li>Barcode: eindeutige Identifikation per Scanner, fehlerfreie Datenweiterleitung, Sichtkontakt nötig</li>
-<li>RFID: Transponder (Tag) = Mikrochip + Antenne; Funkübertragung; Vorteile — kein Sichtkontakt, Pulkfähigkeit, mehr Datenspeicher</li>
-</ul>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Mehrwegtransportverpackungen (MTV)</h4>
-<ul>
-<li>Einwegverpackung: повторне використання АБО утилізація як вторсировина</li>
-<li>MTV bilateral: закрита система між одним відправником і одним отримувачем/галуззю</li>
-<li>MTV multilateral: доступна багатьом сторонам — Poolsystem або Pfandsystem; можливі купівля/оренда</li>
-<li>Повернення: обмін порожньої на повну АБО зберігання до забору оператором системи</li>
-</ul>
-</div>
-<div data-lang="de">
-<h4>⭐ Mehrwegtransportverpackungen (MTV)</h4>
-<ul>
-<li>Einwegverpackung: Weiterverwendung ODER Entsorgung als Wertstoff</li>
-<li>MTV bilateral: geschlossenes System zwischen einem Versender und Empfänger/Branche</li>
-<li>MTV multilateral: für mehrere Parteien zugänglich — Poolsystem oder Pfandsystem; Kauf/Miete möglich</li>
-<li>Rückgabe: Austausch leer-gegen-voll ODER Lagerung bis zur Abholung durch Systembetreiber</li>
-</ul>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Gegenstand der Warenprüfung</h4>
-<ul>
-<li>Identität — чи той товар? · Quantität — чи та кількість? · Beschaffenheit — чи є пошкодження? · Qualität — чи та якість (Güte)?</li>
-<li>При великих партіях — вибіркова перевірка (stichprobenartige Kontrolle)</li>
-</ul>
-</div>
-<div data-lang="de">
-<h4>⭐ Gegenstand der Warenprüfung</h4>
-<ul>
-<li>Identität — richtige Ware? · Quantität — richtige Menge? · Beschaffenheit — Beschädigungen? · Qualität — richtige Güte?</li>
-<li>Bei großen Mengen — stichprobenartige Kontrolle</li>
-</ul>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Класифікація дефектів — 2 виміри</h4>
-<table>
-<tr><th>За розпізнаваністю</th><th>За видом</th></tr>
-<tr><td>offener Mangel (явний)</td><td>Mangel in der Art (не той товар)</td></tr>
-<tr><td>versteckter Mangel (прихований)</td><td>Mangel in der Menge (не та кількість)</td></tr>
-<tr><td>arglistig verschwiegener Mangel (навмисно прихований)</td><td>Mangel in der Beschaffenheit (стан/властивості)</td></tr>
-<tr><td></td><td>Mangel in der Güte (якість/сорт)</td></tr>
-</table>
-</div>
-<div data-lang="de">
-<h4>⭐ Mangel-Klassifizierung — 2 Dimensionen</h4>
-<table>
-<tr><th>Nach Erkennbarkeit</th><th>Nach Art</th></tr>
-<tr><td>offener Mangel</td><td>Mangel in der Art</td></tr>
-<tr><td>versteckter Mangel</td><td>Mangel in der Menge</td></tr>
-<tr><td>arglistig verschwiegener Mangel</td><td>Mangel in der Beschaffenheit</td></tr>
-<tr><td></td><td>Mangel in der Güte</td></tr>
-</table>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Lieferungsverzug — 3 умови + права</h4>
-<p><strong>Умови:</strong> Lieferung fällig · Verkäufer gemahnt (крім Fixgeschäft) · Verkäufer trifft Verschulden</p>
-<p><strong>Права покупця:</strong> наполягати на поставці · відмова від договору · Schadenersatz за порушення обов'язку · Schadenersatz замість виконання · компенсація марних витрат</p>
-<p><strong>Schadenersatz:</strong> konkreter Schaden (легко довести) vs abstrakter Schaden (важко) → на практиці Vertragsstrafe наперед</p>
-</div>
-<div data-lang="de">
-<h4>⭐ Lieferungsverzug — 3 Voraussetzungen + Rechte</h4>
-<p><strong>Voraussetzungen:</strong> Lieferung fällig · Verkäufer gemahnt (außer Fixgeschäft) · Verkäufer trifft Verschulden</p>
-<p><strong>Käuferrechte:</strong> auf Lieferung bestehen · Rücktritt · Schadenersatz wegen Pflichtverletzung · Schadenersatz statt Leistung · Ersatz vergeblicher Aufwendungen</p>
-<p><strong>Schadenersatz:</strong> konkreter Schaden (leicht nachweisbar) vs abstrakter Schaden (schwer) → in der Praxis Vertragsstrafe im Voraus</p>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Обов'язки з охорони праці</h4>
-<p><strong>Підприємство:</strong> заходи безпеки · інструктаж мін. 1×/рік · приписи на видному місці · Meldung нещасного випадку до Berufsgenossenschaft протягом 3 днів</p>
-<p><strong>Працівник:</strong> дотримання заходів · без алкоголю/наркотиків на роботі</p>
-</div>
-<div data-lang="de">
-<h4>⭐ Arbeitsschutz-Pflichten</h4>
-<p><strong>Unternehmen:</strong> Unfallverhütungsmaßnahmen · Unterweisung ≥1×/Jahr · Aushang der Vorschriften · Meldung an Berufsgenossenschaft binnen 3 Tagen</p>
-<p><strong>Versicherte:</strong> Maßnahmen befolgen · kein Alkohol/Drogen bei der Arbeit</p>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Sicherheitskennzeichen — кольори</h4>
-<table>
-<tr><td>Verbotszeichen</td><td>червона рамка/білий фон</td></tr>
-<tr><td>Warnzeichen</td><td>жовтий фон/чорна рамка</td></tr>
-<tr><td>Gebotszeichen</td><td>синій фон/білий символ</td></tr>
-<tr><td>Rettungszeichen</td><td>зелений фон/білий символ</td></tr>
-<tr><td>Brandschutzzeichen</td><td>червоний фон/білий символ</td></tr>
-</table>
-</div>
-<div data-lang="de">
-<h4>⭐ Sicherheitskennzeichen — Farben</h4>
-<table>
-<tr><td>Verbotszeichen</td><td>rote Umrandung/weißer Grund</td></tr>
-<tr><td>Warnzeichen</td><td>gelber Grund/schwarze Umrandung</td></tr>
-<tr><td>Gebotszeichen</td><td>blauer Grund/weißes Symbol</td></tr>
-<tr><td>Rettungszeichen</td><td>grüner Grund/weißes Symbol</td></tr>
-<tr><td>Brandschutzzeichen</td><td>roter Grund/weißes Symbol</td></tr>
-</table>
-</div>
-</div>
-
-<div class="kw-box">
-<div data-lang="ua">
-<h4>⭐ Ersthelfer (§ 26 DGUV Vorschrift 1) + 5 "W"</h4>
-<p>2-20 осіб: 1 Ersthelfer · &gt;20 осіб: 5% (адмін/торгівля) або 10% (інше). Навчання в БГ, підвищення кваліфікації кожні 2 роки.</p>
-<p><strong>5 "W" при виклику 112/110:</strong> Wo (де) · Was (що сталось) · Wie viele (скільки постраждалих) · Welche (які травми) · Warten (чекати на уточнення)</p>
-</div>
-<div data-lang="de">
-<h4>⭐ Ersthelfer (§ 26 DGUV Vorschrift 1) + 5 "W"</h4>
-<p>2-20 Personen: 1 Ersthelfer · &gt;20 Personen: 5% (Verwaltung/Handel) oder 10% (sonstige). Ausbildung durch BG, Fortbildung alle 2 Jahre.</p>
-<p><strong>5 "W" beim Notruf:</strong> Wo · Was · Wie viele · Welche Art · Warten auf Rückfragen</p>
-</div>
-</div>
-
-</div>
 <!-- ============ END TAB: KERNWISSEN ============ -->
 
 <!-- ============ TAB: AUFGABEN ============ -->
 <div class="tab-content" id="tab-aufgaben">
 
+<div class="aufg-topic">1 · Warenannahme</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1a</span><span data-lang="ua">До рампи вашого підприємства під'їхав вантажівка. Водій хоче здати три палети по шість коробок кожна. Які документи ви попросите показати у водія?</span><span data-lang="de">An der Rampe Ihres Ausbildungsbetriebs ist ein Lkw vorgefahren. Der Fahrer will drei Paletten mit je sechs Schachteln abliefern. Welche Papiere lassen Sie sich vom Fahrer zeigen?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Накладна (Frachtbrief) або товарно-транспортний документ (Lieferschein), замовлення.</p></div>
+<div data-lang="de"><p>Frachtbrief bzw. Lieferschein, Bestellung.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1b</span><span data-lang="ua">Опишіть, що ви робите в присутності водія (продовження попереднього завдання).</span><span data-lang="de">Beschreiben Sie, was Sie in Anwesenheit des Fahrers unternehmen (Fortsetzung der vorigen Aufgabe).</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
 <div data-lang="ua">
-<div class="aufg-item"><span class="aufg-num">1</span>До рампи під'їхала вантажівка. Водій хоче здати три палети по шість коробок. Які документи ти попросиш показати у водія, і що саме перевіриш, поки він ще на місці?</div>
-<div class="aufg-item"><span class="aufg-num">2</span>Чому важливо окремо: (а) підтвердити зовнішньо справний товар перед перевізником, (б) отримати від перевізника підтвердження пошкоджень, і (в) негайно перевірити товар і заявити про дефекти постачальнику?</div>
-<div class="aufg-item"><span class="aufg-num">3</span>Поясни, які процеси в різних відділах підприємства запускає Wareneingangsschein.</div>
-<div class="aufg-item"><span class="aufg-num">4</span>Хто несе відповідальність за пошкодження, що виникли саме під час розвантаження?</div>
-<div class="aufg-item"><span class="aufg-num">5</span>Товар, доставлений вантажівкою, має явні дефекти, і є підозра на транспортне пошкодження. Що потрібно зробити і в які строки?</div>
-<div class="aufg-item"><span class="aufg-num">6</span>Опиши основні варіанти застосування штрих-кодів і переваги, які вони дають складу.</div>
-<div class="aufg-item"><span class="aufg-num">7</span>Як працює технологія RFID? Які можливості вона відкриває для логістики складу порівняно зі штрих-кодом?</div>
-<div class="aufg-item"><span class="aufg-num">8</span>У чому різниця між білатеральною і мультилатеральною системою багаторазової тари?</div>
-<div class="aufg-item"><span class="aufg-num">9</span>Поясни принцип роботи Pfandsystem для MTV.</div>
-<div class="aufg-item"><span class="aufg-num">10</span>Обговори переваги й недоліки багаторазової тари порівняно з одноразовою упаковкою.</div>
-<div class="aufg-item"><span class="aufg-num">11</span>Що саме перевіряється при контролі товару перед розміщенням на складі щодо ідентичності, кількості, якості та стану — і які документи для цього використовуються?</div>
-<div class="aufg-item"><span class="aufg-num">12</span>При перевірці товару виявлено: Позиція 1 — доставлено не той товар; Позиція 2 — 3 з 20 виробів мають подряпини; Позиція 3 — частину замовленого товару взагалі не доставлено. Визнач вид дефекту для кожної позиції, і опиши, що потрібно зробити далі та які права покупця діють першочергово, а які — лише якщо перше не спрацювало.</div>
-<div class="aufg-item"><span class="aufg-num">13</span>Назви три умови, які мають одночасно виконуватись, щоб виник Lieferungsverzug.</div>
-<div class="aufg-item"><span class="aufg-num">14</span>Товар для зимового сезону мав прийти в жовтні. На 31.10 він досі не прибув, і постачальник повідомляє, що зможе доставити лише в кінці грудня. Які варіанти дій має покупець?</div>
-<div class="aufg-item"><span class="aufg-num">15</span>Опиши, які обов'язки має підприємство і які — застраховані працівники згідно з UVV.</div>
-<div class="aufg-item"><span class="aufg-num">16</span>Наведи приклади ситуацій, від яких захищають засоби індивідуального захисту (PSA).</div>
-<div class="aufg-item"><span class="aufg-num">17</span>Опиши колірне кодування для кожної з 5 категорій Sicherheitskennzeichen і наведи по прикладу.</div>
-<div class="aufg-item"><span class="aufg-num">18</span>Опиши свою поведінку, якщо ти опинився поруч із нещасним випадком на складі.</div>
-<div class="aufg-item"><span class="aufg-num">19</span>Що означають "5 W" при виклику швидкої допомоги?</div>
+<p>У присутності водія перевіряється:</p>
+<ol>
+<li>чи товар призначений нам</li>
+<li>чи він нами замовлений</li>
+<li>чи доставлений вчасно</li>
+</ol>
+<p>Під час розвантаження — перевірка зовнішніх пошкоджень товару/тари та відповідність кількості вантажних місць (Colli) документам. Якщо все гаразд — підтвердження отримання на транспортних документах.</p>
 </div>
 <div data-lang="de">
-<div class="aufg-item"><span class="aufg-num">1</span>An der Rampe fährt ein Lkw vor. Der Fahrer will drei Paletten mit je sechs Schachteln abliefern. Welche Papiere lassen Sie sich zeigen, und was prüfen Sie, solange der Fahrer noch da ist?</div>
-<div class="aufg-item"><span class="aufg-num">2</span>Warum ist es wichtig, getrennt voneinander (a) die äußerlich einwandfreie Ware gegenüber dem Überbringer zu quittieren, (b) Beschädigungen vom Überbringer bestätigen zu lassen, und (c) unverzüglich zu prüfen und Mängel dem Lieferanten anzuzeigen?</div>
-<div class="aufg-item"><span class="aufg-num">3</span>Erläutern Sie, welche Vorgänge in verschiedenen Abteilungen des Unternehmens durch den Wareneingangsschein ausgelöst werden.</div>
-<div class="aufg-item"><span class="aufg-num">4</span>Wer haftet für Schäden, die beim Abladen selbst entstehen?</div>
-<div class="aufg-item"><span class="aufg-num">5</span>Die per Lkw gelieferte Ware weist offene Mängel auf, ein Transportschaden wird vermutet. Was ist zu tun, und innerhalb welcher Fristen?</div>
-<div class="aufg-item"><span class="aufg-num">6</span>Beschreiben Sie die grundsätzlichen Einsatzmöglichkeiten von Barcodes und die damit verbundenen Vorteile für das Lager.</div>
-<div class="aufg-item"><span class="aufg-num">7</span>Wie funktioniert die RFID-Technologie? Welche Chancen bietet sie der Lagerlogistik im Vergleich zum Barcode?</div>
-<div class="aufg-item"><span class="aufg-num">8</span>Worin besteht der Unterschied zwischen einem bilateralen und einem multilateralen Mehrwegsystem?</div>
-<div class="aufg-item"><span class="aufg-num">9</span>Erläutern Sie den Ablauf eines Pfandsystems für MTV.</div>
-<div class="aufg-item"><span class="aufg-num">10</span>Diskutieren Sie Vor- und Nachteile von Mehrweg- gegenüber Einwegverpackungen.</div>
-<div class="aufg-item"><span class="aufg-num">11</span>Was wird bei der Kontrolle der einzulagernden Ware hinsichtlich Identität, Quantität, Qualität und Beschaffenheit genau geprüft, und welche Unterlagen stehen dafür zur Verfügung?</div>
-<div class="aufg-item"><span class="aufg-num">12</span>Bei der Prüfung stellen Sie fest: Position 1 — falsche Ware geliefert; Position 2 — 3 von 20 Stück verkratzt; Position 3 — ein Teil der bestellten Ware fehlt ganz. Ordnen Sie jeder Position die Mangelart zu und beschreiben Sie, was zu tun ist sowie welche Käuferrechte vorrangig und welche nur nachrangig gelten.</div>
-<div class="aufg-item"><span class="aufg-num">13</span>Nennen Sie die drei Voraussetzungen, die gleichzeitig erfüllt sein müssen, damit ein Lieferungsverzug vorliegt.</div>
-<div class="aufg-item"><span class="aufg-num">14</span>Ware für die Wintersaison sollte im Oktober eintreffen. Am 31.10 ist sie immer noch nicht da, und der Lieferant kündigt an, erst Ende Dezember liefern zu können. Welche Handlungsmöglichkeiten hat der Käufer?</div>
-<div class="aufg-item"><span class="aufg-num">15</span>Beschreiben Sie, welche Pflichten das Unternehmen und welche die Versicherten nach den UVV haben.</div>
-<div class="aufg-item"><span class="aufg-num">16</span>Nennen Sie Beispiele, wovor persönliche Schutzausrüstung (PSA) schützen kann.</div>
-<div class="aufg-item"><span class="aufg-num">17</span>Beschreiben Sie die Farbkodierung jeder der 5 Kategorien von Sicherheitskennzeichen und nennen Sie je ein Beispiel.</div>
-<div class="aufg-item"><span class="aufg-num">18</span>Schildern Sie Ihr Verhalten, wenn Sie Zeuge eines Unfalls im Lager werden.</div>
-<div class="aufg-item"><span class="aufg-num">19</span>Was versteht man unter den „fünf W" beim Notruf?</div>
+<p>In Anwesenheit des Fahrers wird kontrolliert:</p>
+<ol>
+<li>ob die Ware für uns bestimmt ist</li>
+<li>ob sie von uns bestellt wurde</li>
+<li>ob sie rechtzeitig geliefert wurde</li>
+</ol>
+<p>Beim Abladen: Kontrolle auf äußerliche Beschädigungen von Ware/Verpackung sowie ob die Anzahl der Colli mit den Versandpapieren übereinstimmt. Ist alles in Ordnung, erfolgt die Empfangsbestätigung auf den Frachtpapieren.</p>
+</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2a</span><span data-lang="ua">Чому важливо при прийманні товару підтвердити (квитувати) зовнішньо справну продукцію перед перевізником?</span><span data-lang="de">Warum ist es bei der Warenannahme wichtig, die äußerlich einwandfreien Waren gegenüber dem Überbringer zu quittieren?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фіксує факт прийняття товару у зовнішньо справному стані — пізніше перевізник не зможе стверджувати протилежне.</p></div>
+<div data-lang="de"><p>Sichert die Übernahme der Ware in äußerlich einwandfreiem Zustand ab — später kann sich der Frachtführer nicht mehr auf einen unbeschädigten Zustand berufen.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2b</span><span data-lang="ua">Чому важливо отримати підтвердження пошкоджень від перевізника?</span><span data-lang="de">Warum ist es wichtig, Beschädigungen vom Überbringer bestätigen zu lassen?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Служить доказом для подальших претензій щодо відшкодування збитків перевізнику.</p></div>
+<div data-lang="de"><p>Dient als Beweis für spätere Schadenersatzansprüche gegenüber dem Frachtführer.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2c</span><span data-lang="ua">Чому важливо негайно перевірити та (за потреби) заявити про дефекти постачальнику чи перевізнику?</span><span data-lang="de">Warum ist es wichtig, unverzüglich zu prüfen und ggf. Mängel gegenüber Lieferanten bzw. Frachtführer anzuzeigen?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Тому що діють законні строки заяви про дефекти (7 днів перевізнику при транспортних пошкодженнях, негайно постачальнику при явних дефектах) — при пропуску строку права на претензію втрачаються.</p></div>
+<div data-lang="de"><p>Weil gesetzliche Anzeigefristen gelten (7 Tage ggü. Frachtführer bei Transportschäden, unverzüglich ggü. Lieferant bei offenen Mängeln) — bei Fristversäumnis gehen Ansprüche verloren.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3</span><span data-lang="ua">Поясніть, які процеси в різних відділах підприємства запускає Wareneingangsschein (наприклад).</span><span data-lang="de">Erläutern Sie, welche Vorgänge bei einem Wareneingang (z. B. durch einen Wareneingangsschein) in den verschiedenen Abteilungen ausgelöst werden.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Відділ закупівель — звірка з замовленням; склад — розміщення товару; бухгалтерія — перевірка та затвердження рахунку постачальника до оплати; за потреби відділ якості — вхідний контроль; при розбіжностях — обробка рекламації.</div>
+<div data-lang="de"><strong>Antwort:</strong> Einkauf: Abgleich mit der Bestellung; Lager: Einlagerung der Ware; Rechnungswesen/Buchhaltung: Prüfung und Freigabe der Lieferantenrechnung zur Zahlung; ggf. Qualitätssicherung: Wareneingangskontrolle; bei Abweichungen: Reklamationsbearbeitung.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">4</span><span data-lang="ua">Поясніть, хто несе відповідальність за пошкодження, що можуть виникнути під час розвантаження.</span><span data-lang="de">Erklären Sie, wer für Schäden haftet, die beim Abladen entstehen könnten.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> В основному відповідає той, хто спричинив пошкодження. Якщо шкоду завдав перевізник/його персонал під час розвантаження — відповідає перевізник. Якщо розвантаження виконує власний персонал складу і завдає шкоди — відповідає власне підприємство.</div>
+<div data-lang="de"><strong>Antwort:</strong> Grundsätzlich haftet derjenige, der den Schaden verursacht hat. Entsteht der Schaden durch den Frachtführer/dessen Personal beim Abladen, haftet der Frachtführer. Übernimmt das eigene Lagerpersonal das Abladen und verursacht dabei einen Schaden, haftet der eigene Betrieb.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5</span><span data-lang="ua">Доставлений вантажівкою товар має явні дефекти. Є підозра на транспортне пошкодження. Що потрібно врахувати в цьому випадку?</span><span data-lang="de">Die per Lkw angelieferte Ware weist offene Mängel auf. Es wird ein Transportschaden vermutet. Was haben Sie in diesem Fall zu beachten?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Зафіксувати пошкодження одразу при прийманні (фото); отримати підтвердження пошкодження від водія на транспортних документах або скласти акт; залежно від масштабу — відмовитися від прийняття або прийняти під застереженням; протягом 7 днів письмово повідомити перевізника про транспортне пошкодження (строк заяви).</div>
+<div data-lang="de"><strong>Antwort:</strong> Schaden sofort bei Anlieferung feststellen und dokumentieren (Fotos); Bestätigung des Schadens durch den Fahrer auf den Frachtpapieren einholen bzw. Tatbestandsaufnahme; je nach Ausmaß Annahme verweigern oder unter Vorbehalt annehmen; den Frachtführer innerhalb von 7 Tagen über den Transportschaden benachrichtigen (Anzeigefrist).</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">6</span><span data-lang="ua">Опишіть основні варіанти застосування штрих-кодів і пов'язані з цим переваги.</span><span data-lang="de">Schildern Sie die grundsätzlichen Einsatzmöglichkeiten und die damit verbundenen Vorteile des Einsatzes von Barcodes.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Застосування: маркування товарів, упаковок, місць зберігання, транспортних документів для однозначної ідентифікації сканером. Переваги: однозначна швидка ідентифікація товару; проста та безпомилкова передача зчитаних даних (напр., до системи обліку товару).</div>
+<div data-lang="de"><strong>Antwort:</strong> Einsatz: Kennzeichnung von Waren, Verpackungen, Lagerplätzen, Versandpapieren zur eindeutigen Identifikation per Scanner. Vorteile: eindeutige, schnelle Identifikation der Ware; einfache und fehlerfreie Weiterleitung der erfassten Daten (z. B. an das Warenwirtschaftssystem).</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">7</span><span data-lang="ua">Опишіть принцип роботи технології RFID. Які можливості вона може відкрити для логістики складу?</span><span data-lang="de">Beschreiben Sie die Funktionsweise der RFID-Technologie. Welche Chancen könnte diese Technologie für die Lagerlogistik bringen?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Основа технології — транспондер (мітка/тег), що складається з мікрочипа й антени. Дані, збережені на чипі, передаються радіохвилями на зчитувач. Переваги перед штрих-кодом: не потрібен прямий зоровий контакт зі зчитувачем, можливість групового зчитування кількох міток одночасно (Pulkfähigkeit), додаткова можливість зберігання даних на мітці. Перспективи: швидша й автоматизована реєстрація та відстеження товару на складі.</div>
+<div data-lang="de"><strong>Antwort:</strong> Kernstück ist der Transponder (Tag), bestehend aus Mikrochip und Antenne. Die auf dem Chip gespeicherten Daten werden mittels radiofrequenter Wellen an ein Lesegerät gesendet. Vorteile gegenüber Barcode: kein Sichtkontakt zum Lesegerät notwendig, Pulkfähigkeit (mehrere Tags gleichzeitig erfassbar), zusätzliche Speicherung von Daten. Chancen: schnellere, automatisierte Warenerfassung und -verfolgung im Lager.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8</span><span data-lang="ua">Опишіть поводження з одноразовою упаковкою на вашому підприємстві.</span><span data-lang="de">Schildern Sie den Umgang mit Einwegverpackungen in Ihrem Ausbildungsbetrieb.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Індивідуальна відповідь залежно від підприємства — загалом: одноразову упаковку або використовують повторно, або здають як вторсировину на утилізацію/переробку.</div>
+<div data-lang="de"><strong>Antwort:</strong> Individuelle Antwort je nach Betrieb — allgemein gilt: Einwegverpackungen werden entweder weiterverwendet oder als Wertstoff der Entsorgung/dem Recycling zugeführt.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">9</span><span data-lang="ua">Обговоріть переваги й недоліки багаторазової та одноразової тари.</span><span data-lang="de">Diskutieren Sie Vor- und Nachteile von Mehrweg- und Einwegverpackungen.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Багаторазова тара: переваги — екологічніша, придатна до повторного використання, вигідніша у довгостроковій перспективі; недоліки — витрати на очищення, зворотне транспортування та облік запасу тари. Одноразова упаковка: переваги — менше організаційних витрат, не потрібне зворотне транспортування; недоліки — більше відходів, більше навантаження на довкілля, постійні витрати на закупівлю.</div>
+<div data-lang="de"><strong>Antwort:</strong> Mehrwegverpackungen: Vorteile — umweltschonender, wiederverwendbar, auf Dauer kostengünstiger; Nachteile — Aufwand für Reinigung, Rücktransport und Verwaltung des Bestands. Einwegverpackungen: Vorteile — geringerer organisatorischer Aufwand, kein Rücktransport nötig; Nachteile — mehr Abfall, höhere Umweltbelastung, laufende Beschaffungskosten.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">10</span><span data-lang="ua">У чому різниця між білатеральною і мультилатеральною системою багаторазової тари?</span><span data-lang="de">Worin besteht der Unterschied zwischen einem bilateralen und einem multilateralen Mehrwegsystem?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Білатеральна система — закрита система між одним відправником і одним отримувачем (або в межах однієї галузі). Мультилатеральна система — доступна для кількох відправників і отримувачів, організована як пул-система або застáвна (Pfand) система; можливі також купівля або оренда тари.</div>
+<div data-lang="de"><strong>Antwort:</strong> Bilaterales System: geschlossenes System zwischen einem Versender und einem Empfänger (bzw. innerhalb einer Branche). Multilaterales System: für mehrere Versender und Empfänger zugänglich, organisiert als Pool- oder Pfandsystem; Kauf oder Miete der MTV ist ebenfalls möglich.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">11</span><span data-lang="ua">Поясніть перебіг застáвної (Pfandsystem) для MTV.</span><span data-lang="de">Erläutern Sie den Ablauf beim Pfandsystem für MTV.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Постачальник постачає товар на багаторазовій тарі (напр., палетах). Отримувач сплачує за неї заставу або обмінює порожню тару на повну. Після використання отримувач повертає порожню тару і отримує заставу назад, або тара зберігається до забору оператором системи.</div>
+<div data-lang="de"><strong>Antwort:</strong> Der Lieferant liefert die Ware auf MTV (z. B. Paletten). Der Empfänger zahlt dafür ein Pfand oder tauscht leere gegen volle MTV. Nach Gebrauch gibt der Empfänger die leeren MTV zurück und erhält im Gegenzug das Pfand zurück, bzw. die MTV wird bis zur Abholung durch den Systembetreiber gelagert.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">12</span><span data-lang="ua">Опишіть, як на вашому підприємстві поводяться з MTV.</span><span data-lang="de">Beschreiben Sie, wie in Ihrem Ausbildungsbetrieb mit MTV verfahren wird.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Індивідуальна відповідь — уточнити на своєму підприємстві.</div>
+<div data-lang="de"><strong>Antwort:</strong> Individuelle Antwort — im Ausbildungsbetrieb zu erfragen.</div>
+</div>
+</div>
+
+<div class="aufg-topic">2 · Warenprüfung</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1</span><span data-lang="ua">Що мається на увазі під перевіркою товару, що підлягає розміщенню на складі, щодо його ідентичності, кількості, якості та стану — і які документи для цього використовуються?</span><span data-lang="de">Was ist mit der Überprüfung der einzulagernden Waren hinsichtlich ihrer Identität, Quantität, Qualität und Beschaffenheit gemeint und welche Unterlagen stehen hierfür zur Verfügung?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua">
+<ul>
+<li><strong>Identität</strong> — чи доставлено саме той товар, що замовляли?</li>
+<li><strong>Quantität</strong> — чи доставлена замовлена кількість?</li>
+<li><strong>Qualität</strong> — чи має товар обумовлену якість (Güte)?</li>
+<li><strong>Beschaffenheit</strong> — чи має товар пошкодження, чи в належному він стані?</li>
+</ul>
+<p><strong>Документи для перевірки:</strong> замовлення (Bestellung) / підтвердження замовлення, накладна (Lieferschein), транспортні документи (Frachtpapiere), вхідний акт (Wareneingangsschein), а за потреби — узгоджена специфікація якості.</p>
+</div>
+<div data-lang="de">
+<ul>
+<li><strong>Identität</strong> — Wurde die richtige Ware geliefert?</li>
+<li><strong>Quantität</strong> — Wurde die bestellte Menge geliefert?</li>
+<li><strong>Qualität</strong> — Hat die Ware die vereinbarte Güte?</li>
+<li><strong>Beschaffenheit</strong> — Weist die Ware Beschädigungen auf bzw. ist sie in gutem Zustand?</li>
+</ul>
+<p><strong>Zur Verfügung stehende Unterlagen:</strong> Bestellung/Auftragsbestätigung, Lieferschein, Frachtpapiere, Wareneingangsschein sowie ggf. eine vereinbarte Qualitätsspezifikation.</p>
+</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2a</span><span data-lang="ua">Який вид дефекту (за розпізнаваністю та за видом): легковий автомобіль продали як новий, але виявилось, що це авто вже використовувалось як демонстраційне?</span><span data-lang="de">Welche Mangelart liegt vor: Ein Pkw wurde als Neuwagen verkauft. Es stellt sich heraus, dass das neu verkaufte Kraftfahrzeug schon als Vorführwagen genutzt wurde.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>arglistig verschwiegener Mangel</strong> (продавець знав і промовчав) · <strong>Mangel in der Güte</strong> (не той сорт/категорія товару — вживане видано за нове)</p></div>
+<div data-lang="de"><p><strong>arglistig verschwiegener Mangel</strong> (Verkäufer wusste davon) · <strong>Mangel in der Güte</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2b</span><span data-lang="ua">Який вид дефекту: доставлено десять балончиків лаку, хоча замовлено було лише п'ять?</span><span data-lang="de">Welche Mangelart liegt vor: Es werden zehn Spraydosen Lack geliefert, obwohl nur fünf bestellt wurden.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>offener Mangel</strong> (видно одразу при перерахунку) · <strong>Mangel in der Menge</strong> (Mehrlieferung)</p></div>
+<div data-lang="de"><p><strong>offener Mangel</strong> (sofort beim Nachzählen erkennbar) · <strong>Mangel in der Menge</strong> (Mehrlieferung)</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2c</span><span data-lang="ua">Який вид дефекту: замість гайкових ключів доставлено викрутки?</span><span data-lang="de">Welche Mangelart liegt vor: Statt Schraubenschlüssel werden Schraubendreher geliefert.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>offener Mangel</strong> (видно одразу) · <strong>Mangel in der Art</strong> (Falschlieferung)</p></div>
+<div data-lang="de"><p><strong>offener Mangel</strong> (sofort erkennbar) · <strong>Mangel in der Art</strong> (Falschlieferung)</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2d</span><span data-lang="ua">Який вид дефекту: нова пакувальна машина не працює?</span><span data-lang="de">Welche Mangelart liegt vor: Die neue Verpackungsmaschine funktioniert nicht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>versteckter Mangel</strong> (виявляється лише при використанні) · <strong>Mangel in der Beschaffenheit</strong></p></div>
+<div data-lang="de"><p><strong>versteckter Mangel</strong> (erst bei Gebrauch erkennbar) · <strong>Mangel in der Beschaffenheit</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2e</span><span data-lang="ua">Який вид дефекту: шафа подряпана збоку?</span><span data-lang="de">Welche Mangelart liegt vor: Ein Schrank ist an der Seite zerkratzt.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>offener Mangel</strong> (видно одразу) · <strong>Mangel in der Beschaffenheit</strong></p></div>
+<div data-lang="de"><p><strong>offener Mangel</strong> (sofort erkennbar) · <strong>Mangel in der Beschaffenheit</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3a</span><span data-lang="ua">При перевірці товару виявлено: позиція 1 — доставлено не той товар; позиція 2 — 3 з 20 абажурів мають подряпини; позиція 3 — замовлений товар не доставлено. Визначте вид дефекту для кожної позиції.</span><span data-lang="de">Bei der Warenprüfung stellen Sie fest, dass Position 1 falsche Ware geliefert wurde, Position 2 drei von 20 Lampenschirmen zerkratzt sind und Position 3 bestellte Ware nicht geliefert wurde. Ordnen Sie die Sachmängel den Mängelarten zu.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua">
+<ul>
+<li>Позиція 1 (не той товар) = Falschlieferung (дефект за видом)</li>
+<li>Позиція 2 (подряпини) = Beschaffenheitsmangel (дефект стану товару)</li>
+<li>Позиція 3 (не доставлено) = Minderlieferung (дефект кількості)</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>Position 1 (falsche Ware) = Falschlieferung (Mangel in der Art)</li>
+<li>Position 2 (zerkratzt) = Beschaffenheitsmangel</li>
+<li>Position 3 (nicht geliefert) = Minderlieferung (Mangel in der Menge)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3b</span><span data-lang="ua">Що потрібно зробити в цьому випадку (продовження завдання про 3 позиції)?</span><span data-lang="de">Was ist in diesem Fall zu unternehmen (Fortsetzung der Aufgabe mit den 3 Positionen)?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Негайно перевірити та заявити постачальнику про дефекти (рекламація), задокументувати факт, за потреби прийняти товар із застереженням, вимагати додаткового виконання (Nacherfüllung).</p></div>
+<div data-lang="de"><p>Mängel unverzüglich prüfen und dem Lieferanten anzeigen (rügen), Sachverhalt dokumentieren, Annahme ggf. unter Vorbehalt, Nacherfüllung verlangen.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3c</span><span data-lang="ua">Які права покупця застосовуються першочергово?</span><span data-lang="de">Welche Rechte könnten seitens des Käufers vorrangig in Anspruch genommen werden?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Першочергово: додаткове виконання — Nacherfüllung (усунення недоліку або нова поставка).</p></div>
+<div data-lang="de"><p>Vorrangig: Nacherfüllung (Nachbesserung oder Neulieferung).</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3d</span><span data-lang="ua">Які права покупця застосовуються лише додатково (у другу чергу)?</span><span data-lang="de">Welche Rechte könnten seitens des Käufers nachrangig in Anspruch genommen werden?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Лише якщо строк на додаткове виконання минув безрезультатно: відмова від договору, зменшення ціни, відшкодування збитків.</p></div>
+<div data-lang="de"><p>Erst nach erfolglosem Ablauf der Nacherfüllungsfrist: Rücktritt vom Kaufvertrag, Minderung des Kaufpreises, Schadenersatz.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">4</span><span data-lang="ua">Назвіть умови, які мають бути виконані, щоб виник Lieferungsverzug.</span><span data-lang="de">Nennen Sie die Voraussetzungen, die erfüllt sein müssen, damit ein Lieferungsverzug vorliegt.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> 1) Строк поставки настав (Lieferung fällig). 2) Продавця має бути письмово попереджено (Mahnung). 3) Продавець несе вину (Verschulden) за прострочення.</div>
+<div data-lang="de"><strong>Antwort:</strong> 1) Die Lieferung muss fällig sein. 2) Der Verkäufer muss gemahnt werden. 3) Den Verkäufer muss ein Verschulden treffen.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5</span><span data-lang="ua">Товар для зимового сезону мав прийти в жовтні. На 31.10 він досі не прибув, і на запит постачальник повідомляє, що зможе доставити лише в кінці грудня. Які варіанти дій маєте ви як покупець?</span><span data-lang="de">Ware, die für die Wintersaison im Oktober geliefert werden sollte, ist am 31.10. immer noch nicht eingetroffen. Auf Nachfrage kündigt der Lieferant an, erst Ende Dezember liefern zu können. Welche Handlungsmöglichkeiten haben Sie als Käufer?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Наполягати на поставці; відмовитися від договору (Rücktritt); вимагати відшкодування збитків через порушення обов'язку; вимагати відшкодування замість виконання; вимагати компенсації марних витрат.</div>
+<div data-lang="de"><strong>Antwort:</strong> Auf der Lieferung bestehen; vom Vertrag zurücktreten; Schadenersatz wegen Pflichtverletzung verlangen; Schadenersatz statt Leistung verlangen; Ersatz vergeblicher Aufwendungen verlangen.</div>
+</div>
+</div>
+
+<div class="aufg-topic">3 · Unfallgefahr</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1</span><span data-lang="ua">Поясніть завдання Berufsgenossenschaften і дізнайтесь, яка Berufsgenossenschaft відповідальна за ваше підприємство.</span><span data-lang="de">Erläutern Sie die Aufgaben der Berufsgenossenschaften und informieren Sie sich, welche Berufsgenossenschaft für Ihren Ausbildungsbetrieb zuständig ist.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Berufsgenossenschaften — органи державного страхування від нещасних випадків. Завдання: запобігання нещасним випадкам на виробництві, профзахворюванням і виробничим ризикам для здоров'я (профілактика, зокрема через видання Unfallverhütungsvorschriften/UVV); у разі настання випадку — лікування, реабілітація та компенсація застрахованим. Яка саме BG відповідає — уточнити індивідуально (напр., для будівельних підприємств — BG BAU).</div>
+<div data-lang="de"><strong>Antwort:</strong> Berufsgenossenschaften sind Träger der gesetzlichen Unfallversicherung. Aufgaben: Verhütung von Arbeitsunfällen, Berufskrankheiten und arbeitsbedingten Gesundheitsgefahren (u. a. durch Erlass von Unfallverhütungsvorschriften/UVV); im Schadensfall Heilbehandlung, Rehabilitation und Entschädigung der Versicherten. Welche BG zuständig ist, ist individuell im Ausbildungsbetrieb zu erfragen (für Bauunternehmen z. B. BG BAU).</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2</span><span data-lang="ua">Які положення містяться в Unfallverhütungsvorschriften?</span><span data-lang="de">Welche Regelungen sind in den Unfallverhütungsvorschriften enthalten?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Права та обов'язки роботодавців і працівників; технічні вимоги безпеки до інструментів і обладнання; правила поведінки для певних робочих місць і виробничих процесів.</div>
+<div data-lang="de"><strong>Antwort:</strong> Rechte und Pflichten von Arbeitgebenden und Arbeitnehmenden; sicherheitstechnische Anforderungen an Werkzeuge und Geräte; Verhaltensvorschriften für bestimmte Arbeitsplätze und Arbeitsverfahren.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3a</span><span data-lang="ua">Які обов'язки за DGUV Vorschrift 1 має підприємство?</span><span data-lang="de">Welche Pflichten nach der DGUV Vorschrift 1 hat das Unternehmen?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua">
+<ul>
+<li>вживає необхідних заходів з профілактики нещасних випадків</li>
+<li>проводить інструктаж застрахованих мінімум раз на рік</li>
+<li>розміщує приписи на видному місці</li>
+<li>повідомляє про нещасні випадки Berufsgenossenschaft протягом трьох днів</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>erforderliche Maßnahmen zur Unfallverhütung treffen</li>
+<li>Versicherte mindestens einmal jährlich unterweisen</li>
+<li>Vorschriften an geeigneter Stelle im Betrieb aushängen</li>
+<li>Arbeitsunfälle innerhalb von drei Tagen der Berufsgenossenschaft melden</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3b</span><span data-lang="ua">Які обов'язки за DGUV Vorschrift 1 мають застраховані?</span><span data-lang="de">Welche Pflichten nach der DGUV Vorschrift 1 haben die Versicherten?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua">
+<ul>
+<li>дотримуються заходів безпеки, встановлених підприємством</li>
+<li>не доводять себе алкоголем чи наркотиками до стану, що загрожує їм самим та іншим</li>
+</ul>
+</div>
+<div data-lang="de">
+<ul>
+<li>die vom Unternehmen zur Unfallverhütung angeordneten Maßnahmen befolgen</li>
+<li>sich nicht durch Alkohol oder Drogen in einen Zustand versetzen, durch den sie sich und andere gefährden könnten</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">4</span><span data-lang="ua">Наведіть приклади того, від яких небезпек може захистити персональне спорядження (PSA).</span><span data-lang="de">Schildern Sie anhand von Beispielen, vor welchen Gefahren die persönliche Schutzausrüstung schützen kann.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Захисне взуття — захист від падаючих предметів і проколів; захисні рукавиці — захист від порізів і защемлень; захисна каска — захист голови від падаючих предметів; засоби захисту слуху — захист від шкідливого шуму; сигнальний жилет — краща видимість, захист від нещасних випадків у зоні руху транспорту.</div>
+<div data-lang="de"><strong>Antwort:</strong> Sicherheitsschuhe — Schutz vor herabfallenden Gegenständen und Durchstich; Schutzhandschuhe — Schutz vor Schnitt- und Quetschverletzungen; Schutzhelm — Schutz vor Kopfverletzungen durch herabfallende Gegenstände; Gehörschutz — Schutz vor Lärmschäden; Warnweste — bessere Sichtbarkeit, Schutz vor Unfällen im Verkehrsbereich.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5a</span><span data-lang="ua">Опишіть Verbotszeichen (заборонні знаки) і наведіть приклад.</span><span data-lang="de">Beschreiben Sie Verbotszeichen und nennen Sie ein Beispiel.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Червона рамка, білий фон, чорний символ; приклад: «Курити заборонено».</p></div>
+<div data-lang="de"><p>Rote Umrandung, weißer Hintergrund, schwarzes Symbol; Beispiel: Rauchen verboten.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5b</span><span data-lang="ua">Опишіть Warnzeichen (попереджувальні знаки) і наведіть приклад.</span><span data-lang="de">Beschreiben Sie Warnzeichen und nennen Sie ein Beispiel.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Жовтий фон, чорна рамка, чорний символ; приклад: «Обережно, навантажувачі».</p></div>
+<div data-lang="de"><p>Gelber Grund, schwarze Umrandung, schwarzes Symbol; Beispiel: Warnung vor Flurförderzeugen.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5c</span><span data-lang="ua">Опишіть Gebotszeichen (наказові знаки) і наведіть приклад.</span><span data-lang="de">Beschreiben Sie Gebotszeichen und nennen Sie ein Beispiel.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Синій фон, білий символ; приклад: «Використовувати захисну каску».</p></div>
+<div data-lang="de"><p>Blauer Grund, weißes Symbol; Beispiel: Schutzhelm benutzen.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5d</span><span data-lang="ua">Опишіть Rettungszeichen (рятувальні знаки) і наведіть приклад.</span><span data-lang="de">Beschreiben Sie Rettungszeichen und nennen Sie ein Beispiel.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Зелений фон, білий символ; приклад: знак першої допомоги / евакуаційний вихід.</p></div>
+<div data-lang="de"><p>Grüner Grund, weißes Symbol; Beispiel: Erste-Hilfe-Zeichen / Notausgang.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5e</span><span data-lang="ua">Опишіть Brandschutzzeichen (знаки пожежної безпеки) і наведіть приклад.</span><span data-lang="de">Beschreiben Sie Brandschutzzeichen und nennen Sie ein Beispiel.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Червоний фон, білий символ; приклад: вогнегасник.</p></div>
+<div data-lang="de"><p>Roter Grund, weißes Symbol; Beispiel: Feuerlöscher.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">6</span><span data-lang="ua">Опишіть, як ви маєте поводитись при нещасному випадку.</span><span data-lang="de">Schildern Sie, wie Sie sich bei einem Unfall verhalten sollten.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Зберігати спокій, убезпечити місце події, викликати екстрену допомогу (112/110, дотримуючись «5 W»), надати невідкладну допомогу для рятування життя (напр., стабільне бокове положення при непритомності), залишатися з потерпілим і заспокоювати його до прибуття рятувальників, зустріти й направити рятувальну службу до місця події.</div>
+<div data-lang="de"><strong>Antwort:</strong> Ruhe bewahren, Unfallstelle absichern, Notruf absetzen (112/110, dabei die „5 W" beachten), lebensrettende Sofortmaßnahmen einleiten (z. B. stabile Seitenlage bei Bewusstlosigkeit), beim Verletzten bleiben und ihn beruhigen, bis der Rettungsdienst eintrifft, den Rettungsdienst zur Unfallstelle einweisen.</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">7</span><span data-lang="ua">Що розуміють під «п'ятьма W» при виклику екстреної допомоги?</span><span data-lang="de">Was versteht man beim Notruf unter den fünf „Ws"?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Wo — де сталася подія? Was — що сталося? Wie viele — скільки постраждалих потребує допомоги? Welche — які травми чи ознаки захворювання у постраждалих? Warten — чекати на можливі уточнювальні запитання від диспетчерської служби!</div>
+<div data-lang="de"><strong>Antwort:</strong> Wo ist der Notfall? Was ist geschehen? Wie viele Verletzte/Betroffene sind zu versorgen? Welche Art von Verletzungen oder Krankheitszeichen haben die Betroffenen? Warten auf mögliche Rückfragen der Rettungsleitstelle!</div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8</span><span data-lang="ua">Дізнайтеся на своєму підприємстві про заходи першої допомоги.</span><span data-lang="de">Informieren Sie sich in Ihrem Ausbildungsbetrieb über die Maßnahmen zur Ersten Hilfe.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><strong>Відповідь:</strong> Індивідуальна відповідь — уточнити на підприємстві (напр., місце розташування аптечки, відповідальні за першу допомогу, план дій у надзвичайній ситуації).</div>
+<div data-lang="de"><strong>Antwort:</strong> Individuelle Antwort — im Ausbildungsbetrieb zu erfragen (z. B. Standort des Verbandskastens, zuständige Ersthelfer, Notfallplan).</div>
+</div>
 </div>
 
 </div>
@@ -837,7 +858,7 @@ span[data-lang].active{display:inline}
 
 <script>
 let lang = 'ua';
-let tab = 'theorie';
+let tab = 'kernwissen';
 function setLang(l, btn){
   lang = l;
   document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
@@ -845,6 +866,13 @@ function setLang(l, btn){
   document.querySelectorAll('[data-lang]').forEach(el=>{
     el.classList.toggle('active', el.getAttribute('data-lang')===l);
   });
+}
+function toggleAufg(el){
+  var item = el.closest('.aufg-item');
+  var ans = item.querySelector('.aufg-ans');
+  var arrow = item.querySelector('.aufg-arrow');
+  ans.classList.toggle('open');
+  arrow.classList.toggle('open');
 }
 function setTab(t, btn){
   tab = t;
