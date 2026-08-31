@@ -3,7 +3,6 @@
     { "source": "/lf1-obshyrna.html", "destination": "/lf1.html", "permanent": true },
     { "source": "/lf2-obshyrna.html", "destination": "/lf2.html", "permanent": true },
     { "source": "/lf1-korotka.html", "destination": "/lf1.html", "permanent": true },
-    { "source": "/lf3-obshyrna.html", "destination": "/", "permanent": false },
     { "source": "/lf4-obshyrna.html", "destination": "/", "permanent": false },
     { "source": "/lf5-obshyrna.html", "destination": "/", "permanent": false },
     { "source": "/lf6-obshyrna.html", "destination": "/", "permanent": false }

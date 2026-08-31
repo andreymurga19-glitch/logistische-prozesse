@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Lernfeld 3</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --green-light:#4a9d5c;
+  --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd; --accent:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.lf-nav{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.lf-nav a{background:rgba(255,255,255,.15);color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.3)}
+.lf-nav a:hover{background:rgba(255,255,255,.28)}
+.hdr-mode{background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px;margin-left:6px}
+.lang-btns{display:flex;gap:6px}
+.lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+.lb.on{background:#fff;color:var(--green-dark);border-color:#fff}
+.tabs{display:flex;gap:6px;margin-top:12px}
+.tab-btn{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;padding:9px 6px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;text-align:center}
+.tab-btn.on{background:var(--red);border-color:var(--red)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.lf-hdr{background:var(--green-dark);color:#fff;padding:14px 18px;border-radius:8px;margin:20px 0 12px;display:flex;align-items:baseline;gap:10px}
+.lf-num{font-size:13px;font-weight:800;background:var(--red);padding:3px 10px;border-radius:4px}
+.lf-title{font-size:17px;font-weight:800}
+.sec{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:16px 18px;margin-bottom:12px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--red);margin-right:6px}
+.sec h3{font-size:15px;font-weight:700;color:var(--green-dark);display:inline}
+.sec-body{margin-top:10px}
+.sec p{margin-bottom:10px}
+.sec ul,.sec ol{margin-left:20px;margin-bottom:8px}
+.sec li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{background:#eef3ec;color:var(--green-dark);text-align:left;padding:6px 8px;border:1px solid var(--border);font-size:12px}
+td{padding:6px 8px;border:1px solid var(--border)}
+.rule{background:#fdf2f0;border-left:3px solid var(--red);padding:10px 14px;margin-top:10px;font-size:13px;border-radius:4px}
+[data-lang]{display:none}
+[data-lang].active{display:block}
+span[data-lang]{display:none}
+span[data-lang].active{display:inline}
+.progress{font-size:12px;color:var(--muted);text-align:center;margin:16px 0;padding:10px;background:#eef3ec;border-radius:6px}
+.tab-content{display:none}
+.tab-content.on{display:block}
+.kw-box{background:#eef3ec;border:2px solid var(--green);border-radius:8px;padding:16px 18px;margin-bottom:14px}
+.kw-box h4{color:var(--green-dark);font-size:14px;margin-bottom:8px}
+.aufg-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:8px}
+.aufg-num{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;border-radius:11px;min-width:22px;height:22px;line-height:22px;text-align:center;padding:0 6px;margin-right:8px;flex-shrink:0}
+.aufg-topic{font-size:12px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;background:var(--green-dark);padding:8px 14px;border-radius:6px;margin:18px 0 10px}
+.aufg-topic:first-child{margin-top:0}
+.aufg-q{cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.aufg-q-text{flex:1}
+.aufg-arrow{color:var(--green);font-weight:700;flex-shrink:0;transition:transform .2s;font-size:12px;margin-top:3px}
+.aufg-arrow.open{transform:rotate(90deg)}
+.aufg-ans{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:13.5px;color:var(--muted);line-height:1.6}
+.aufg-ans.open{display:block}
+.aufg-ans strong{color:var(--green-dark)}
+.aufg-note{background:#fdf2f0;border-left:3px solid var(--red);padding:8px 12px;margin-bottom:10px;font-size:12.5px;border-radius:4px;color:var(--ink)}
+.aufg-q-text ol{margin:10px 0 0 22px}
+.aufg-q-text ol li{margin-bottom:6px}
+.aufg-ans ol{margin:8px 0 0 22px}
+.aufg-ans ol li{margin-bottom:6px}
+.aufg-ans p{margin-bottom:8px}
+.aufg-ans p:last-child{margin-bottom:0}
+.kw-box ul,.kw-box ol{margin:8px 0 0 20px}
+.kw-box li{margin-bottom:6px}
+.kw-box p{margin-bottom:6px}
+.kw-box p:last-child{margin-bottom:0}
+.fbox{background:#fff;border:2px solid var(--green);border-left:6px solid var(--green);border-radius:8px;padding:14px 16px;margin:12px 0;overflow-x:auto}
+.fbox .fname{font-size:12px;font-weight:700;color:var(--green-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.feq{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink);text-align:center;line-height:1.4}
+.frac{display:inline-flex;flex-direction:column;align-items:center}
+.frac .num{padding:0 10px 4px}
+.frac .den{padding:4px 10px 0;border-top:2px solid var(--ink)}
+.fnote{margin-top:10px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.fnote b{color:var(--ink)}
+.fex{margin-top:10px;background:#eef3ec;border:1px solid var(--border);border-radius:6px;padding:9px 11px;font-size:12.5px;line-height:1.6}
+.fex .fex-t{font-weight:700;color:var(--green-dark);display:block;margin-bottom:4px}
+.src{display:inline-block;background:#eef3ec;color:var(--green-dark);border:1px solid var(--border);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:6px;vertical-align:middle}
+.gap{background:#fdf2f0;border-left:3px solid var(--red);padding:9px 12px;margin:10px 0;font-size:12.5px;border-radius:4px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">Lernfeld 3 / 11</div>
+    </div>
+    <div class="lang-btns">
+      <button class="lb" onclick="setLang('de',this)">DE</button>
+      <button class="lb on" onclick="setLang('ua',this)">UA</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn on" onclick="setTab('kernwissen',this)">⭐ Kernwissen</button>
+    <button class="tab-btn" onclick="setTab('aufgaben',this)"><span data-lang="ua">✏️ Завдання</span><span data-lang="de">✏️ Aufgaben</span></button>
+  </div>
+  <div class="lf-nav">
+    <a href="index.html">🏠 Головна</a>
+    <a href="lf2.html">← LF2</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="lf-hdr">
+  <span class="lf-num">LF 3</span>
+  <span class="lf-title">Güter bearbeiten</span>
+</div>
+
+<!-- ============ TAB: KERNWISSEN ============ -->
+<div class="tab-content on" id="tab-kernwissen">
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Abfallwirtschaft und Entsorgung <span class="src">стор. 160</span></h4>
+<p>За <strong>Законом про кругову економіку та відходи</strong> (Kreislaufwirtschafts- und Abfallgesetz) діє така <strong>черговість дій</strong> (Stufenfolge):</p>
+<ol>
+<li>уникати (vermeiden),</li>
+<li>використовувати повторно (wiederverwenden),</li>
+<li>переробляти матеріально (stofflich verwerten),</li>
+<li>використовувати енергетично (energetisch verwerten),</li>
+<li>видаляти (beseitigen).</li>
+</ol>
+<p>Завдяки <strong>рециклінгу</strong> (Recycling) має витрачатися менше первинної сировини. Це називають <strong>збереженням ресурсів</strong> (Ressourcenschonung).</p>
+<p>До <strong>2035 року</strong> 65&nbsp;% усіх приватних і промислових побутових відходів (Siedlungsabfälle) мають перероблятися матеріально.</p>
+<p><strong>Особливі приписи щодо відходів</strong> діють для батарейок, електро- та електронного брухту (Elektro- und Elektronikaltgeräte), а також для відпрацьованої оливи (Altöl).</p>
+<p>Символ <strong>перекресленого сміттєвого бака</strong> означає: <strong>не в загальні відходи!</strong> (Nicht in den Restmüll!)</p>
+<p><strong>Altöl</strong> утилізують і матеріально, і енергетично.</p>
+<p>На <strong>полігонах</strong> (Deponien) дозволено розміщувати лише попередньо оброблені відходи.</p>
+<p>Підприємства, у яких утворюються <strong>небезпечні відходи</strong>, зобов'язані вести <strong>процедуру підтвердження відходів</strong> (Abfallnachweisverfahren) і призначити <strong>уповноваженого з відходів</strong> (Abfallbeauftragter).</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Abfallwirtschaft und Entsorgung <span class="src">S. 160</span></h4>
+<p>Nach dem <strong>Kreislaufwirtschafts- und Abfallgesetz</strong> gilt die <strong>Stufenfolge</strong>:</p>
+<ol>
+<li>vermeiden,</li>
+<li>wiederverwenden,</li>
+<li>stofflich verwerten,</li>
+<li>energetisch verwerten,</li>
+<li>beseitigen.</li>
+</ol>
+<p>Durch <strong>Recycling</strong> sollen weniger primäre Rohstoffe verbraucht werden. Man spricht auch von <strong>Ressourcenschonung</strong>.</p>
+<p>Bis <strong>2035</strong> sollen <strong>65&nbsp;%</strong> aller privaten und gewerblichen Siedlungsabfälle stofflich verwertet werden.</p>
+<p><strong>Besondere Abfallvorschriften</strong> gelten für Batterien, Elektro- und Elektronikaltgeräte sowie für Altöl.</p>
+<p>Das Symbol der <strong>durchgestrichenen Mülltonne</strong> soll heißen: <strong>Nicht in den Restmüll!</strong></p>
+<p><strong>Altöl</strong> wird stofflich und energetisch verwertet.</p>
+<p>Auf <strong>Deponien</strong> dürfen nur vorbehandelte Abfälle entsorgt werden.</p>
+<p>Unternehmen, bei denen <strong>gefährliche Abfälle</strong> anfallen, müssen ein <strong>Abfallnachweisverfahren</strong> durchführen und einen <strong>Abfallbeauftragten</strong> bestellen.</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Inventur — Bestandsaufnahme <span class="src">стор. 165–166</span></h4>
+<p><strong>Принцип складування «First in — First out»</strong> означає, що товар, який надійшов першим, першим і видається зі складу: стара продукція ставиться вперед, нова — назад.</p>
+<p>Під час зберігання товар потрібно контролювати за <strong>кількістю та якістю</strong> (Menge und Qualität).</p>
+<p>Законодавець приписує <strong>щорічну інвентаризацію</strong> (jährliche Bestandsaufnahme, Inventur).</p>
+<p>Розрізняють <strong>чотири види інвентаризації</strong> (vier Inventurarten):</p>
+<ul>
+<li><strong>Stichtagsinventur</strong> — товарний запас визначають на дату закриття господарського року через підрахунок, вимірювання та/або зважування (Zählen, Messen und/oder Wiegen).</li>
+<li><strong>Permanente Inventur</strong> — інвентаризаційні роботи розподіляють на весь рік, за умови, що ведеться точне продовження обліку запасів (Bestandsfortschreibung) і кожен артикул інвентаризується щонайменше раз на рік.</li>
+<li><strong>Verlegte Inventur</strong> — фізичний перелік запасів може відбуватися до <strong>трьох місяців до</strong> або до <strong>двох місяців після</strong> закриття господарського року.</li>
+<li><strong>Stichprobeninventur</strong> — запас майнових об'єктів визначають за допомогою визнаних математично-статистичних методів на основі вибірок (Stichproben).</li>
+</ul>
+<p>Закриття господарського року — здебільшого <strong>31 грудня</strong>; ця ж дата є <strong>балансовою датою</strong> (Bilanzstichtag).</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Inventur — Bestandsaufnahme <span class="src">S. 165–166</span></h4>
+<p>Das <strong>Einlagerungsprinzip „First in – First out"</strong> bedeutet, dass zuerst hereingenommene Ware auch zuerst wieder herausgenommen wird, also alte Ware nach vorne und neue Ware nach hinten gelagert wird.</p>
+<p>Während der Lagerung muss die Ware auf <strong>Menge und Qualität</strong> kontrolliert werden.</p>
+<p>Der Gesetzgeber schreibt eine <strong>jährliche Bestandsaufnahme</strong> vor (Inventur).</p>
+<p>Man unterscheidet <strong>vier Inventurarten</strong>:</p>
+<ul>
+<li><strong>Stichtagsinventur</strong>: Der Warenbestand wird am Geschäftsjahresschluss durch Zählen, Messen und/oder Wiegen ermittelt.</li>
+<li><strong>Permanente Inventur</strong>: Die Inventurarbeiten können über das ganze Jahr verteilt werden, wenn sichergestellt ist, dass eine exakte Bestandsfortschreibung erfolgt und jeder Artikel mindestens einmal im Jahr aufgenommen wird.</li>
+<li><strong>Verlegte Inventur</strong>: Die körperliche Bestandsaufnahme kann bis drei Monate vor oder bis zwei Monate nach Geschäftsjahresabschluss erfolgen.</li>
+<li><strong>Stichprobeninventur</strong>: Der Bestand der Vermögensgegenstände wird mithilfe anerkannter mathematisch-statistischer Methoden aufgrund von Stichproben ermittelt.</li>
+</ul>
+<p>Der Geschäftsjahresabschluss ist meist der <strong>31. Dezember</strong> eines Jahres und ist auch <strong>Bilanzstichtag</strong>.</p>
+</div>
+</div>
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Stichprobeninventur <span class="src">стор. 165</span></h4>
+<p>Зростання розмірів складів, високостелажні склади (Hochregallager) і збільшення розмаїття артикулів ускладнюють підприємствам дотримання строків інвентаризації. Тому законодавець через <strong>§ 241 HGB</strong> дозволяє, щоб «запас майнових об'єктів за видом, кількістю і вартістю визначався також за допомогою визнаних математично-статистичних методів на основі вибірок». Метод має відповідати <strong>принципам належного бухгалтерського обліку</strong> (Grundsätze der ordnungsgemäßen Buchführung), а отримані результати — мати ту саму доказову силу, що й фізичний перелік запасів.</p>
+<p><strong>Передумови (Voraussetzungen):</strong></p>
+<ul>
+<li>якомога більший склад — щонайменше <strong>2 000 видів артикулів</strong>;</li>
+<li><strong>EDV-система складського обліку</strong>, яка точно дає інформацію про запаси, надходження і видатки;</li>
+<li><strong>5 % складованих деталей</strong> мають становити щонайменше <strong>40 % вартості складу</strong>.</li>
+</ul>
+<p>Якщо інвентаризувати ці 5 % деталей, то за вартістю вже охоплено більшу частину складського запасу. Окрім цього невеликого відсотка цінних товарів, як і раніше повністю обліковують важливі позиції — наприклад, ті, що ризикові щодо крадіжки, або швидкопсувні. З решти запасу — приблизно <strong>90–95 %</strong> обсягу складу — далі беруть вибірку за <strong>принципом випадковості</strong> (Zufallsprinzip).</p>
+<p><strong>Застосування (Einsatz):</strong> саме на великих підприємствах цей вид інвентаризації використовують дедалі активніше. Він дає значну економію часу і персоналу, не погіршуючи доказової сили інвентаризації.</p>
+</div>
+<div data-lang="de">
+<h4>⭐ Stichprobeninventur <span class="src">S. 165</span></h4>
+<p>Wachsende Lagergrößen, Hochregallager und eine Zunahme der Artikelvielfalt erschweren den Unternehmen, die Inventur zeitlich einzuhalten. Der Gesetzgeber erlaubt deshalb über <strong>§ 241 HGB</strong>, dass „der Bestand der Vermögensgegenstände nach Art, Menge und Wert auch mithilfe anerkannter mathematisch-statistischer Methoden aufgrund von Stichproben ermittelt werden" kann. Das Verfahren muss den <strong>Grundsätzen der ordnungsgemäßen Buchführung</strong> entsprechen und die erzielten Inventurergebnisse müssen den gleichen Aussagewert wie eine körperliche Bestandsaufnahme erreichen.</p>
+<p><strong>Voraussetzungen:</strong></p>
+<ul>
+<li>ein möglichst großes Lager mit mindestens <strong>2 000 Artikelarten</strong>,</li>
+<li>ein <strong>EDV-Lagerbuchführungssystem</strong>, das genau Auskunft gibt über Bestände, Zu- und Abgänge,</li>
+<li><strong>5 % der gelagerten Teile</strong> sollen mindestens <strong>40 % des Lagerwerts</strong> ausmachen.</li>
+</ul>
+<p>Inventiert man nun diese 5 % der gelagerten Teile, so hat man wertmäßig bereits einen Großteil des Lagerbestandes aufgenommen. Neben diesem kleinen Prozentsatz an wertvollen Gütern werden wichtige Positionen, z. B. diebstahlgefährdete, leicht verderbliche Teile, wie bisher voll erfasst. Aus dem verbleibenden Restbestand von etwa <strong>90 bis 95 %</strong> des Lagerumfangs entnimmt man danach eine Stichprobe nach dem <strong>Zufallsprinzip</strong>.</p>
+<p><strong>Einsatz:</strong> Gerade in Großunternehmen wird diese Inventurart immer stärker eingesetzt. Sie führt zu hohen Einsparungen an Zeit und Personal, ohne dass der Aussagewert der Inventur beeinträchtigt wird.</p>
+</div>
+</div>
+
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Wertrückrechnung <span class="src">стор. 165</span></h4>
+<p>Якщо перелік запасів проводять <strong>не на балансову дату</strong>, вартість перераховують на 31 грудня. Схема з підручника:</p>
+<div class="fbox">
+<div class="fname">Wertrückrechnung — приклад із книги</div>
+<div class="fex" style="margin-top:0">
+<span class="fex-t">Приклад (Zähltag 28 лютого — після балансової дати)</span>
+&nbsp;&nbsp;&nbsp;вартісний запас на день підрахунку 28 лютого &nbsp;&nbsp;<strong>240 000,00 €</strong><br>
+<strong>−</strong>&nbsp;вартість надходжень 31 грудня — 28 лютого &nbsp;&nbsp;<strong>20 000,00 €</strong><br>
+<strong>+</strong>&nbsp;вартість видатків 31 грудня — 28 лютого &nbsp;&nbsp;<strong>25 000,00 €</strong><br>
+<strong>=</strong>&nbsp;вартісний запас на балансову дату 31 грудня &nbsp;&nbsp;<strong>245 000,00 €</strong>
+</div>
+<div class="fnote"><b>Як це читати.</b> День підрахунку тут <b>пізніше</b> за балансову дату, тому рахуємо <b>назад у часі</b>: те, що надійшло після 31 грудня, віднімаємо, а те, що було видане, — додаємо. Якщо ж день підрахунку <b>раніший</b> за балансову дату, дію змінюють на протилежну: надходження додають, видатки віднімають.</div>
+</div>
+</div>
+<div data-lang="de">
+<h4>⭐ Wertrückrechnung <span class="src">S. 165</span></h4>
+<p>Wird die Bestandsaufnahme <strong>nicht am Bilanzstichtag</strong> durchgeführt, wird der Wert auf den 31. Dezember zurückgerechnet. Schema aus dem Buch:</p>
+<div class="fbox">
+<div class="fname">Wertrückrechnung — Beispiel aus dem Buch</div>
+<div class="fex" style="margin-top:0">
+<span class="fex-t">Beispiel (Zähltag 28. Februar — nach dem Bilanzstichtag)</span>
+&nbsp;&nbsp;&nbsp;wertmäßiger Bestand am Zähltag 28. Februar &nbsp;&nbsp;<strong>240 000,00 €</strong><br>
+<strong>−</strong>&nbsp;Wert der Zugänge 31. Dezember bis 28. Februar &nbsp;&nbsp;<strong>20 000,00 €</strong><br>
+<strong>+</strong>&nbsp;Wert der Abgänge 31. Dezember bis 28. Februar &nbsp;&nbsp;<strong>25 000,00 €</strong><br>
+<strong>=</strong>&nbsp;wertmäßiger Bestand am Bilanzstichtag 31. Dezember &nbsp;&nbsp;<strong>245 000,00 €</strong>
+</div>
+<div class="fnote"><b>Lesehilfe.</b> Der Zähltag liegt hier <b>nach</b> dem Bilanzstichtag, deshalb wird <b>zurückgerechnet</b>: Zugänge nach dem 31. Dezember werden abgezogen, Abgänge werden addiert. Liegt der Zähltag <b>vor</b> dem Bilanzstichtag, kehrt sich das um: Zugänge werden addiert, Entnahmen abgezogen.</div>
+</div>
+</div>
+</div>
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Lagerkennzahlen — формули <span class="src">стор. 171–173</span></h4>
+<p><strong>Складські показники</strong> (Lagerkennzahlen) служать економному веденню складу. Найважливіші з них:</p>
+
+<div class="fbox">
+<div class="fname">1 · Ø Lagerbestand — середній складський запас</div>
+<div class="feq"><span>Ø Lagerbestand&nbsp;=</span><span class="frac"><span class="num">(Anfangsbestand + 12 Monatsendbestände)</span><span class="den">13</span></span></div>
+<div class="fnote"><b>Anfangsbestand</b> — запас на початок року. <b>12 Monatsendbestände</b> — запаси на кінець кожного з 12 місяців. Ділимо на <b>13</b>, бо значень саме тринадцять: один початковий плюс дванадцять місячних.</div>
+<div class="fex"><span class="fex-t">Спрощений варіант</span>Якщо відомі лише початковий і кінцевий запас, середній рахують як (Anfangsbestand + Endbestand) ÷ 2 — цей варіант потрібен у завданні 7a.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">2 · Umschlagshäufigkeit — оборотність (Lagerumschlag)</div>
+<div class="feq"><span>Umschlagshäufigkeit&nbsp;=</span><span class="frac"><span class="num">Wareneinsatz</span><span class="den">Ø Lagerbestand</span></span></div>
+<div class="fnote"><b>Wareneinsatz</b> — вартість товару, спожитого за рік. Показник каже, <b>скільки разів</b> склад обернувся за рік. Сам Wareneinsatz рахують так: Anfangsbestand + Zugänge − Endbestand.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">3 · Ø Lagerdauer — середня тривалість зберігання</div>
+<div class="feq"><span>Ø Lagerdauer&nbsp;=</span><span class="frac"><span class="num">360</span><span class="den">Lagerumschlag</span></span></div>
+<div class="fnote">Показує, <b>скільки днів</b> товар у середньому лежить на складі. У розрахунках беруть <b>комерційний рік — 360 днів</b>, не 365.</div>
+<div class="fex"><span class="fex-t">Приклад із книги</span>Lagerumschlag = 6 → Ø Lagerdauer = 360 ÷ 6 = <strong>60 днів</strong>.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">4 · Lagerzinsen — складські відсотки</div>
+<div class="feq"><span>Lagerzinsen&nbsp;=</span><span class="frac"><span class="num">Ø Lagerbestand · Ø Lagerdauer · Zinssatz</span><span class="den">100 · 360</span></span></div>
+<div class="fnote">Скільки коштує капітал, заморожений у складських запасах. <b>100</b> прибирає відсотки, <b>360</b> переводить річну ставку в денну.</div>
+<div class="fex"><span class="fex-t">Приклад із книги</span>Ø Lagerbestand 250 000,00 € · Ø Lagerdauer 60 днів · ставка 9 %<br>→ (250 000 · 60 · 9) ÷ (100 · 360) = <strong>3 750,00 €</strong> складських відсотків на рік.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">5 · Lagerzinssatz — складська відсоткова ставка</div>
+<div class="feq"><span>Lagerzinssatz у %&nbsp;=</span><span class="frac"><span class="num">banküblicher Zinssatz · durchschnittliche Lagerdauer</span><span class="den">360</span></span></div>
+<div class="feq" style="margin-top:12px"><span>Lagerzinsen&nbsp;=</span><span class="frac"><span class="num">durchschnittlicher Lagerbestand · Lagerzinssatz</span><span class="den">100</span></span></div>
+<div class="fnote">Це <b>другий шлях</b> до тих самих Lagerzinsen: спершу рахують ставку за час зберігання, потім застосовують її до запасу. Результат збігається з формулою&nbsp;4.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">6 · Lagerreichweite — на скільки вистачить запасу <span class="src">стор. 172</span></div>
+<div class="feq"><span>Lagerreichweite у днях&nbsp;=</span><span class="frac"><span class="num">(Lagerbestand + offene Bestellungen)</span><span class="den">Verbrauch pro Tag</span></span></div>
+<div class="fnote">Показує, на <b>скільки днів</b> вистачить запасу, щоб підтримувати виробництво. <b>Offene Bestellungen</b> — замовлення, які вже зроблені й очікуються.</div>
+<div class="fex"><span class="fex-t">Приклад із книги</span>Lagerbestand 500 шт., очікуване надходження 1 000 шт., витрата 150 шт./день<br>→ (500 + 1 000) ÷ 150 = <strong>10 днів</strong>. Якщо замовлення не зроблено, запасу вистачить ще на 10 днів.</div>
+</div>
+
+<p><strong>Висновки з підручника:</strong></p>
+<ul>
+<li>Що <strong>вища</strong> Umschlagshäufigkeit, то <strong>менша</strong> Lagerdauer.</li>
+<li>Висока Umschlagshäufigkeit зменшує складські та відсоткові витрати і потребу в капіталі — і <strong>підвищує економічність</strong>.</li>
+<li>Показники дають змогу <strong>порівнювати</strong> себе з іншими підприємствами та з попередніми роками; вони — передумова економного ведення складу.</li>
+</ul>
+</div>
+<div data-lang="de">
+<h4>⭐ Lagerkennzahlen — Formeln <span class="src">S. 171–173</span></h4>
+<p><strong>Lagerkennzahlen</strong> dienen einer wirtschaftlichen Lagerhaltung. Die wichtigsten sind:</p>
+
+<div class="fbox">
+<div class="fname">1 · Ø Lagerbestand</div>
+<div class="feq"><span>Ø Lagerbestand&nbsp;=</span><span class="frac"><span class="num">(Anfangsbestand + 12 Monatsendbestände)</span><span class="den">13</span></span></div>
+<div class="fnote">Geteilt wird durch <b>13</b>, weil es dreizehn Werte sind: ein Anfangsbestand und zwölf Monatsendbestände.</div>
+<div class="fex"><span class="fex-t">Vereinfachte Form</span>Sind nur Anfangs- und Endbestand bekannt: (Anfangsbestand + Endbestand) ÷ 2 — so in Aufgabe 7a.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">2 · Umschlagshäufigkeit (Lagerumschlag)</div>
+<div class="feq"><span>Umschlagshäufigkeit&nbsp;=</span><span class="frac"><span class="num">Wareneinsatz</span><span class="den">Ø Lagerbestand</span></span></div>
+<div class="fnote">Sagt aus, <b>wie oft</b> sich das Lager im Jahr umschlägt. Wareneinsatz = Anfangsbestand + Zugänge − Endbestand.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">3 · Ø Lagerdauer</div>
+<div class="feq"><span>Ø Lagerdauer&nbsp;=</span><span class="frac"><span class="num">360</span><span class="den">Lagerumschlag</span></span></div>
+<div class="fnote">Gerechnet wird mit dem <b>kaufmännischen Jahr zu 360 Tagen</b>.</div>
+<div class="fex"><span class="fex-t">Beispiel aus dem Buch</span>Lagerumschlag = 6 → Ø Lagerdauer = 360 ÷ 6 = <strong>60 Tage</strong>.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">4 · Lagerzinsen</div>
+<div class="feq"><span>Lagerzinsen&nbsp;=</span><span class="frac"><span class="num">Ø Lagerbestand · Ø Lagerdauer · Zinssatz</span><span class="den">100 · 360</span></span></div>
+<div class="fnote">Zinsen für das in den Lagerbeständen gebundene Kapital.</div>
+<div class="fex"><span class="fex-t">Beispiel aus dem Buch</span>250 000,00 € · 60 Tage · 9 % → (250 000 · 60 · 9) ÷ (100 · 360) = <strong>3 750,00 €</strong>.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">5 · Lagerzinssatz</div>
+<div class="feq"><span>Lagerzinssatz in %&nbsp;=</span><span class="frac"><span class="num">banküblicher Zinssatz · durchschnittliche Lagerdauer</span><span class="den">360</span></span></div>
+<div class="feq" style="margin-top:12px"><span>Lagerzinsen&nbsp;=</span><span class="frac"><span class="num">durchschnittlicher Lagerbestand · Lagerzinssatz</span><span class="den">100</span></span></div>
+<div class="fnote">Zweiter Weg zu denselben Lagerzinsen — das Ergebnis stimmt mit Formel&nbsp;4 überein.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">6 · Lagerreichweite <span class="src">S. 172</span></div>
+<div class="feq"><span>Lagerreichweite in Tagen&nbsp;=</span><span class="frac"><span class="num">(Lagerbestand + offene Bestellungen)</span><span class="den">Verbrauch pro Tag</span></span></div>
+<div class="fnote">Drückt aus, wie viele Tage der Lagerbestand ausreicht, um die Fertigung aufrechtzuerhalten.</div>
+<div class="fex"><span class="fex-t">Beispiel aus dem Buch</span>Lagerbestand 500 Stück, Zugang 1 000 Stück, Verbrauch 150 Stück/Tag<br>→ (500 + 1 000) ÷ 150 = <strong>10 Tage</strong>.</div>
+</div>
+
+<p><strong>Kernaussagen:</strong></p>
+<ul>
+<li>Je <strong>höher</strong> die Umschlagshäufigkeit, desto <strong>geringer</strong> die Lagerdauer.</li>
+<li>Eine hohe Umschlagshäufigkeit führt zu einer Verringerung der Lager- und Zinskosten sowie des Kapitalbedarfs und <strong>erhöht die Wirtschaftlichkeit</strong>.</li>
+<li>Kennzahlen ermöglichen <strong>Vergleiche</strong> mit anderen Betrieben sowie früheren Geschäftsjahren und sind Voraussetzung für eine wirtschaftliche Lagerhaltung.</li>
+</ul>
+</div>
+</div>
+<div class="kw-box">
+<div data-lang="ua">
+<h4>⭐ Lagerkosten und Lagerumschlag <span class="src">стор. 171–172</span></h4>
+<p><strong>Складські витрати</strong> (Lagerkosten) поділяються так:</p>
+<ul>
+<li><strong>Personalkosten</strong> — витрати на персонал</li>
+<li><strong>Raumkosten</strong> — витрати на приміщення</li>
+<li><strong>Warenkosten (totes Kapital)</strong> — вартість самого товару, «мертвий капітал»</li>
+<li><strong>Maschinenkosten</strong> — витрати на машини</li>
+<li><strong>Materialkosten</strong> — витрати на матеріали</li>
+</ul>
+<p>Занадто <strong>великі</strong> й занадто <strong>малі</strong> складські запаси спричиняють зайві витрати. Найбільша економічність досягається за <strong>оптимального складського запасу</strong> (optimaler Lagerbestand).</p>
+<p><strong>Підвищення оборотності складу (Lagerumschlag) дає переваги:</strong></p>
+<ul>
+<li>зменшення потреби в капіталі (Verringerung des Kapitalbedarfs),</li>
+<li>економія відсотків (Einsparung von Zinsen),</li>
+<li>зниження складських витрат (Senkung der Lagerkosten),</li>
+<li>зменшення складського ризику (Verminderung des Lagerrisikos).</li>
+</ul>
+<p><strong>Як підвищити оборотність:</strong></p>
+<p>через <strong>збільшений товарообіг</strong> (vermehrter Wareneinsatz):</p>
+<ul>
+<li>розпродажі (Sonderverkäufe),</li>
+<li>посилена реклама (verstärkte Werbung);</li>
+</ul>
+<p>через <strong>менший середній складський запас</strong> (geringerer durchschnittlicher Lagerbestand):</p>
+<ul>
+<li>частіші й менші замовлення,</li>
+<li>купівля на виклик (Kauf auf Abruf — купівля одразу, постачання за потреби),</li>
+<li>складання планів закупівель (Beschaffungspläne),</li>
+<li>встановлення максимальних запасів (Höchstbestände),</li>
+<li>часті перевірки запасів (permanente Inventur),</li>
+<li>принцип Just-in-time,</li>
+<li>вилучення з асортименту товару, що погано продається.</li>
+</ul>
+</div>
+<div data-lang="de">
+<h4>⭐ Lagerkosten und Lagerumschlag <span class="src">S. 171–172</span></h4>
+<p>Die <strong>Lagerkosten</strong> teilen sich folgendermaßen auf:</p>
+<ul>
+<li><strong>Personalkosten</strong></li>
+<li><strong>Raumkosten</strong></li>
+<li><strong>Warenkosten (totes Kapital)</strong></li>
+<li><strong>Maschinenkosten</strong></li>
+<li><strong>Materialkosten</strong></li>
+</ul>
+<p>Zu große und zu kleine Lagerbestände verursachen unnötige Kosten. Die größte Wirtschaftlichkeit ist beim <strong>optimalen Lagerbestand</strong> erreicht.</p>
+<p><strong>Eine Erhöhung des Lagerumschlags bringt wichtige Vorteile:</strong></p>
+<ul>
+<li>Verringerung des Kapitalbedarfs,</li>
+<li>Einsparung von Zinsen,</li>
+<li>Senkung der Lagerkosten,</li>
+<li>Verminderung des Lagerrisikos.</li>
+</ul>
+<p><strong>Eine Erhöhung des Lagerumschlags kann erreicht werden</strong></p>
+<p>über einen <strong>vermehrten Wareneinsatz</strong> durch:</p>
+<ul>
+<li>Sonderverkäufe,</li>
+<li>verstärkte Werbung;</li>
+</ul>
+<p>über einen <strong>geringeren durchschnittlichen Lagerbestand</strong> durch:</p>
+<ul>
+<li>häufigere und kleinere Bestellungen,</li>
+<li>Kauf auf Abruf (Kauf sofort, Lieferung, wenn nötig),</li>
+<li>Erstellen von Beschaffungsplänen,</li>
+<li>Feststellen von Höchstbeständen,</li>
+<li>häufige Bestandskontrollen (permanente Inventur),</li>
+<li>Just-in-time-Prinzip,</li>
+<li>Herausnahme schlecht verkäuflicher Ware aus dem Sortiment.</li>
+</ul>
+</div>
+</div>
+
+<div class="gap">
+<div data-lang="ua"><strong>Що не потрапило у скани.</strong> Сторінки 154–159, 161–164 і 167–170 не сфотографовані, тому конспект охоплює лише теми зі сканованих сторінок: відходи (160), інвентаризація (165–166) і складські показники (171–174). На стор. 160, 166, 172 і 174 правий край подекуди зрізаний — окремі слова довелося дочитувати за контекстом. Формули «verfügbarer Bestand» у сканах немає.</div>
+<div data-lang="de"><strong>Nicht im Scan enthalten.</strong> Die Seiten 154–159, 161–164 und 167–170 wurden nicht fotografiert. Auf den Seiten 160, 166, 172 und 174 ist der rechte Rand teilweise abgeschnitten. Die Formel für den verfügbaren Bestand ist im Scan nicht enthalten.</div>
+</div>
+
+</div>
+<!-- ============ END TAB: KERNWISSEN ============ -->
+<!-- ============ TAB: AUFGABEN ============ -->
+<div class="tab-content" id="tab-aufgaben">
+
+<div class="aufg-note">
+<div data-lang="ua"><strong>Увага:</strong> у підручнику відповідей до цих завдань немає. Відповіді нижче виведені з Kernwissen і формул цих самих сторінок. Там, де матеріалу зі сканів не вистачає, це прямо зазначено — не вчи такі місця напам'ять, спершу дескануй потрібну сторінку.</div>
+<div data-lang="de"><strong>Hinweis:</strong> Das Buch enthält keine Lösungen zu diesen Aufgaben. Die Antworten sind aus dem Kernwissen und den Formeln derselben Seiten abgeleitet. Wo das Material nicht ausreicht, ist dies ausdrücklich vermerkt.</div>
+</div>
+
+<div class="aufg-topic">1 · Abfall und Entsorgung (стор. 160)</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1a</span><span data-lang="ua">Утворіть робочі групи й перелічіть відходи, що виникають у приватних домогосподарствах. Візьміть за основу законодавче поняття відходів.</span><span data-lang="de">Bilden Sie Arbeitsgruppen und zählen Sie Abfälle auf, die in privaten Haushalten anfallen. Legen Sie dazu den gesetzlichen Abfallbegriff zugrunde.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Це практичне групове завдання — конкретний перелік залежить від вашої групи.</p><p><strong>Законодавчого поняття відходів (Abfallbegriff) у наданих сканах немає</strong> — воно на сторінках, які не сфотографовані (ймовірно 158–159). Дескануй їх, і я допишу відповідь.</p><p>Що дає наявний Kernwissen: у побуті окремо збирають батарейки, електро- та електронний брухт і відпрацьовану оливу — на них поширюються особливі приписи, і символ перекресленого бака означає «не в загальні відходи».</p></div>
+<div data-lang="de"><p>Praktische Gruppenaufgabe — die Liste hängt von der Gruppe ab.</p><p><strong>Der gesetzliche Abfallbegriff ist im Material nicht enthalten</strong> (vermutlich S. 158–159, nicht gescannt).</p><p>Aus dem vorhandenen Kernwissen: Batterien, Elektro- und Elektronikaltgeräte sowie Altöl unterliegen besonderen Vorschriften; die durchgestrichene Mülltonne heißt: nicht in den Restmüll.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1b</span><span data-lang="ua">…та відходи, що виникають на вашому навчальному підприємстві.</span><span data-lang="de">…und Abfälle, die in Ihrem Ausbildungsunternehmen anfallen.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Залежить від конкретного підприємства — відповідь треба скласти за своїм складом.</p><p>Орієнтир із Kernwissen: підприємства, у яких утворюються <strong>небезпечні відходи</strong>, зобов'язані вести процедуру Abfallnachweisverfahren і призначити Abfallbeauftragter. Тож у переліку варто окремо позначити саме небезпечні відходи.</p></div>
+<div data-lang="de"><p>Betriebsabhängig.</p><p>Orientierung aus dem Kernwissen: Unternehmen, bei denen gefährliche Abfälle anfallen, müssen ein Abfallnachweisverfahren durchführen und einen Abfallbeauftragten bestellen.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2</span><span data-lang="ua">Визначте, які речовини з питання 1 вважаються a) залишковим сміттям, b) вторсировиною, c) спецвідходами.</span><span data-lang="de">Stellen Sie fest, welche Stoffe aus Frage 1 als a) Restmüll, b) Wertstoffe, c) Sondermüll gelten.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Спирається на власний перелік із завдання 1.</p><p><strong>Означень Restmüll / Wertstoffe / Sondermüll у наданих сканах немає</strong> — вони на несфотографованих сторінках. Що можна сказати з наявного Kernwissen: батарейки, електро- та електронний брухт і Altöl <strong>не належать до Restmüll</strong> (символ перекресленого бака), а Altöl переробляють матеріально й енергетично.</p></div>
+<div data-lang="de"><p>Baut auf der eigenen Liste aus Aufgabe 1 auf.</p><p><strong>Die Definitionen von Restmüll, Wertstoffen und Sondermüll sind im Scan nicht enthalten.</strong> Aus dem Kernwissen folgt nur: Batterien, Elektro- und Elektronikaltgeräte sowie Altöl gehören nicht in den Restmüll.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3</span><span data-lang="ua">Порівняйте, як у вашій громаді/місті організовано вивезення приватних і промислових відходів.</span><span data-lang="de">Vergleichen Sie, wie in Ihrer Gemeinde/Stadt die Entsorgung von privaten und gewerblichen Abfällen organisiert ist.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Завдання на дослідження свого міста — відповіді в підручнику немає й бути не може. Дані треба взяти на сайті громади або в комунального перевізника.</p><p>За що зачепитися при порівнянні, спираючись на Kernwissen: чи дотримано черговість <em>vermeiden → wiederverwenden → stofflich verwerten → energetisch verwerten → beseitigen</em>; як окремо збирають батарейки, електроприлади й Altöl; чи потрапляють на полігон лише попередньо оброблені відходи.</p></div>
+<div data-lang="de"><p>Recherche vor Ort; im Buch nicht beantwortbar.</p><p>Vergleichspunkte aus dem Kernwissen: Einhaltung der Stufenfolge, getrennte Sammlung von Batterien, Elektrogeräten und Altöl, Vorbehandlung vor der Deponierung.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">4</span><span data-lang="ua">Які спільні цілі мають закони про батарейки та про електро- і електронний брухт у розумінні Закону про кругову економіку та відходи?</span><span data-lang="de">Welche gemeinsamen Ziele haben Batterie-, Elektro- und Elektronikaltgerätegesetz im Sinne des Kreislaufwirtschafts- und Abfallgesetzes?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Спільна мета — <strong>підпорядкувати ці групи відходів черговості дій</strong> Закону про кругову економіку: спершу уникати, потім використовувати повторно, далі переробляти матеріально, потім енергетично і лише насамкінець видаляти.</p><p>Конкретно це означає:</p><ol><li><strong>вилучити такі відходи із загального сміття</strong> — саме про це говорить символ перекресленого бака: «Nicht in den Restmüll!»;</li><li><strong>забезпечити роздільний збір і переробку</strong>, бо на ці групи діють особливі приписи (besondere Abfallvorschriften) — так само, як і на Altöl;</li><li><strong>зберегти ресурси</strong> (Ressourcenschonung): завдяки рециклінгу витрачається менше первинної сировини;</li><li><strong>наблизитися до цільового показника</strong>: до 2035 року 65&nbsp;% усіх приватних і промислових побутових відходів мають перероблятися матеріально.</li></ol></div>
+<div data-lang="de"><p>Gemeinsames Ziel ist, diese Abfallgruppen der <strong>Stufenfolge</strong> des Kreislaufwirtschafts- und Abfallgesetzes zu unterwerfen: vermeiden, wiederverwenden, stofflich verwerten, energetisch verwerten, beseitigen.</p><ol><li>Diese Abfälle sollen <strong>nicht in den Restmüll</strong> gelangen (durchgestrichene Mülltonne).</li><li>Für sie gelten <strong>besondere Abfallvorschriften</strong> — getrennte Sammlung und Verwertung, wie auch bei Altöl.</li><li><strong>Ressourcenschonung</strong>: Durch Recycling werden weniger primäre Rohstoffe verbraucht.</li><li>Beitrag zum Ziel: bis <strong>2035</strong> sollen <strong>65&nbsp;%</strong> aller privaten und gewerblichen Siedlungsabfälle stofflich verwertet werden.</li></ol></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5</span><span data-lang="ua">Віднесіть наведені відходи до залишкового сміття, вторсировини або спецвідходів: Allzweckreiniger, Batterien, verschmutzte Taschentücher, Energiesparlampen, Fensterglas, Fernsehgerät, Filzstift, Frostschutzmittel, Grillanzünder, Porzellan…</span><span data-lang="de">Ordnen Sie die folgenden Abfälle dem Restmüll, den Wertstoffen oder dem Sondermüll zu: Allzweckreiniger, Batterien, verschmutzte Taschentücher, Energiesparlampen, Fensterglas, Fernsehgerät, Filzstift, Frostschutzmittel, Grillanzünder, Porzellan…</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>Повної відповіді наданий матеріал не дозволяє.</strong> Критеріїв віднесення до Restmüll / Wertstoffe / Sondermüll у сканах немає, а сам перелік на стор. 160 <strong>обрізаний знизу</strong> — після «Porzellan» у книзі, найімовірніше, є ще позиції.</p><p>Те, що Kernwissen підтверджує напряму:</p><ul><li><strong>Batterien</strong> — особливі приписи, не в Restmüll;</li><li><strong>Fernsehgerät</strong> — Elektro-/Elektronikaltgerät, особливі приписи, не в Restmüll;</li><li><strong>Energiesparlampen</strong> — теж електроприлад, не в Restmüll.</li></ul><p>Решту позицій (Allzweckreiniger, Frostschutzmittel, Grillanzünder, Fensterglas, Porzellan, Filzstift, verschmutzte Taschentücher) без критеріїв із відсутніх сторінок класифікувати чесно не можна. Дескануй стор. 158–160 повністю — і я допишу таблицю.</p></div>
+<div data-lang="de"><p><strong>Eine vollständige Zuordnung ist mit dem vorliegenden Material nicht möglich.</strong> Die Kriterien fehlen im Scan, und die Liste auf S. 160 ist unten abgeschnitten.</p><p>Direkt belegt sind nur: <strong>Batterien</strong>, <strong>Fernsehgerät</strong> und <strong>Energiesparlampen</strong> — besondere Abfallvorschriften, nicht in den Restmüll.</p></div>
+</div>
+</div>
+<div class="aufg-topic">2 · Inventur (стор. 166)</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1</span><span data-lang="ua">Опишіть, як і коли на вашому навчальному підприємстві проводиться порівняння планових і фактичних показників. Чому воно потрібне?</span><span data-lang="de">Beschreiben Sie, wie und wann in Ihrem Ausbildungsbetrieb der Soll-Ist-Vergleich vorgenommen wird. Warum ist er notwendig?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Перша частина — про власне підприємство, її треба заповнити самому.</p><p><strong>Чому це потрібно</strong> — випливає з Kernwissen:</p><ul><li>законодавець <strong>приписує щорічну інвентаризацію</strong> (jährliche Bestandsaufnahme);</li><li>під час зберігання товар треба контролювати за <strong>кількістю та якістю</strong>;</li><li>порівняння показує <strong>Inventurdifferenzen</strong> — розбіжності між обліковим (Buchbestand) і фактичним запасом. Їхні типові причини перелічені в завданні 8: крадіжка та помилки обліку.</li></ul></div>
+<div data-lang="de"><p>Der erste Teil ist betriebsabhängig.</p><p><strong>Notwendigkeit</strong> laut Kernwissen: Der Gesetzgeber schreibt eine jährliche Bestandsaufnahme vor; die Ware muss auf Menge und Qualität kontrolliert werden; der Vergleich deckt Inventurdifferenzen zwischen Buchbestand und tatsächlichem Bestand auf.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2</span><span data-lang="ua">Поясніть різницю між Inventur та Inventar.</span><span data-lang="de">Erklären Sie den Unterschied zwischen Inventur und Inventar.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>Inventur</strong> — за наданим Kernwissen це <strong>сам процес</strong> переліку запасів: щорічна Bestandsaufnahme, яку приписує законодавець, із визначенням запасу за видом, кількістю і вартістю (через Zählen, Messen und/oder Wiegen або статистичні методи).</p><p><strong>Означення «Inventar» у наданих сканах відсутнє</strong> — воно на сторінках 161–164, які не сфотографовані. Щоб не вчити неточне формулювання, дескануй їх, і я допишу цю відповідь.</p></div>
+<div data-lang="de"><p><strong>Inventur</strong> ist laut Kernwissen die <strong>Tätigkeit</strong>: die vom Gesetzgeber vorgeschriebene jährliche Bestandsaufnahme nach Art, Menge und Wert.</p><p><strong>Die Definition von „Inventar" ist im Scan nicht enthalten</strong> (S. 161–164 fehlen).</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3</span><span data-lang="ua">Розрізніть поняття: a) Stichtagsinventur, b) permanente Inventur, c) verlegte Inventur, d) Stichprobeninventur.</span><span data-lang="de">Unterscheiden Sie die Begriffe a) Stichtagsinventur, b) permanente Inventur, c) verlegte Inventur, d) Stichprobeninventur.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>a) Stichtagsinventur</strong> — товарний запас визначають <strong>на дату закриття господарського року</strong> через підрахунок, вимірювання та/або зважування.</p><p><strong>b) Permanente Inventur</strong> — роботи <strong>розподілені на весь рік</strong>. Умови: ведеться точна Bestandsfortschreibung і кожен артикул інвентаризується щонайменше <strong>раз на рік</strong>.</p><p><strong>c) Verlegte Inventur</strong> — фізичний перелік <strong>зміщений у часі</strong>: до <strong>трьох місяців до</strong> або до <strong>двох місяців після</strong> закриття господарського року. Вартість потім перераховують на балансову дату (Wertrückrechnung).</p><p><strong>d) Stichprobeninventur</strong> — запас визначають <strong>за вибірками</strong> з допомогою визнаних математично-статистичних методів (§ 241 HGB). Умови: щонайменше 2 000 видів артикулів, EDV-облік, і 5&nbsp;% деталей мають становити щонайменше 40&nbsp;% вартості складу.</p><p><em>Різниця в одному рядку:</em> a) — коли рахують (на дату), b) — коли рахують (весь рік), c) — коли рахують (зі зсувом), d) — <strong>як</strong> рахують (вибірково, а не суцільно).</p></div>
+<div data-lang="de"><p><strong>a) Stichtagsinventur</strong>: Bestand am Geschäftsjahresschluss durch Zählen, Messen und/oder Wiegen.</p><p><strong>b) Permanente Inventur</strong>: über das ganze Jahr verteilt, bei exakter Bestandsfortschreibung und mindestens einer Aufnahme je Artikel pro Jahr.</p><p><strong>c) Verlegte Inventur</strong>: bis drei Monate vor oder bis zwei Monate nach Geschäftsjahresabschluss; anschließend Wertrückrechnung auf den Bilanzstichtag.</p><p><strong>d) Stichprobeninventur</strong>: Ermittlung aufgrund von Stichproben mit anerkannten mathematisch-statistischen Methoden (§ 241 HGB); mindestens 2 000 Artikelarten, EDV-Lagerbuchführung, 5 % der Teile = mindestens 40 % des Lagerwerts.</p><p><em>Kurz:</em> a–c betreffen den <strong>Zeitpunkt</strong>, d das <strong>Verfahren</strong>.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">4</span><span data-lang="ua">Запропонуйте своєму керівникові запровадити permanente Inventur. Обґрунтуйте пропозицію.</span><span data-lang="de">Schlagen Sie Ihrem Chef die Einführung der permanenten Inventur vor. Begründen Sie Ihren Vorschlag.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>Пропозиція:</strong> перейти зі Stichtagsinventur на permanente Inventur, тобто розподілити інвентаризаційні роботи на весь рік.</p><p><strong>Обґрунтування — з Kernwissen:</strong></p><ol><li>Роботи <strong>розподіляються на весь рік</strong>, а не падають одним блоком на закриття господарського року.</li><li>Законодавчу вимогу щорічної Bestandsaufnahme при цьому <strong>виконано</strong>: кожен артикул інвентаризується щонайменше раз на рік.</li><li>Умова — <strong>точна Bestandsfortschreibung</strong>, тобто робочий EDV-облік надходжень і видатків. Це водночас дає постійний Soll-Ist-Vergleich.</li></ol><p>Додатковий аргумент із розділу про економічність (стор. 171): <strong>часті перевірки запасів (permanente Inventur)</strong> названі там одним зі способів зменшити середній складський запас, а отже — <strong>підвищити оборотність</strong> і знизити складські та відсоткові витрати.</p></div>
+<div data-lang="de"><p><strong>Vorschlag:</strong> Umstellung von der Stichtagsinventur auf die permanente Inventur.</p><ol><li>Die Arbeiten werden <strong>über das ganze Jahr verteilt</strong>.</li><li>Die gesetzliche Vorgabe bleibt erfüllt: jeder Artikel mindestens einmal jährlich.</li><li>Voraussetzung ist eine <strong>exakte Bestandsfortschreibung</strong> — sie ermöglicht laufende Soll-Ist-Vergleiche.</li></ol><p>Zusatzargument von S. 171: häufige Bestandskontrollen (permanente Inventur) senken den durchschnittlichen Lagerbestand und <strong>erhöhen den Lagerumschlag</strong>.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5a</span><span data-lang="ua">Визначте вартість на балансову дату 31 грудня. Вартість на день підрахунку 15 жовтня — 7 800,00 €; надходження 15.10–31.12 — 2 700,00 €; видатки 15.10–31.12 — 1 900,00 €.</span><span data-lang="de">Ermitteln Sie die Werte für den Bilanzstichtag 31. Dezember. Wert am Zähltag 15. Oktober 7 800,00 €; Zugänge 15. Oktober bis 31. Dezember 2 700,00 €; Entnahmen 15. Oktober bis 31. Dezember 1 900,00 €.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>День підрахунку (15 жовтня) — <strong>раніший</strong> за балансову дату, тому рахуємо <strong>вперед у часі</strong>: надходження додаємо, видатки віднімаємо.</p><div class="fbox"><div class="feq">7 800,00 € + 2 700,00 € − 1 900,00 € = <strong>8 600,00 €</strong></div></div><p><strong>Вартісний запас на 31 грудня — 8 600,00 €.</strong></p></div>
+<div data-lang="de"><p>Der Zähltag liegt <strong>vor</strong> dem Bilanzstichtag: Zugänge addieren, Entnahmen abziehen.</p><div class="fbox"><div class="feq">7 800,00 € + 2 700,00 € − 1 900,00 € = <strong>8 600,00 €</strong></div></div><p><strong>Wert am 31. Dezember: 8 600,00 €.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5b</span><span data-lang="ua">Вартість на день підрахунку 31 січня — 6 300,00 €; надходження 31.12–31.01 — 700,00 €; видатки 31.12–31.01 — 1 000,00 €. Яка вартість на 31 грудня?</span><span data-lang="de">Wert am Zähltag 31. Januar 6 300,00 €; Zugänge 31. Dezember bis 31. Januar 700,00 €; Entnahmen 31. Dezember bis 31. Januar 1 000,00 €. Wert am 31. Dezember?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>День підрахунку (31 січня) — <strong>пізніший</strong> за балансову дату, тому рахуємо <strong>назад</strong>, точно за схемою Wertrückrechnung із книги: надходження віднімаємо, видатки додаємо.</p><div class="fbox"><div class="feq">6 300,00 € − 700,00 € + 1 000,00 € = <strong>6 600,00 €</strong></div></div><p><strong>Вартісний запас на 31 грудня — 6 600,00 €.</strong></p><div class="fnote">Порівняй зі схемою з підручника: 240 000 − 20 000 + 25 000 = 245 000. Той самий напрямок дій.</div></div>
+<div data-lang="de"><p>Der Zähltag liegt <strong>nach</strong> dem Bilanzstichtag: Zugänge abziehen, Abgänge addieren (Wertrückrechnung).</p><div class="fbox"><div class="feq">6 300,00 € − 700,00 € + 1 000,00 € = <strong>6 600,00 €</strong></div></div><p><strong>Wert am 31. Dezember: 6 600,00 €.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">6</span><span data-lang="ua">Опишіть перебіг інвентаризації на вашому підприємстві.</span><span data-lang="de">Erläutern Sie den Ablauf der Inventur in Ihrem Unternehmen.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Відповідь залежить від підприємства — її треба скласти за власним досвідом.</p><p>Що варто назвати, спираючись на Kernwissen: який із <strong>чотирьох видів</strong> інвентаризації застосовують (Stichtags-, permanente, verlegte чи Stichprobeninventur); чи збігається дата з <strong>Bilanzstichtag 31 грудня</strong>; як фіксують запас — Zählen, Messen und/oder Wiegen; як оформлюють Inventurbeleg і що роблять з виявленими Inventurdifferenzen.</p></div>
+<div data-lang="de"><p>Betriebsabhängig.</p><p>Anhaltspunkte aus dem Kernwissen: welche der vier Inventurarten eingesetzt wird, Bezug zum Bilanzstichtag 31. Dezember, Erfassung durch Zählen, Messen und/oder Wiegen, Umgang mit Inventurdifferenzen.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">7a</span><span data-lang="ua">За інвентаризаційним документом на стор. 163 визначте, які розбіжності виявила permanente Inventur 25 липня.</span><span data-lang="de">Stellen Sie anhand des Inventurbelegs auf Seite 163 fest, welche Inventurdifferenzen bei der permanenten Inventur am 25. Juli vorlagen.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>Відповісти неможливо: сторінки 163 у сканах немає.</strong> Завдання прямо посилається на Inventurbeleg саме з цієї сторінки, а без таблиці з цифрами будь-яка відповідь була б вигадкою.</p><p>Сфотографуй стор. 163 — і я порахую розбіжності.</p></div>
+<div data-lang="de"><p><strong>Nicht beantwortbar: Seite 163 fehlt im Scan.</strong> Die Aufgabe verweist direkt auf den dortigen Inventurbeleg.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">7b</span><span data-lang="ua">Поміркуйте, які причини можуть мати ці розбіжності.</span><span data-lang="de">Überlegen Sie, welche Ursachen diese Differenzen haben können.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Перелік причин прямо випливає з випадків, наведених у <strong>завданні 8</strong> на цій самій сторінці:</p><ul><li><strong>крадіжка</strong> (Diebstahl) — фактичний запас зменшується, а обліковий ні;</li><li><strong>подвійне проведення</strong> надходження або видачі;</li><li><strong>непроведена</strong> операція — товар прийняли чи видали, але не занесли в облік;</li><li><strong>помилкова кількість</strong> при проведенні (наприклад, 200 шт. проведено як 20, а 600 як 6 000);</li><li><strong>переплутаний напрямок</strong> операції — надходження проведене як видача або навпаки.</li></ul><p>Тобто причини поділяються на дві групи: <strong>реальні втрати запасу</strong> (крадіжка) і <strong>помилки обліку</strong> (Fehlbuchungen).</p></div>
+<div data-lang="de"><p>Die Ursachen ergeben sich aus den Fällen in <strong>Aufgabe 8</strong>: Diebstahl, doppelte Buchung, nicht verbuchte Ein- oder Auslagerung, falsche Mengen bei der Buchung, Verwechslung von Ein- und Auslagerung.</p><p>Zwei Gruppen: <strong>tatsächliche Bestandsverluste</strong> und <strong>Fehlbuchungen</strong>.</p></div>
+</div>
+</div>
+<div class="aufg-note">
+<div data-lang="ua"><strong>Завдання 8.</strong> Визначте, на скільки штук обліковий запас (Buchbestand) відхиляється від фактичного (tatsächlicher Bestand). Підказка до всіх пунктів: порівнюй, що сталося <em>насправді</em> зі складом, і що при цьому <em>записали</em> в облік.</div>
+<div data-lang="de"><strong>Aufgabe 8.</strong> Stellen Sie fest, um wie viel Stück der Buchbestand vom tatsächlichen Bestand abweicht.</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8a</span><span data-lang="ua">Крадіжка 30 штук.</span><span data-lang="de">Diebstahl von 30 Stück.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично зі складу зникло 30 шт., в обліку не змінилося нічого.</p><p><strong>Buchbestand на 30 шт. більший</strong> за фактичний.</p></div>
+<div data-lang="de"><p>Tatsächlich −30, Buchung ±0.</p><p><strong>Buchbestand ist um 30 Stück höher.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8b</span><span data-lang="ua">Надходження 400 шт. помилково проведено двічі.</span><span data-lang="de">Einlagerung von 400 Stück versehentlich doppelt verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично +400, в обліку +800.</p><p><strong>Buchbestand на 400 шт. більший.</strong></p></div>
+<div data-lang="de"><p>Tatsächlich +400, gebucht +800.</p><p><strong>Buchbestand ist um 400 Stück höher.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8c</span><span data-lang="ua">Надходження 500 шт. помилково не проведено.</span><span data-lang="de">Einlagerung von 500 Stück versehentlich nicht verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично +500, в обліку 0.</p><p><strong>Buchbestand на 500 шт. менший.</strong></p></div>
+<div data-lang="de"><p>Tatsächlich +500, gebucht 0.</p><p><strong>Buchbestand ist um 500 Stück niedriger.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8d</span><span data-lang="ua">Надходження 200 шт. помилково проведено як 20 шт.</span><span data-lang="de">Einlagerung von 200 Stück versehentlich mit 20 Stück verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично +200, в обліку +20 → 200 − 20 = 180.</p><p><strong>Buchbestand на 180 шт. менший.</strong></p></div>
+<div data-lang="de"><p>+200 tatsächlich, +20 gebucht.</p><p><strong>Buchbestand ist um 180 Stück niedriger.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8e</span><span data-lang="ua">Надходження 600 шт. помилково проведено як 6 000 шт.</span><span data-lang="de">Einlagerung von 600 Stück versehentlich mit 6 000 Stück verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично +600, в обліку +6 000 → 6 000 − 600 = 5 400.</p><p><strong>Buchbestand на 5 400 шт. більший.</strong></p></div>
+<div data-lang="de"><p>+600 tatsächlich, +6 000 gebucht.</p><p><strong>Buchbestand ist um 5 400 Stück höher.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8f</span><span data-lang="ua">Надходження 400 шт. помилково проведено як видачу.</span><span data-lang="de">Einlagerung von 400 Stück versehentlich als Auslagerung verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично +400, в обліку −400. Помилка подвійна: 400 + 400 = 800.</p><p><strong>Buchbestand на 800 шт. менший.</strong></p></div>
+<div data-lang="de"><p>+400 tatsächlich, −400 gebucht → Differenz 800.</p><p><strong>Buchbestand ist um 800 Stück niedriger.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8g</span><span data-lang="ua">Видачу 700 шт. помилково проведено двічі.</span><span data-lang="de">Auslagerung von 700 Stück versehentlich doppelt verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично −700, в обліку −1 400.</p><p><strong>Buchbestand на 700 шт. менший.</strong></p></div>
+<div data-lang="de"><p>−700 tatsächlich, −1 400 gebucht.</p><p><strong>Buchbestand ist um 700 Stück niedriger.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8h</span><span data-lang="ua">Видачу 300 шт. помилково не проведено.</span><span data-lang="de">Auslagerung von 300 Stück versehentlich nicht verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично −300, в обліку 0.</p><p><strong>Buchbestand на 300 шт. більший.</strong></p></div>
+<div data-lang="de"><p>−300 tatsächlich, 0 gebucht.</p><p><strong>Buchbestand ist um 300 Stück höher.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8i</span><span data-lang="ua">Видачу 650 шт. помилково проведено як 65 шт.</span><span data-lang="de">Auslagerung von 650 Stück versehentlich mit 65 Stück verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично −650, в обліку −65 → 650 − 65 = 585.</p><p><strong>Buchbestand на 585 шт. більший.</strong></p></div>
+<div data-lang="de"><p>−650 tatsächlich, −65 gebucht.</p><p><strong>Buchbestand ist um 585 Stück höher.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8j</span><span data-lang="ua">Видачу 250 шт. помилково проведено як 2 500 шт.</span><span data-lang="de">Auslagerung von 250 Stück versehentlich mit 2 500 Stück verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично −250, в обліку −2 500 → 2 500 − 250 = 2 250.</p><p><strong>Buchbestand на 2 250 шт. менший.</strong></p></div>
+<div data-lang="de"><p>−250 tatsächlich, −2 500 gebucht.</p><p><strong>Buchbestand ist um 2 250 Stück niedriger.</strong></p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8k</span><span data-lang="ua">Видачу 700 шт. помилково проведено як надходження.</span><span data-lang="de">Auslagerung von 700 Stück versehentlich als Einlagerung verbucht.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Фактично −700, в обліку +700. Помилка подвійна: 700 + 700 = 1 400.</p><p><strong>Buchbestand на 1 400 шт. більший.</strong></p></div>
+<div data-lang="de"><p>−700 tatsächlich, +700 gebucht → Differenz 1 400.</p><p><strong>Buchbestand ist um 1 400 Stück höher.</strong></p></div>
+</div>
+</div>
+<div class="aufg-topic">3 · Wirtschaftlichkeit im Lager (стор. 173–174)</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">1</span><span data-lang="ua">Складіть таблицю складських витрат і покажіть можливості їх зниження.</span><span data-lang="de">Erstellen Sie eine Tabelle über die Lagerkosten und zeigen Sie Möglichkeiten auf, wie diese gesenkt werden können.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><table><tr><th>Вид витрат</th><th>Як знизити (за стор. 171)</th></tr><tr><td><strong>Personalkosten</strong></td><td>менший запас → менше операцій; Just-in-time</td></tr><tr><td><strong>Raumkosten</strong></td><td>менший середній запас — потрібно менше площі</td></tr><tr><td><strong>Warenkosten</strong> (totes Kapital)</td><td>частіші й менші замовлення, Kauf auf Abruf, вилучення товару, що погано продається</td></tr><tr><td><strong>Maschinenkosten</strong></td><td>менший обсяг руху товару при меншому запасі</td></tr><tr><td><strong>Materialkosten</strong></td><td>плани закупівель, встановлення Höchstbestände</td></tr></table><p>Загальний принцип із підручника: зайві витрати спричиняють <strong>і завеликі, і замалі</strong> запаси, а найбільша економічність — за <strong>оптимального складського запасу</strong>.</p></div>
+<div data-lang="de"><table><tr><th>Kostenart</th><th>Senkung (S. 171)</th></tr><tr><td><strong>Personalkosten</strong></td><td>geringerer Bestand, Just-in-time</td></tr><tr><td><strong>Raumkosten</strong></td><td>geringerer durchschnittlicher Lagerbestand</td></tr><tr><td><strong>Warenkosten</strong> (totes Kapital)</td><td>häufigere kleinere Bestellungen, Kauf auf Abruf, Herausnahme schlecht verkäuflicher Ware</td></tr><tr><td><strong>Maschinenkosten</strong></td><td>geringeres Bewegungsvolumen</td></tr><tr><td><strong>Materialkosten</strong></td><td>Beschaffungspläne, Höchstbestände</td></tr></table><p>Grundsatz: Zu große und zu kleine Lagerbestände verursachen unnötige Kosten; die größte Wirtschaftlichkeit liegt beim optimalen Lagerbestand.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">2</span><span data-lang="ua">Визначте, які складські витрати зростають при великому складському запасі.</span><span data-lang="de">Stellen Sie fest, welche Lagerkosten bei einem großen Lagerbestand steigen.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Насамперед <strong>Warenkosten (totes Kapital)</strong> — що більший запас, то більше капіталу заморожено, а отже, зростають і <strong>Lagerzinsen</strong>: у формулі складські відсотки прямо пропорційні Ø Lagerbestand.</p><p>Далі — <strong>Raumkosten</strong> (більший запас потребує більше площі) і разом з ним <strong>Personal-</strong> та <strong>Maschinenkosten</strong> на обслуговування.</p><p>Підручник формулює це так: занадто великі запаси спричиняють зайві витрати, а висока оборотність, навпаки, <strong>зменшує складські та відсоткові витрати і потребу в капіталі</strong>.</p></div>
+<div data-lang="de"><p>Vor allem die <strong>Warenkosten (totes Kapital)</strong> und damit die <strong>Lagerzinsen</strong> — sie sind dem Ø Lagerbestand direkt proportional. Ebenso steigen <strong>Raumkosten</strong> sowie Personal- und Maschinenkosten.</p><p>Laut Buch: Eine hohe Umschlagshäufigkeit führt zu einer Verringerung der Lager- und Zinskosten sowie des Kapitalbedarfs.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">3</span><span data-lang="ua">Поясніть поняття «мертвий» і «зв'язаний» капітал.</span><span data-lang="de">Erklären Sie die Begriffe „totes" bzw. „gebundenes" Kapital.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>У схемі складських витрат підручник позначає <strong>Warenkosten як «totes Kapital»</strong> — це гроші, вкладені у товар, який лежить на складі.</p><p>Такий капітал <strong>зв'язаний</strong>: доки товар не проданий чи не використаний, підприємство не може розпорядитися цими грішми інакше. Він при цьому <strong>коштує</strong> — саме за нього нараховують <strong>Lagerzinsen</strong>, тобто відсотки на капітал, інвестований у складські запаси.</p><p>Звідси й висновок підручника: що вища оборотність складу, то менше капіталу зв'язано — і то менші відсоткові витрати та потреба в капіталі.</p></div>
+<div data-lang="de"><p>Das Buch bezeichnet die <strong>Warenkosten als „totes Kapital"</strong>: Geld, das in der lagernden Ware steckt.</p><p>Dieses Kapital ist <strong>gebunden</strong> — es steht dem Betrieb nicht anderweitig zur Verfügung und verursacht <strong>Lagerzinsen</strong>, also Zinsen für das in den Lagerbeständen investierte Kapital.</p><p>Je höher der Lagerumschlag, desto weniger Kapital ist gebunden.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">4</span><span data-lang="ua">Розрізніть поняття «Absatz», «Umsatz», «Wareneinsatz».</span><span data-lang="de">Unterscheiden Sie die Begriffe „Absatz", „Umsatz", „Wareneinsatz".</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>Wareneinsatz</strong> — єдине з трьох понять, яке є в наданих сканах: це величина, що стоїть у чисельнику формули Umschlagshäufigkeit, тобто вартість товару, спожитого за період. З завдання 8 видно, як його рахують: Anfangsbestand + Zugänge − Endbestand.</p><p><strong>Означень «Absatz» і «Umsatz» у сканах немає</strong> — вони на сторінках 167–170, які не сфотографовані. Щоб не вчити неточне формулювання, дескануй їх.</p></div>
+<div data-lang="de"><p><strong>Wareneinsatz</strong> ist im Material enthalten: Zähler der Umschlagshäufigkeit; Berechnung Anfangsbestand + Zugänge − Endbestand.</p><p><strong>„Absatz" und „Umsatz" sind im Scan nicht definiert</strong> (S. 167–170 fehlen).</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">5</span><span data-lang="ua">У яких цінах визначають складські показники?</span><span data-lang="de">In welchen Preisen werden die Lagerkennzahlen ermittelt?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>У наданому матеріалі відповіді немає.</strong> Скановані сторінки 171–173 дають формули, але не вказують, у яких саме цінах беруть значення. Це на сторінках 167–170, яких бракує.</p></div>
+<div data-lang="de"><p><strong>Im Material nicht enthalten.</strong> Die gescannten Seiten 171–173 nennen die Formeln, nicht aber die Preisbasis (S. 167–170 fehlen).</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">6</span><span data-lang="ua">Якими двома способами можна визначити споживання (Wareneinsatz)?</span><span data-lang="de">Auf welche zwei Arten können Sie den Verbrauch bzw. den Wareneinsatz ermitteln?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>1. Розрахунком через запаси</strong> (Bestandsrechnung) — так побудоване завдання 8:</p><div class="fbox"><div class="feq">Wareneinsatz = Anfangsbestand + Zugänge − Endbestand</div></div><p><strong>2. За документами на відпуск матеріалів</strong> — у завданні 11 споживання задане саме так: «Materialverbrauch lt. <strong>Materialentnahmescheine</strong>», тобто підсумовуванням виданих зі складу кількостей.</p><p>Обидва способи взяті з самих завдань цієї сторінки; окремого формулювання «zwei Arten» у Kernwissen немає.</p></div>
+<div data-lang="de"><p><strong>1. Rechnerisch über die Bestände</strong> (so in Aufgabe 8): Wareneinsatz = Anfangsbestand + Zugänge − Endbestand.</p><p><strong>2. Über Materialentnahmescheine</strong> — so in Aufgabe 11 vorgegeben.</p><p>Beide Wege ergeben sich aus den Aufgaben selbst; im Kernwissen sind sie nicht ausdrücklich als „zwei Arten" formuliert.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">7a</span><span data-lang="ua">Обчисліть середній складський запас: Anfangsbestand 43 000,00 €, Endbestand 55 000,00 €.</span><span data-lang="de">Berechnen Sie den durchschnittlichen Lagerbestand: Anfangsbestand 43 000,00 €, Endbestand 55 000,00 €.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Відомі лише два значення, тому беремо спрощену форму: середнє арифметичне.</p><div class="fbox"><div class="feq"><span class="frac"><span class="num">43 000,00 € + 55 000,00 €</span><span class="den">2</span></span><span>=&nbsp;<strong>49 000,00 €</strong></span></div></div></div>
+<div data-lang="de"><p>Nur zwei Werte bekannt → vereinfachte Form.</p><div class="fbox"><div class="feq"><span class="frac"><span class="num">43 000,00 € + 55 000,00 €</span><span class="den">2</span></span><span>=&nbsp;<strong>49 000,00 €</strong></span></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">7b</span><span data-lang="ua">Anfangsbestand 10 400,00 €, 12 Monatsendbestände разом 91 000,00 €.</span><span data-lang="de">Anfangsbestand 10 400,00 €, 12 Monatsendbestände 91 000,00 €.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Тут є всі тринадцять значень, тому працює основна формула з Kernwissen.</p><div class="fbox"><div class="feq"><span class="frac"><span class="num">10 400,00 € + 91 000,00 €</span><span class="den">13</span></span><span>=&nbsp;<span class="frac"><span class="num">101 400,00 €</span><span class="den">13</span></span></span><span>=&nbsp;<strong>7 800,00 €</strong></span></div></div></div>
+<div data-lang="de"><div class="fbox"><div class="feq"><span class="frac"><span class="num">10 400,00 € + 91 000,00 €</span><span class="den">13</span></span><span>=&nbsp;<strong>7 800,00 €</strong></span></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">8</span><span data-lang="ua">Визначте Wareneinsatz: Anfangsbestand 6 900,00 €, Zugänge 132 600,00 €, Endbestand 8 200,00 €.</span><span data-lang="de">Ermitteln Sie den Wareneinsatz: Anfangsbestand 6 900,00 €, Zugänge 132 600,00 €, Endbestand 8 200,00 €.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><div class="fbox"><div class="feq">6 900,00 € + 132 600,00 € − 8 200,00 € = <strong>131 300,00 €</strong></div></div><p>Логіка: усе, що було на початку, плюс усе, що надійшло, мінус те, що лишилося на кінець — і є спожите за рік.</p></div>
+<div data-lang="de"><div class="fbox"><div class="feq">6 900,00 € + 132 600,00 € − 8 200,00 € = <strong>131 300,00 €</strong></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">9</span><span data-lang="ua">Визначте оборотність і середню тривалість зберігання: Ø Lagerbestand 180 000,00 €, Wareneinsatz 1 350 000,00 €.</span><span data-lang="de">Ermitteln Sie die Umschlagshäufigkeit und die durchschnittliche Lagerdauer: Ø Lagerbestand 180 000,00 €, Wareneinsatz 1 350 000,00 €.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><div class="fbox"><div class="feq"><span>Umschlagshäufigkeit&nbsp;=</span><span class="frac"><span class="num">1 350 000,00 €</span><span class="den">180 000,00 €</span></span><span>=&nbsp;<strong>7,5</strong></span></div><div class="feq" style="margin-top:12px"><span>Ø Lagerdauer&nbsp;=</span><span class="frac"><span class="num">360</span><span class="den">7,5</span></span><span>=&nbsp;<strong>48 днів</strong></span></div></div><p>Склад обертається 7,5 раза на рік, товар лежить у середньому 48 днів.</p></div>
+<div data-lang="de"><div class="fbox"><div class="feq"><span>Umschlagshäufigkeit&nbsp;=</span><span class="frac"><span class="num">1 350 000,00 €</span><span class="den">180 000,00 €</span></span><span>=&nbsp;<strong>7,5</strong></span></div><div class="feq" style="margin-top:12px"><span>Ø Lagerdauer&nbsp;=</span><span class="frac"><span class="num">360</span><span class="den">7,5</span></span><span>=&nbsp;<strong>48 Tage</strong></span></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">10</span><span data-lang="ua">Скільки складських відсотків спричиняє середній запас 270 000,00 €, який лежить у середньому 45 днів, за ставки 8 %?</span><span data-lang="de">Wie viel Lagerzinsen verursacht ein durchschnittlicher Lagerbestand von 270 000,00 €, der durchschnittlich 45 Tage auf Lager liegt, wenn ein Zinssatz von 8 % angenommen wird?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><div class="fbox"><div class="feq"><span class="frac"><span class="num">270 000 · 45 · 8</span><span class="den">100 · 360</span></span><span>=&nbsp;<span class="frac"><span class="num">97 200 000</span><span class="den">36 000</span></span></span><span>=&nbsp;<strong>2 700,00 €</strong></span></div></div></div>
+<div data-lang="de"><div class="fbox"><div class="feq"><span class="frac"><span class="num">270 000 · 45 · 8</span><span class="den">100 · 360</span></span><span>=&nbsp;<strong>2 700,00 €</strong></span></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">11</span><span data-lang="ua">Визначте Ø Lagerbestand, Lagerumschlag, Ø Lagerdauer і Lagerzinsen: AB 35 000,00 €, EB 45 000,00 €, Materialverbrauch 720 000,00 €, ставка банку 10 %.</span><span data-lang="de">Ermitteln Sie Ø Lagerbestand, Lagerumschlag, Ø Lagerdauer und Lagerzinsen: AB lt. Inventur 35 000,00 €, EB lt. Inventur 45 000,00 €, Materialverbrauch lt. Materialentnahmescheine 720 000,00 €, Bankzinssatz 10 %.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Завдання в чотири кроки — кожен наступний спирається на попередній.</p><div class="fbox"><div class="fname">Крок 1 · Ø Lagerbestand</div><div class="feq"><span class="frac"><span class="num">35 000,00 € + 45 000,00 €</span><span class="den">2</span></span><span>=&nbsp;<strong>40 000,00 €</strong></span></div></div><div class="fbox"><div class="fname">Крок 2 · Lagerumschlag</div><div class="feq"><span class="frac"><span class="num">720 000,00 €</span><span class="den">40 000,00 €</span></span><span>=&nbsp;<strong>18</strong></span></div></div><div class="fbox"><div class="fname">Крок 3 · Ø Lagerdauer</div><div class="feq"><span class="frac"><span class="num">360</span><span class="den">18</span></span><span>=&nbsp;<strong>20 днів</strong></span></div></div><div class="fbox"><div class="fname">Крок 4 · Lagerzinsen</div><div class="feq"><span class="frac"><span class="num">40 000 · 20 · 10</span><span class="den">100 · 360</span></span><span>=&nbsp;<span class="frac"><span class="num">8 000 000</span><span class="den">36 000</span></span></span><span>=&nbsp;<strong>222,22 €</strong></span></div></div></div>
+<div data-lang="de"><div class="fbox"><div class="fname">Schritt 1 · Ø Lagerbestand</div><div class="feq">(35 000,00 € + 45 000,00 €) ÷ 2 = <strong>40 000,00 €</strong></div></div><div class="fbox"><div class="fname">Schritt 2 · Lagerumschlag</div><div class="feq">720 000,00 € ÷ 40 000,00 € = <strong>18</strong></div></div><div class="fbox"><div class="fname">Schritt 3 · Ø Lagerdauer</div><div class="feq">360 ÷ 18 = <strong>20 Tage</strong></div></div><div class="fbox"><div class="fname">Schritt 4 · Lagerzinsen</div><div class="feq">(40 000 · 20 · 10) ÷ (100 · 360) = <strong>222,22 €</strong></div></div></div>
+</div>
+</div>
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">12</span><span data-lang="ua">Якими заходами можна скоротити середню тривалість зберігання товару?</span><span data-lang="de">Durch welche Maßnahmen kann die durchschnittliche Lagerdauer einer Ware verkürzt werden?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Оскільки Ø Lagerdauer = 360 ÷ Lagerumschlag, скоротити тривалість зберігання означає <strong>підвищити оборотність</strong>. Підручник (стор. 171) називає два шляхи:</p><p><strong>Збільшити Wareneinsatz:</strong></p><ul><li>розпродажі (Sonderverkäufe),</li><li>посилена реклама.</li></ul><p><strong>Зменшити середній складський запас:</strong></p><ul><li>частіші й менші замовлення,</li><li>Kauf auf Abruf,</li><li>плани закупівель,</li><li>встановлення Höchstbestände,</li><li>часті перевірки запасів (permanente Inventur),</li><li>Just-in-time,</li><li>вилучення з асортименту товару, що погано продається.</li></ul></div>
+<div data-lang="de"><p>Ø Lagerdauer = 360 ÷ Lagerumschlag → die Lagerdauer sinkt, wenn der <strong>Lagerumschlag steigt</strong> (S. 171):</p><p><strong>Vermehrter Wareneinsatz:</strong> Sonderverkäufe, verstärkte Werbung.</p><p><strong>Geringerer durchschnittlicher Lagerbestand:</strong> häufigere und kleinere Bestellungen, Kauf auf Abruf, Beschaffungspläne, Höchstbestände, häufige Bestandskontrollen (permanente Inventur), Just-in-time, Herausnahme schlecht verkäuflicher Ware.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">13a</span><span data-lang="ua">Як впливає на оборотність: частіші, але менші замовлення?</span><span data-lang="de">Wirkung auf die Umschlagshäufigkeit: häufigere, aber kleinere Bestellungen.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Зменшує <strong>Ø Lagerbestand</strong> — знаменник формули. Оборотність <strong>зростає</strong>, тривалість зберігання скорочується.</p></div>
+<div data-lang="de"><p>Senkt den <strong>Ø Lagerbestand</strong> (Nenner) → Umschlagshäufigkeit <strong>steigt</strong>.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">13b</span><span data-lang="ua">Як впливає Kauf auf Abruf?</span><span data-lang="de">Wirkung: Kauf auf Abruf.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Купівля відбувається одразу, а постачання — лише за потреби, тож товар не лежить на складі. <strong>Ø Lagerbestand зменшується → оборотність зростає.</strong></p></div>
+<div data-lang="de"><p>Kauf sofort, Lieferung, wenn nötig → geringerer Ø Lagerbestand → Umschlagshäufigkeit <strong>steigt</strong>.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">13c</span><span data-lang="ua">Як впливають Sonderverkäufe?</span><span data-lang="de">Wirkung: Sonderverkäufe.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Збільшують <strong>Wareneinsatz</strong> — чисельник формули. Оборотність <strong>зростає</strong>.</p></div>
+<div data-lang="de"><p>Erhöhen den <strong>Wareneinsatz</strong> (Zähler) → Umschlagshäufigkeit <strong>steigt</strong>.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">13d</span><span data-lang="ua">Як впливає припинення реклами?</span><span data-lang="de">Wirkung: Einstellung der Werbung.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Протилежно до посиленої реклами, яку підручник називає способом збільшити Wareneinsatz. Без реклами збут падає, <strong>Wareneinsatz зменшується → оборотність знижується</strong>, тривалість зберігання зростає.</p></div>
+<div data-lang="de"><p>Gegenteil der verstärkten Werbung: geringerer <strong>Wareneinsatz</strong> → Umschlagshäufigkeit <strong>sinkt</strong>.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">13e</span><span data-lang="ua">Як впливає велике замовлення заради знижки?</span><span data-lang="de">Wirkung: Großbestellung zur Ausnutzung von Rabatt.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Протилежно до «частіших і менших замовлень». Разове велике замовлення <strong>підвищує Ø Lagerbestand → оборотність знижується</strong>, товар лежить довше і зв'язує більше капіталу.</p></div>
+<div data-lang="de"><p>Gegenteil häufigerer kleiner Bestellungen: höherer <strong>Ø Lagerbestand</strong> → Umschlagshäufigkeit <strong>sinkt</strong>.</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">14</span><span data-lang="ua">Скільки становить Wareneinsatz, якщо середній запас 60 000,00 € обертається дванадцять разів на рік?</span><span data-lang="de">Wie viel Euro beträgt der Wareneinsatz, wenn der durchschnittliche Lagerbestand von 60 000,00 € im Jahr zwölfmal umgeschlagen wird?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Формулу оборотності розвертаємо: Wareneinsatz = Umschlagshäufigkeit · Ø Lagerbestand.</p><div class="fbox"><div class="feq">12 · 60 000,00 € = <strong>720 000,00 €</strong></div></div></div>
+<div data-lang="de"><div class="fbox"><div class="feq">12 · 60 000,00 € = <strong>720 000,00 €</strong></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">15</span><span data-lang="ua">Якій оборотності відповідає середня тривалість зберігання 45 днів?</span><span data-lang="de">Welchem Lagerumschlag entspricht eine durchschnittliche Lagerdauer von 45 Tagen?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><div class="fbox"><div class="feq"><span class="frac"><span class="num">360</span><span class="den">45</span></span><span>=&nbsp;<strong>8</strong></span></div></div><p>Склад обертається 8 разів на рік.</p></div>
+<div data-lang="de"><div class="fbox"><div class="feq"><span class="frac"><span class="num">360</span><span class="den">45</span></span><span>=&nbsp;<strong>8</strong></span></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">16</span><span data-lang="ua">Який середній складський запас має підприємство, якщо при тривалості зберігання 40 днів і ставці 10 % воно калькулює 15 000,00 € складських відсотків?</span><span data-lang="de">Welchen durchschnittlichen Lagerbestand hat ein Unternehmen, wenn es bei einer durchschnittlichen Lagerdauer von 40 Tagen und einem Zinssatz von 10 % mit 15 000,00 € Lagerzinsen kalkuliert?</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p>Формулу Lagerzinsen розвертаємо відносно Ø Lagerbestand.</p><div class="fbox"><div class="feq"><span>15 000&nbsp;=</span><span class="frac"><span class="num">Ø LB · 40 · 10</span><span class="den">100 · 360</span></span></div><div class="feq" style="margin-top:12px"><span>Ø LB&nbsp;=</span><span class="frac"><span class="num">15 000 · 36 000</span><span class="den">400</span></span><span>=&nbsp;<strong>1 350 000,00 €</strong></span></div></div><div class="fnote"><b>Перевірка:</b> (1 350 000 · 40 · 10) ÷ 36 000 = 15 000,00 € ✔</div></div>
+<div data-lang="de"><div class="fbox"><div class="feq"><span>Ø LB&nbsp;=</span><span class="frac"><span class="num">15 000 · 100 · 360</span><span class="den">40 · 10</span></span><span>=&nbsp;<strong>1 350 000,00 €</strong></span></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">17</span><span data-lang="ua">Визначте доступний запас: фактичний запас 4 000 шт., відкриті замовлення 2 000 шт., резерв для клієнтів 600 шт., резерв для виробництва 1 200 шт., заборгованість перед клієнтами 700 шт.</span><span data-lang="de">Ermitteln Sie den verfügbaren Bestand: tatsächlicher Lagerbestand 4 000 Stück, offene Bestellungen 2 000 Stück, Reservierungen für Kunden 600 Stück, Reservierungen für die Fertigung 1 200 Stück, Rückstände gegenüber Kunden 700 Stück.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>У наданому матеріалі відповіді немає.</strong> Формули «verfügbarer Bestand» на сканованих сторінках 171–174 немає — вона на сторінках 167–170, які не сфотографовані. Без неї невідомо, які саме позиції додаються, а які віднімаються, тож будь-яка цифра тут була б здогадкою.</p><p>Дескануй стор. 167–170 — і я допишу розрахунок.</p></div>
+<div data-lang="de"><p><strong>Im Material nicht enthalten.</strong> Die Formel für den verfügbaren Bestand steht nicht auf den gescannten Seiten 171–174 (vermutlich S. 167–170, nicht gescannt).</p></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">18</span><span data-lang="ua">Поясніть поняття «Lagerreichweite».</span><span data-lang="de">Erklären Sie den Begriff „Lagerreichweite".</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><p><strong>Lagerreichweite</strong> показує, <strong>на скільки днів вистачить складського запасу</strong>, щоб підтримувати виробництво (die Fertigung aufrechtzuerhalten).</p><div class="fbox"><div class="feq"><span>Lagerreichweite у днях&nbsp;=</span><span class="frac"><span class="num">(Lagerbestand + offene Bestellungen)</span><span class="den">Verbrauch pro Tag</span></span></div></div><p>Важливо, що в чисельник входить не лише наявний запас, а й <strong>offene Bestellungen</strong> — уже зроблені замовлення, надходження яких очікується.</p></div>
+<div data-lang="de"><p>Die <strong>Lagerreichweite</strong> drückt aus, wie viele Tage der Lagerbestand ausreicht, um die Fertigung aufrechtzuerhalten.</p><div class="fbox"><div class="feq"><span>Lagerreichweite in Tagen&nbsp;=</span><span class="frac"><span class="num">(Lagerbestand + offene Bestellungen)</span><span class="den">Verbrauch pro Tag</span></span></div></div></div>
+</div>
+</div>
+
+<div class="aufg-item">
+<div class="aufg-q" onclick="toggleAufg(this)"><div class="aufg-q-text"><span class="aufg-num">19</span><span data-lang="ua">Визначте Lagerreichweite у днях: Lagerbestand 500 шт., offene Bestellungen 2 500 шт., витрата 200 шт. на день.</span><span data-lang="de">Ermitteln Sie die Lagerreichweite in Tagen: Lagerbestand 500 Stück, offene Bestellungen 2 500 Stück, Verbrauch pro Tag 200 Stück.</span></div><span class="aufg-arrow">▶</span></div>
+<div class="aufg-ans">
+<div data-lang="ua"><div class="fbox"><div class="feq"><span class="frac"><span class="num">(500 + 2 500)</span><span class="den">200</span></span><span>=&nbsp;<span class="frac"><span class="num">3 000</span><span class="den">200</span></span></span><span>=&nbsp;<strong>15 днів</strong></span></div></div><p>Запасу разом з очікуваними надходженнями вистачить на 15 днів виробництва.</p></div>
+<div data-lang="de"><div class="fbox"><div class="feq"><span class="frac"><span class="num">(500 + 2 500)</span><span class="den">200</span></span><span>=&nbsp;<strong>15 Tage</strong></span></div></div></div>
+</div>
+</div>
+
+</div>
+<!-- ============ END TAB: AUFGABEN ============ -->
+
+</div>
+
+<script>
+let lang = 'ua';
+let tab = 'kernwissen';
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===l);
+  });
+}
+function toggleAufg(el){
+  var item = el.closest('.aufg-item');
+  var ans = item.querySelector('.aufg-ans');
+  var arrow = item.querySelector('.aufg-arrow');
+  ans.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+function setTab(t, btn){
+  tab = t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('on'));
+  document.getElementById('tab-'+t).classList.add('on');
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===lang);
+  });
+});
+</script>
+</body>
+</html>
