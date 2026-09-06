@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Формули</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --green-light:#4a9d5c;
+  --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd; --accent:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.lf-nav{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.lf-nav a{background:rgba(255,255,255,.15);color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.3)}
+.lf-nav a:hover{background:rgba(255,255,255,.28)}
+.lang-btns{display:flex;gap:6px}
+.lb{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+.lb.on{background:#fff;color:var(--green-dark);border-color:#fff}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+[data-lang]{display:none}
+[data-lang].active{display:block}
+span[data-lang]{display:none}
+span[data-lang].active{display:inline}
+.lf-section-title{font-size:12px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;background:var(--green-dark);padding:8px 14px;border-radius:6px;margin:22px 0 12px}
+.lf-section-title:first-child{margin-top:0}
+.fbox{background:#fff;border:2px solid var(--green);border-left:6px solid var(--green);border-radius:8px;padding:14px 16px;margin:12px 0;overflow-x:auto}
+.fbox .fname{font-size:12px;font-weight:700;color:var(--green-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.feq{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink);text-align:center;line-height:1.4}
+.frac{display:inline-flex;flex-direction:column;align-items:center}
+.frac .num{padding:0 10px 4px}
+.frac .den{padding:4px 10px 0;border-top:2px solid var(--ink)}
+.fnote{margin-top:10px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.fnote b{color:var(--ink)}
+.fex{margin-top:10px;background:#eef3ec;border:1px solid var(--border);border-radius:6px;padding:9px 11px;font-size:12.5px;line-height:1.6}
+.fex .fex-t{font-weight:700;color:var(--green-dark);display:block;margin-bottom:4px}
+.src{display:inline-block;background:#eef3ec;color:var(--green-dark);border:1px solid var(--border);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:6px;vertical-align:middle}
+.intro{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;font-size:13.5px;color:var(--muted)}
+p{margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">📐 Формули</div>
+    </div>
+    <div class="lang-btns">
+      <button class="lb" onclick="setLang('de',this)">DE</button>
+      <button class="lb on" onclick="setLang('ua',this)">UA</button>
+    </div>
+  </div>
+  <div class="lf-nav">
+    <a href="index.html">🏠 Головна</a>
+    <a href="lf2.html">LF2</a>
+    <a href="lf3.html">LF3</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="intro">
+<div data-lang="ua">Усі формули, зустрінуті в Kernwissen кожного Lernfeld, зібрані тут в одному місці — щоб не шукати по окремих сторінках під час підготовки до екзамену. Список поповнюється в міру опрацювання нових Lernfeld. У LF1 і LF4 математичних формул поки не зустрічалось (лише визначення й переліки).</div>
+<div data-lang="de">Alle Formeln aus dem Kernwissen jedes Lernfelds sind hier an einem Ort gesammelt — zur schnelleren Prüfungsvorbereitung. Die Liste wächst mit jedem neu bearbeiteten Lernfeld. In LF1 und LF4 kamen bisher keine mathematischen Formeln vor (nur Definitionen und Aufzählungen).</div>
+</div>
+
+<div class="lf-section-title">LF2 · Güter lagern</div>
+
+<div class="fbox">
+<div class="fname"><span data-lang="ua">Flächennutzungsgrad — ступінь використання площі</span><span data-lang="de">Flächennutzungsgrad</span></div>
+<div class="feq"><span>Flächennutzungsgrad&nbsp;=</span><span class="frac"><span class="num">belegte Lagerfläche in m²</span><span class="den">Gesamtlagerfläche in m²</span></span><span>× 100</span></div>
+<div class="fnote"><span data-lang="ua">Показує, яка частка загальної площі складу зайнята безпосередньо під зберігання товару.</span><span data-lang="de">Zeigt, welcher Anteil der Gesamtlagerfläche direkt für die Lagerung der Güter genutzt wird.</span></div>
+</div>
+
+<div class="fbox">
+<div class="fname"><span data-lang="ua">Höhennutzungsgrad — ступінь використання висоти</span><span data-lang="de">Höhennutzungsgrad</span></div>
+<div class="feq"><span>Höhennutzungsgrad&nbsp;=</span><span class="frac"><span class="num">genutzte Lagerungshöhe in m</span><span class="den">nutzbare Lagerungshöhe in m</span></span><span>× 100</span></div>
+<div class="fnote"><span data-lang="ua">Показує, наскільки повно використана можлива висота складу.</span><span data-lang="de">Zeigt, wie hoch die mögliche Lagerhöhe tatsächlich ausgenutzt wird.</span></div>
+</div>
+
+<div class="fbox">
+<div class="fname"><span data-lang="ua">Raumnutzungsgrad — Kennzahl 1</span><span data-lang="de">Raumnutzungsgrad — Kennzahl 1</span></div>
+<div class="feq"><span>Raumnutzungsgrad&nbsp;=</span><span class="frac"><span class="num">maximaler Rauminhalt der einzulagernden Güter in m³</span><span class="den">umbauter Raum des Lagers in m³</span></span><span>× 100</span></div>
+<div class="fnote"><span data-lang="ua">Співвідношення максимального обсягу товарів до забудованого об'єму всього складу. Краще використовується при штучних (Zeilenlagern), ніж при блокових складах.</span><span data-lang="de">Verhältnis des maximalen Rauminhalts der Güter zum umbauten Raum des gesamten Lagers. Wird bei Zeilenlagern besser genutzt als bei Blocklagern.</span></div>
+</div>
+
+<div class="fbox">
+<div class="fname"><span data-lang="ua">Raumnutzungsgrad — Kennzahl 2 (для регального гнізда)</span><span data-lang="de">Raumnutzungsgrad — Kennzahl 2 (je Regalfach)</span></div>
+<div class="feq"><span>Raumnutzungsgrad&nbsp;=</span><span class="frac"><span class="num">Lagergutvolumen in m³ × 100</span><span class="den">nutzbares Regalvolumen in m³</span></span></div>
+<div class="fnote"><span data-lang="ua">Співвідношення об'єму складованого товару до корисного об'єму конкретного регалу/полиці.</span><span data-lang="de">Verhältnis des Lagergutvolumens zum nutzbaren Volumen eines konkreten Regals/Regalfachs.</span></div>
+</div>
+
+<div class="fbox">
+<div class="fname"><span data-lang="ua">GTIN — контрольна цифра за методом Modulo-10</span><span data-lang="de">GTIN — Prüfziffer nach dem Modulo-10-Verfahren</span></div>
+<div class="fnote"><span data-lang="ua">Цифри номера множать по черзі справа наліво на 3 і на 1, суму додають; контрольна цифра = (10 − (сума mod 10)) mod 10.</span><span data-lang="de">Die Ziffern der Nummer werden von rechts nach links abwechselnd mit 3 und 1 multipliziert und die Produkte addiert; Prüfziffer = (10 − (Summe mod 10)) mod 10.</span></div>
+<div class="fex"><span class="fex-t"><span data-lang="ua">Приклад із завдання (GTIN 400550008715)</span><span data-lang="de">Beispiel aus der Aufgabe (GTIN 400550008715)</span></span>(5×3)+(1×1)+(7×3)+(8×1)+(0×3)+(0×1)+(0×3)+(5×1)+(5×3)+(0×1)+(0×3)+(4×1) = 69 → (10 − 9) = <strong>1</strong>. GTIN: <strong>4005500087151</strong>.</div>
+</div>
+
+<div class="lf-section-title">LF3 · Güter bearbeiten</div>
+
+<div class="fbox">
+<div class="fname">1 · <span data-lang="ua">Ø Lagerbestand — середній складський запас</span><span data-lang="de">Ø Lagerbestand</span></div>
+<div class="feq"><span>Ø Lagerbestand&nbsp;=</span><span class="frac"><span class="num">(Anfangsbestand + 12 Monatsendbestände)</span><span class="den">13</span></span></div>
+<div class="fnote"><span data-lang="ua"><b>Anfangsbestand</b> — запас на початок року. <b>12 Monatsendbestände</b> — запаси на кінець кожного з 12 місяців. Ділимо на <b>13</b>, бо значень саме тринадцять.</span><span data-lang="de"><b>Anfangsbestand</b> — Bestand zu Jahresbeginn. <b>12 Monatsendbestände</b> — Bestände am Ende jedes der 12 Monate. Division durch <b>13</b>, da genau dreizehn Werte vorliegen.</span></div>
+<div class="fex"><span class="fex-t"><span data-lang="ua">Спрощений варіант</span><span data-lang="de">Vereinfachte Variante</span></span><span data-lang="ua">Якщо відомі лише початковий і кінцевий запас: (Anfangsbestand + Endbestand) ÷ 2.</span><span data-lang="de">Sind nur Anfangs- und Endbestand bekannt: (Anfangsbestand + Endbestand) ÷ 2.</span></div>
+</div>
+
+<div class="fbox">
+<div class="fname">2 · <span data-lang="ua">Umschlagshäufigkeit — оборотність складу</span><span data-lang="de">Umschlagshäufigkeit</span></div>
+<div class="feq"><span>Umschlagshäufigkeit&nbsp;=</span><span class="frac"><span class="num">Wareneinsatz</span><span class="den">Ø Lagerbestand</span></span></div>
+<div class="fnote"><span data-lang="ua"><b>Wareneinsatz</b> — вартість товару, спожитого за рік (Anfangsbestand + Zugänge − Endbestand). Показує, скільки разів склад обернувся за рік.</span><span data-lang="de"><b>Wareneinsatz</b> — Wert der im Jahr verbrauchten Ware (Anfangsbestand + Zugänge − Endbestand). Zeigt, wie oft sich das Lager im Jahr umschlägt.</span></div>
+</div>
+
+<div class="fbox">
+<div class="fname">3 · <span data-lang="ua">Ø Lagerdauer — середня тривалість зберігання</span><span data-lang="de">Ø Lagerdauer</span></div>
+<div class="feq"><span>Ø Lagerdauer&nbsp;=</span><span class="frac"><span class="num">360</span><span class="den">Lagerumschlag</span></span></div>
+<div class="fnote"><span data-lang="ua">Комерційний рік = <b>360 днів</b>, не 365.</span><span data-lang="de">Kaufmännisches Jahr = <b>360 Tage</b>, nicht 365.</span></div>
+<div class="fex"><span class="fex-t"><span data-lang="ua">Приклад із книги</span><span data-lang="de">Beispiel aus dem Buch</span></span>Lagerumschlag = 6 → 360 ÷ 6 = <strong>60 <span data-lang="ua">днів</span><span data-lang="de">Tage</span></strong>.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">4 · <span data-lang="ua">Lagerzinsen — складські відсотки</span><span data-lang="de">Lagerzinsen</span></div>
+<div class="feq"><span>Lagerzinsen&nbsp;=</span><span class="frac"><span class="num">Ø Lagerbestand · Ø Lagerdauer · Zinssatz</span><span class="den">100 · 360</span></span></div>
+<div class="fex"><span class="fex-t"><span data-lang="ua">Приклад із книги</span><span data-lang="de">Beispiel aus dem Buch</span></span>250 000,00 € · 60 <span data-lang="ua">днів</span><span data-lang="de">Tage</span> · 9 % → (250 000 · 60 · 9) ÷ (100 · 360) = <strong>3 750,00 €</strong>.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">5 · Lagerzinssatz</div>
+<div class="feq"><span>Lagerzinssatz&nbsp;=</span><span class="frac"><span class="num">banküblicher Zinssatz · durchschnittliche Lagerdauer</span><span class="den">360</span></span></div>
+<div class="feq" style="margin-top:12px"><span>Lagerzinsen&nbsp;=</span><span class="frac"><span class="num">durchschnittlicher Lagerbestand · Lagerzinssatz</span><span class="den">100</span></span></div>
+<div class="fnote"><span data-lang="ua">Другий шлях до тих самих Lagerzinsen — результат збігається з формулою 4.</span><span data-lang="de">Zweiter Weg zu denselben Lagerzinsen — Ergebnis stimmt mit Formel 4 überein.</span></div>
+</div>
+
+<div class="fbox">
+<div class="fname">6 · Lagerreichweite <span class="src">S. 172</span></div>
+<div class="feq"><span>Lagerreichweite&nbsp;=</span><span class="frac"><span class="num">Lagerbestand + offene Bestellungen</span><span class="den">Verbrauch pro Tag</span></span></div>
+<div class="fex"><span class="fex-t"><span data-lang="ua">Приклад із книги</span><span data-lang="de">Beispiel aus dem Buch</span></span>500 + 1 000 <span data-lang="ua">шт., витрата 150 шт./день</span><span data-lang="de">Stück, Verbrauch 150 Stück/Tag</span> → 1 500 ÷ 150 = <strong>10 <span data-lang="ua">днів</span><span data-lang="de">Tage</span></strong>.</div>
+</div>
+
+<div class="fbox">
+<div class="fname">Wertrückrechnung <span class="src">S. 165</span></div>
+<div class="fex" style="margin-top:0">
+<span class="fex-t"><span data-lang="ua">Приклад (Zähltag 28 лютого — після балансової дати)</span><span data-lang="de">Beispiel (Zähltag 28. Februar — nach dem Bilanzstichtag)</span></span>
+<span data-lang="ua">&nbsp;&nbsp;&nbsp;вартісний запас на день підрахунку 28 лютого&nbsp;&nbsp;<strong>240 000,00 €</strong><br><strong>−</strong>&nbsp;вартість надходжень 31.12–28.02&nbsp;&nbsp;<strong>20 000,00 €</strong><br><strong>+</strong>&nbsp;вартість видатків 31.12–28.02&nbsp;&nbsp;<strong>25 000,00 €</strong><br><strong>=</strong>&nbsp;запас на балансову дату 31 грудня&nbsp;&nbsp;<strong>245 000,00 €</strong></span>
+<span data-lang="de">&nbsp;&nbsp;&nbsp;wertmäßiger Bestand am Zähltag 28. Februar&nbsp;&nbsp;<strong>240 000,00 €</strong><br><strong>−</strong>&nbsp;Wert der Zugänge 31.12–28.02&nbsp;&nbsp;<strong>20 000,00 €</strong><br><strong>+</strong>&nbsp;Wert der Abgänge 31.12–28.02&nbsp;&nbsp;<strong>25 000,00 €</strong><br><strong>=</strong>&nbsp;Bestand am Bilanzstichtag 31. Dezember&nbsp;&nbsp;<strong>245 000,00 €</strong></span>
+</div>
+<div class="fnote"><span data-lang="ua">Якщо день підрахунку <b>пізніше</b> балансової дати — рахуємо назад: надходження віднімаємо, видатки додаємо. Якщо <b>раніше</b> — навпаки.</span><span data-lang="de">Liegt der Zähltag <b>nach</b> dem Bilanzstichtag — Zugänge abziehen, Abgänge addieren. Liegt er <b>davor</b> — umgekehrt.</span></div>
+</div>
+
+</div>
+
+<script>
+let lang = 'ua';
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===l);
+  });
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-lang')===lang);
+  });
+});
+</script>
+</body>
+</html>
