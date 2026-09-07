@@ -108,6 +108,7 @@ span[data-lang].active{display:inline}
   </div>
   <div class="lf-nav">
     <a href="formuly.html">📐 Формули</a>
+    <a href="slovnyk.html">📖 Словник</a>
     <a href="index.html">🏠 Головна</a>
     <a href="lf2.html">← LF2</a>
     <a href="lf4.html">LF4 →</a>
@@ -1264,5 +1265,85 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 </script>
+<style>
+.dict-popup{position:fixed;background:#fff;border:2px solid #2d7a3f;border-radius:8px;padding:10px 12px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:9999;max-width:240px;font-family:'Inter',sans-serif;font-size:13px}
+.dict-popup .dict-pop-word{font-weight:800;color:#1c4a2e;margin-bottom:4px;word-break:break-word}
+.dict-popup .dict-pop-trans{margin-bottom:8px;color:#1a1a1a;min-height:16px}
+.dict-popup .dict-pop-btns{display:flex;gap:6px}
+.dict-popup button{border:none;padding:5px 9px;border-radius:5px;font-size:11.5px;cursor:pointer;font-weight:700}
+.dict-popup .dict-pop-add{background:#2d7a3f;color:#fff}
+.dict-popup .dict-pop-add:disabled{opacity:.5}
+.dict-popup .dict-pop-close{background:#e0e0e0;color:#333}
+</style>
+<script>
+(function(){
+  const DICT_KEY = 'logistik_dictionary_v1';
+  let popupEl = null;
+
+  function loadDict() {
+    try { return JSON.parse(localStorage.getItem(DICT_KEY) || '[]'); }
+    catch(e) { return []; }
+  }
+  function saveDict(list) { localStorage.setItem(DICT_KEY, JSON.stringify(list)); }
+
+  function closePopup() {
+    if (popupEl) { popupEl.remove(); popupEl = null; }
+  }
+
+  async function showDictPopup(word, x, y) {
+    closePopup();
+    const pop = document.createElement('div');
+    pop.className = 'dict-popup';
+    pop.style.left = Math.min(x, window.innerWidth - 260) + 'px';
+    pop.style.top = Math.min(y + 12, window.innerHeight - 100) + 'px';
+    pop.innerHTML = `<div class="dict-pop-word">${word}</div>
+      <div class="dict-pop-trans" id="dictPopTrans">Перекладаю...</div>
+      <div class="dict-pop-btns">
+        <button class="dict-pop-add" id="dictPopAdd" disabled>+ Додати</button>
+        <button class="dict-pop-close">✕</button>
+      </div>`;
+    document.body.appendChild(pop);
+    popupEl = pop;
+    pop.querySelector('.dict-pop-close').onclick = closePopup;
+
+    try {
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ text: word })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Помилка');
+      pop.querySelector('#dictPopTrans').textContent = data.translation;
+      const addBtn = pop.querySelector('#dictPopAdd');
+      addBtn.disabled = false;
+      addBtn.onclick = function(){
+        const list = loadDict();
+        list.push({ word: data.word, translation: data.translation, ts: Date.now() });
+        saveDict(list);
+        addBtn.textContent = '✓ Додано';
+        addBtn.disabled = true;
+      };
+    } catch(e) {
+      pop.querySelector('#dictPopTrans').textContent = 'Помилка перекладу';
+    }
+  }
+
+  document.addEventListener('dblclick', function(e){
+    // ignore double-clicks inside the popup itself or on interactive elements
+    if (e.target.closest('.dict-popup')) return;
+    if (e.target.closest('button, a, input, .tab-btn, .lang-btns')) return;
+    const sel = window.getSelection();
+    const word = sel && sel.toString().trim();
+    if (!word || word.length > 60 || word.includes('\n')) return;
+    showDictPopup(word, e.clientX, e.clientY);
+  });
+
+  document.addEventListener('click', function(e){
+    if (popupEl && !e.target.closest('.dict-popup')) closePopup();
+  });
+})();
+</script>
+
 </body>
 </html>

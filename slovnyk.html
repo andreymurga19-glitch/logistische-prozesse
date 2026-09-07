@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Logistische Prozesse — Словник</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{
+  --green-dark:#1c4a2e; --green:#2d7a3f; --green-light:#4a9d5c;
+  --red:#c0392b; --bg:#f7f7f4; --ink:#1a1a1a; --muted:#5a6b5f;
+  --card:#ffffff; --border:#dde3dd; --accent:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6}
+.hdr{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:20px 16px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+.hdr-title{font-size:20px;font-weight:800;margin-top:2px}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;display:inline-block;margin-top:6px}
+.lf-nav{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.lf-nav a{background:rgba(255,255,255,.15);color:#fff;text-decoration:none;font-size:11px;font-weight:700;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.3)}
+.lf-nav a:hover{background:rgba(255,255,255,.28)}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 60px}
+.intro{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;color:var(--muted)}
+.dict-add-box{background:#fff;border:2px solid var(--green);border-radius:10px;padding:14px;margin-bottom:20px}
+.dict-add-title{font-size:12px;font-weight:800;color:var(--green-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.dict-add-row{display:flex;gap:8px}
+.dict-add-row input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit}
+.dict-add-row button{background:var(--green);color:#fff;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:700;font-size:13px;white-space:nowrap}
+.dict-add-row button:disabled{opacity:.5;cursor:default}
+.dict-add-status{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.dict-stats{font-size:12px;color:var(--muted);margin-bottom:10px}
+.dict-list-item{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px}
+.dict-list-item .dict-word{font-weight:700;color:var(--green-dark);font-family:'JetBrains Mono',monospace;font-size:13.5px}
+.dict-list-item .dict-trans{color:var(--ink);font-size:13.5px;margin-left:10px;flex:1;text-align:right;margin-right:10px}
+.dict-list-item .dict-del{background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;line-height:1;padding:2px 6px}
+.dict-empty{text-align:center;color:var(--muted);padding:30px 10px;font-size:13.5px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">Logistische Prozesse</div>
+      <div class="hdr-title">Berufe der Lagerlogistik</div>
+      <div class="hdr-badge">📖 Словник</div>
+    </div>
+  </div>
+  <div class="lf-nav">
+    <a href="index.html">🏠 Головна</a>
+    <a href="formuly.html">📐 Формули</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="intro">
+Клікни двічі на будь-яке німецьке слово в Kernwissen чи Aufgaben на сторінках LF1-4 — з'явиться переклад і кнопка "Додати в словник". Або додай слово вручну тут. Усі збережені слова синхронізуються між усіма сторінками сайту (зберігаються в цьому браузері).
+</div>
+
+<div class="dict-add-box">
+  <div class="dict-add-title">Додати слово вручну</div>
+  <div class="dict-add-row">
+    <input type="text" id="manualWord" placeholder="Напр. Lagerbestand" onkeydown="if(event.key==='Enter')addManualWord()">
+    <button onclick="addManualWord()" id="manualBtn">Перекласти й додати</button>
+  </div>
+  <div class="dict-add-status" id="manualStatus"></div>
+</div>
+
+<div class="dict-stats" id="dictStats"></div>
+<div id="dictList"></div>
+
+</div>
+
+<script>
+const DICT_KEY = 'logistik_dictionary_v1';
+
+function loadDict() {
+  try {
+    return JSON.parse(localStorage.getItem(DICT_KEY) || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveDict(list) {
+  localStorage.setItem(DICT_KEY, JSON.stringify(list));
+}
+
+function renderDict() {
+  const list = loadDict();
+  const statsEl = document.getElementById('dictStats');
+  const listEl = document.getElementById('dictList');
+  statsEl.textContent = list.length ? `Збережено слів: ${list.length}` : '';
+  if (!list.length) {
+    listEl.innerHTML = '<div class="dict-empty">Словник поки порожній. Клікни двічі на слово в Kernwissen будь-якої сторінки LF1-4, або додай вручну вище.</div>';
+    return;
+  }
+  listEl.innerHTML = list.slice().reverse().map((item, revIdx) => {
+    const idx = list.length - 1 - revIdx;
+    return `<div class="dict-list-item">
+      <span class="dict-word">${escapeHtml(item.word)}</span>
+      <span class="dict-trans">${escapeHtml(item.translation)}</span>
+      <button class="dict-del" onclick="deleteWord(${idx})" title="Видалити">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function deleteWord(idx) {
+  const list = loadDict();
+  list.splice(idx, 1);
+  saveDict(list);
+  renderDict();
+}
+
+async function addManualWord() {
+  const input = document.getElementById('manualWord');
+  const btn = document.getElementById('manualBtn');
+  const status = document.getElementById('manualStatus');
+  const word = input.value.trim();
+  if (!word) return;
+  btn.disabled = true;
+  status.textContent = 'Перекладаю...';
+  try {
+    const res = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: word })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Помилка');
+    const list = loadDict();
+    list.push({ word: data.word, translation: data.translation, ts: Date.now() });
+    saveDict(list);
+    input.value = '';
+    status.textContent = '';
+    renderDict();
+  } catch (e) {
+    status.textContent = 'Помилка перекладу: ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+renderDict();
+</script>
+</body>
+</html>
