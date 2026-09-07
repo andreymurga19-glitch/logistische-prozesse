@@ -1013,11 +1013,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
 .dict-popup .dict-pop-add{background:#2d7a3f;color:#fff}
 .dict-popup .dict-pop-add:disabled{opacity:.5}
 .dict-popup .dict-pop-close{background:#e0e0e0;color:#333}
+.dict-clickable{cursor:pointer}
 </style>
 <script>
 (function(){
   const DICT_KEY = 'logistik_dictionary_v1';
   let popupEl = null;
+  let lastPointer = {x:0,y:0};
 
   function loadDict() {
     try { return JSON.parse(localStorage.getItem(DICT_KEY) || '[]'); }
@@ -1029,21 +1031,54 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if (popupEl) { popupEl.remove(); popupEl = null; }
   }
 
+  function isWordChar(c) {
+    return /[A-Za-zÀ-ÖØ-öø-ÿА-Яа-яЁёІіЇїЄєҐґ0-9\-]/.test(c);
+  }
+
+  function getWordAtPoint(x, y) {
+    let range = null;
+    if (document.caretRangeFromPoint) {
+      range = document.caretRangeFromPoint(x, y);
+    } else if (document.caretPositionFromPoint) {
+      const pos = document.caretPositionFromPoint(x, y);
+      if (pos && pos.offsetNode) {
+        range = document.createRange();
+        range.setStart(pos.offsetNode, pos.offset);
+        range.collapse(true);
+      }
+    }
+    if (!range || !range.startContainer || range.startContainer.nodeType !== 3) return null;
+    const textNode = range.startContainer;
+    const text = textNode.textContent || '';
+    let start = range.startOffset;
+    let end = range.startOffset;
+    if (start < text.length && !isWordChar(text[start]) && start > 0 && isWordChar(text[start-1])) {
+      start -= 1; end -= 1;
+    }
+    while (start > 0 && isWordChar(text[start-1])) start--;
+    while (end < text.length && isWordChar(text[end])) end++;
+    const word = text.slice(start, end).trim();
+    return word || null;
+  }
+
   async function showDictPopup(word, x, y) {
     closePopup();
     const pop = document.createElement('div');
     pop.className = 'dict-popup';
-    pop.style.left = Math.min(x, window.innerWidth - 260) + 'px';
-    pop.style.top = Math.min(y + 12, window.innerHeight - 100) + 'px';
+    pop.style.left = Math.max(8, Math.min(x, window.innerWidth - 260)) + 'px';
+    pop.style.top = Math.max(8, Math.min(y + 12, window.innerHeight - 110)) + 'px';
     pop.innerHTML = `<div class="dict-pop-word">${word}</div>
       <div class="dict-pop-trans" id="dictPopTrans">Перекладаю...</div>
       <div class="dict-pop-btns">
         <button class="dict-pop-add" id="dictPopAdd" disabled>+ Додати</button>
-        <button class="dict-pop-close">✕</button>
+        <button class="dict-pop-close" type="button">✕</button>
       </div>`;
     document.body.appendChild(pop);
     popupEl = pop;
-    pop.querySelector('.dict-pop-close').onclick = closePopup;
+    pop.querySelector('.dict-pop-close').addEventListener('click', function(ev){
+      ev.stopPropagation();
+      closePopup();
+    });
 
     try {
       const res = await fetch('/api/translate', {
@@ -1053,33 +1088,42 @@ document.addEventListener('DOMContentLoaded', ()=>{
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Помилка');
-      pop.querySelector('#dictPopTrans').textContent = data.translation;
+      const transEl = pop.querySelector('#dictPopTrans');
+      if (transEl) transEl.textContent = data.translation;
       const addBtn = pop.querySelector('#dictPopAdd');
-      addBtn.disabled = false;
-      addBtn.onclick = function(){
-        const list = loadDict();
-        list.push({ word: data.word, translation: data.translation, ts: Date.now() });
-        saveDict(list);
-        addBtn.textContent = '✓ Додано';
-        addBtn.disabled = true;
-      };
+      if (addBtn) {
+        addBtn.disabled = false;
+        addBtn.addEventListener('click', function(ev){
+          ev.stopPropagation();
+          const list = loadDict();
+          list.push({ word: data.word, translation: data.translation, ts: Date.now() });
+          saveDict(list);
+          addBtn.textContent = '✓ Додано';
+          addBtn.disabled = true;
+        });
+      }
     } catch(e) {
-      pop.querySelector('#dictPopTrans').textContent = 'Помилка перекладу';
+      const transEl = pop.querySelector('#dictPopTrans');
+      if (transEl) transEl.textContent = 'Помилка перекладу: ' + (e.message || 'невідома');
     }
   }
 
-  document.addEventListener('dblclick', function(e){
-    // ignore double-clicks inside the popup itself or on interactive elements
-    if (e.target.closest('.dict-popup')) return;
-    if (e.target.closest('button, a, input, .tab-btn, .lang-btns')) return;
-    const sel = window.getSelection();
-    const word = sel && sel.toString().trim();
-    if (!word || word.length > 60 || word.includes('\n')) return;
-    showDictPopup(word, e.clientX, e.clientY);
-  });
+  document.addEventListener('pointerdown', function(e){
+    lastPointer.x = e.clientX;
+    lastPointer.y = e.clientY;
+  }, true);
 
   document.addEventListener('click', function(e){
-    if (popupEl && !e.target.closest('.dict-popup')) closePopup();
+    if (e.target.closest('.dict-popup')) return;
+    if (popupEl) { closePopup(); }
+    if (e.target.closest('button, a, input, .tab-btn, .lang-btns, .aufg-q, .aufg-arrow, .lf-nav')) return;
+    const container = e.target.closest('.kw-box, .aufg-ans, .aufg-topic-content, #tab-kernwissen, #tab-aufgaben');
+    if (!container) return;
+    const x = e.clientX || lastPointer.x;
+    const y = e.clientY || lastPointer.y;
+    const word = getWordAtPoint(x, y);
+    if (!word || word.length < 2 || word.length > 40 || /^\d+$/.test(word)) return;
+    showDictPopup(word, x, y);
   });
 })();
 </script>
